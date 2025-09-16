@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цвет и типографика в WPF</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #6a11cb;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+            color: #2980b9;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        /* Стили для таблиц */
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+            min-width: 600px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4fc;
+            transition: background-color 0.3s;
+        }
+        
+        /* Стили для блоков кода */
+        .code-container {
+            background: #2d3a4b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .code-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #63b3ed;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .code-header .language {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .code-header .caption {
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .keyword {
+            color: #ff79c6;
+        }
+        
+        .type {
+            color: #8be9fd;
+        }
+        
+        .value {
+            color: #f1fa8c;
+        }
+        
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+        
+        .tag {
+            color: #ff79c6;
+        }
+        
+        .attribute {
+            color: #50fa7b;
+        }
+        
+        .string {
+            color: #f1fa8c;
+        }
+        
+        /* Стили для заметок и советов */
+        .note {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tip {
+            background: #f0f9eb;
+            border-left: 4px solid #52c41a;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background: #fef7ec;
+            border-left: 4px solid #fa8c16;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .visual-demo {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .demo-item {
+            width: 200px;
+            height: 200px;
+            margin: 15px;
+            border: 2px dashed #3498db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-rectangle {
+            width: 100px;
+            height: 50px;
+            background-color: #3498db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        .demo-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .color-palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .color-item {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .color-name {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        
+        .typography-demo {
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            background: #f8f9fa;
+        }
+        
+        .font-sample {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+            
+            .demo-item {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .color-item {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Цвет и типографика в WPF</h1>
+        <p>Использование стилей и ресурсов для создания единообразного визуального оформления</p>
+    </header>
+
+    <div class="container">
+        <h2>Ресурсы в WPF</h2>
+        <p>Ресурсы в WPF позволяют определять и повторно использовать объекты, такие как кисти, стили, шаблоны и анимации, по всему приложению.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип ресурса</th>
+                        <th>Назначение</th>
+                        <th>Примеры</th>
+                        <th>Область видимости</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Локальные ресурсы</strong></td>
+                        <td>Ресурсы, определенные в элементе или окне</td>
+                        <td>Кисти, стили для конкретного окна</td>
+                        <td>Только в пределах элемента и его дочерних элементов</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ресурсы приложения</strong></td>
+                        <td>Глобальные ресурсы для всего приложения</td>
+                        <td>Цветовые схемы, общие стили</td>
+                        <td>Во всем приложении</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Тематические ресурсы</strong></td>
+                        <td>Ресурсы, определенные в темах</td>
+                        <td>Системные цвета, стили по умолчанию</td>
+                        <td>Зависит от темы ОС</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Динамические ресурсы</strong></td>
+                        <td>Ресурсы, которые могут изменяться во время выполнения</td>
+                        <td>Изменяемые цветовые схемы</td>
+                        <td>Во время выполнения</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Статические ресурсы</strong></td>
+                        <td>Ресурсы, которые определяются один раз при загрузке</td>
+                        <td>Фиксированные значения, константы</td>
+                        <td>Во время загрузки</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример определения и использования ресурсов</span>
+            </div>
+            <pre><code><span class="comment">&lt;!-- Определение ресурсов --&gt;</span>
+<span class="tag">&lt;Window.Resources&gt;</span>
+    <span class="tag">&lt;SolidColorBrush</span> <span class="attribute">x:Key</span>=<span class="string">"PrimaryBrush"</span> <span class="attribute">Color</span>=<span class="string">"#FF6A11CB"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;SolidColorBrush</span> <span class="attribute">x:Key</span>=<span class="string">"SecondaryBrush"</span> <span class="attribute">Color</span>=<span class="string">"#FF2575FC"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;SolidColorBrush</span> <span class="attribute">x:Key</span>=<span class="string">"AccentBrush"</span> <span class="attribute">Color</span>=<span class="string">"#FF3498DB"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/Window.Resources&gt;</span>
+
+<span class="comment">&lt;!-- Использование ресурсов --&gt;</span>
+<span class="tag">&lt;Button</span> 
+    <span class="attribute">Background</span>=<span class="string">"{StaticResource PrimaryBrush}"</span>
+    <span class="attribute">Foreground</span>=<span class="string">"White"</span>
+    <span class="attribute">Content</span>=<span class="string">"Кнопка с ресурсом"</span><span class="tag">/&gt;</span>
+
+<span class="tag">&lt;Border</span> 
+    <span class="attribute">Background</span>=<span class="string">"{DynamicResource SecondaryBrush}"</span>
+    <span class="attribute">Padding</span>=<span class="string">"10"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;TextBlock</span> <span class="attribute">Text</span>=<span class="string">"Текст с динамическим ресурсом"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/Border&gt;</span></code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Используйте StaticResource для значений, которые не будут меняться во время выполнения, и DynamicResource для значений, которые могут изменяться.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Цветовые схемы и палитры</h2>
+        <p>Создание согласованной цветовой схемы - ключевой аспект профессионального дизайна приложения.</p>
+        
+        <h3>Системные цвета</h3>
+        <p>WPF предоставляет доступ к системным цветам, которые автоматически адаптируются под тему ОС:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования системных цветов</span>
+            </div>
+            <pre><code><span class="tag">&lt;Button</span> 
+    <span class="attribute">Background</span>=<span class="string">"{x:Static SystemColors.ControlBrush}"</span>
+    <span class="attribute">Foreground</span>=<span class="string">"{x:Static SystemColors.ControlTextBrush}"</span>
+    <span class="attribute">Content</span>=<span class="string">"Кнопка с системными цветами"</span><span class="tag">/&gt;</span>
+
+<span class="tag">&lt;Border</span> 
+    <span class="attribute">Background</span>=<span class="string">"{x:Static SystemColors.WindowBrush}"</span>
+    <span class="attribute">BorderBrush</span>=<span class="string">"{x:Static SystemColors.ActiveBorderBrush}"</span>
+    <span class="attribute">BorderThickness</span>=<span class="string">"1"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;TextBlock</span> 
+        <span class="attribute">Foreground</span>=<span class="string">"{x:Static SystemColors.WindowTextBrush}"</span>
+        <span class="attribute">Text</span>=<span class="string">"Текст с системными цветами"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/Border&gt;</span></code></pre>
+        </div>
+        
+        <h3>Пользовательская цветовая палитра</h3>
+        <p>Создание собственной цветовой палитры помогает поддерживать единообразие дизайна:</p>
+        
+        <div class="color-palette">
+            <div class="color-item" style="background: #6a11cb;">
+                <span>Primary</span>
+                <div class="color-name">#6A11CB</div>
+            </div>
+            <div class="color-item" style="background: #2575fc;">
+                <span>Secondary</span>
+                <div class="color-name">#2575FC</div>
+            </div>
+            <div class="color-item" style="background: #3498db;">
+                <span>Accent</span>
+                <div class="color-name">#3498DB</div>
+            </div>
+            <div class="color-item" style="background: #2c3e50; color: white;">
+                <span>Dark</span>
+                <div class="color-name">#2C3E50</div>
+            </div>
+            <div class="color-item" style="background: #f5f7fa; color: #2c3e50;">
+                <span>Light</span>
+                <div class="color-name">#F5F7FA</div>
+            </div>
+            <div class="color-item" style="background: #e74c3c; color: white;">
+                <span>Error</span>
+                <div class="color-name">#E74C3C</div>
+            </div>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Определение цветовой палитры в ресурсах</span>
+            </div>
+            <pre><code><span class="tag">&lt;Application.Resources&gt;</span>
+    <span class="comment">&lt;!-- Цвета --&gt;</span>
+    <span class="tag">&lt;Color</span> <span class="attribute">x:Key</span>=<span class="string">"PrimaryColor"</span><span class="tag">&gt;</span>#FF6A11CB<span class="tag">&lt;/Color&gt;</span>
+    <span class="tag">&lt;Color</span> <span class="attribute">x:Key</span>=<span class="string">"SecondaryColor"</span><span class="tag">&gt;</span>#FF2575FC<span class="tag">&lt;/Color&gt;</span>
+    <span class="tag">&lt;Color</span> <span class="attribute">x:Key</span>=<span class="string">"AccentColor"</span><span class="tag">&gt;</span>#FF3498DB<span class="tag">&lt;/Color&gt;</span>
+    
+    <span class="comment">&lt;!-- Кисти --&gt;</span>
+    <span class="tag">&lt;SolidColorBrush</span> <span class="attribute">x:Key</span>=<span class="string">"PrimaryBrush"</span> <span class="attribute">Color</span>=<span class="string">"{StaticResource PrimaryColor}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;SolidColorBrush</span> <span class="attribute">x:Key</span>=<span class="string">"SecondaryBrush"</span> <span class="attribute">Color</span>=<span class="string">"{StaticResource SecondaryColor}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;SolidColorBrush</span> <span class="attribute">x:Key</span>=<span class="string">"AccentBrush"</span> <span class="attribute">Color</span>=<span class="string">"{StaticResource AccentColor}"</span><span class="tag">/&gt;</span>
+    
+    <span class="comment">&lt;!-- Градиентные кисти --&gt;</span>
+    <span class="tag">&lt;LinearGradientBrush</span> <span class="attribute">x:Key</span>=<span class="string">"PrimaryGradient"</span> <span class="attribute">StartPoint</span>=<span class="string">"0,0"</span> <span class="attribute">EndPoint</span>=<span class="string">"1,1"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;GradientStop</span> <span class="attribute">Color</span>=<span class="string">"#FF6A11CB"</span> <span class="attribute">Offset</span>=<span class="string">"0"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;GradientStop</span> <span class="attribute">Color</span>=<span class="string">"#FF2575FC"</span> <span class="attribute">Offset</span>=<span class="string">"1"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/LinearGradientBrush&gt;</span>
+<span class="tag">&lt;/Application.Resources&gt;</span></code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Создавайте семантически названные ресурсы (PrimaryBrush, SecondaryBrush), а не ресурсы, названные по цвету (BlueBrush, RedBrush). Это позволит легко изменять цветовую схему приложения без изменения логики.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Типографика в WPF</h2>
+        <p>Единообразная типографика - важный аспект профессионального пользовательского интерфейса.</p>
+        
+        <h3>Определение стилей текста</h3>
+        <p>Создание стилей для различных типов текстового контента:</p>
+        
+        <div class="typography-demo">
+            <div class="font-sample" style="font-size: 24px; font-weight: bold;">Заголовок 1 (24px, Bold)</div>
+            <div class="font-sample" style="font-size: 20px; font-weight: bold;">Заголовок 2 (20px, Bold)</div>
+            <div class="font-sample" style="font-size: 18px; font-weight: bold;">Заголовок 3 (18px, Bold)</div>
+            <div class="font-sample" style="font-size: 16px; font-weight: normal;">Обычный текст (16px, Normal)</div>
+            <div class="font-sample" style="font-size: 14px; font-weight: normal;">Мелкий текст (14px, Normal)</div>
+            <div class="font-sample" style="font-size: 12px; font-weight: normal;">Очень мелкий текст (12px, Normal)</div>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Определение стилей текста в ресурсах</span>
+            </div>
+            <pre><code><span class="tag">&lt;Application.Resources&gt;</span>
+    <span class="comment">&lt;!-- Стили типографики --&gt;</span>
+    <span class="tag">&lt;Style</span> <span class="attribute">x:Key</span>=<span class="string">"Header1"</span> <span class="attribute">TargetType</span>=<span class="string">"TextBlock"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"FontSize"</span> <span class="attribute">Value</span>=<span class="string">"24"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"FontWeight"</span> <span class="attribute">Value</span>=<span class="string">"Bold"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Margin"</span> <span class="attribute">Value</span>=<span class="string">"0,0,0,10"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Style&gt;</span>
+    
+    <span class="tag">&lt;Style</span> <span class="attribute">x:Key</span>=<span class="string">"Header2"</span> <span class="attribute">TargetType</span>=<span class="string">"TextBlock"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"FontSize"</span> <span class="attribute">Value</span>=<span class="string">"20"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"FontWeight"</span> <span class="attribute">Value</span>=<span class="string">"Bold"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Margin"</span> <span class="attribute">Value</span>=<span class="string">"0,15,0,8"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Style&gt;</span>
+    
+    <span class="tag">&lt;Style</span> <span class="attribute">x:Key</span>=<span class="string">"BodyText"</span> <span class="attribute">TargetType</span>=<span class="string">"TextBlock"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"FontSize"</span> <span class="attribute">Value</span>=<span class="string">"14"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"TextWrapping"</span> <span class="attribute">Value</span>=<span class="string">"Wrap"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Margin"</span> <span class="attribute">Value</span>=<span class="string">"0,0,0,5"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Style&gt;</span>
+    
+    <span class="tag">&lt;Style</span> <span class="attribute">x:Key</span>=<span class="string">"CaptionText"</span> <span class="attribute">TargetType</span>=<span class="string">"TextBlock"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"FontSize"</span> <span class="attribute">Value</span>=<span class="string">"12"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Foreground"</span> <span class="attribute">Value</span>=<span class="string">"Gray"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"FontStyle"</span> <span class="attribute">Value</span>=<span class="string">"Italic"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Style&gt;</span>
+<span class="tag">&lt;/Application.Resources&gt;</span></code></pre>
+        </div>
+        
+        <h3>Использование стилей текста</h3>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования текстовых стилей</span>
+            </div>
+            <pre><code><span class="tag">&lt;StackPanel&gt;</span>
+    <span class="tag">&lt;TextBlock</span> <span class="attribute">Style</span>=<span class="string">"{StaticResource Header1}"</span> <span class="attribute">Text</span>=<span class="string">"Заголовок первого уровня"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;TextBlock</span> <span class="attribute">Style</span>=<span class="string">"{StaticResource BodyText}"</span> 
+               <span class="attribute">Text</span>=<span class="string">"Это основной текст, который wraps по ширине контейнера. Он использует стиль BodyText, определенный в ресурсах приложения."</span><span class="tag">/&gt;</span>
+    
+    <span class="tag">&lt;TextBlock</span> <span class="attribute">Style</span>=<span class="string">"{StaticResource Header2}"</span> <span class="attribute">Text</span>=<span class="string">"Заголовок второго уровня"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;TextBlock</span> <span class="attribute">Style</span>=<span class="string">"{StaticResource BodyText}"</span> 
+               <span class="attribute">Text</span>=<span class="string">"Еще один абзац текста, демонстрирующий использование стилей для обеспечения единообразия внешнего вида приложения."</span><span class="tag">/&gt;</span>
+    
+    <span class="tag">&lt;TextBlock</span> <span class="attribute">Style</span>=<span class="string">"{StaticResource CaptionText}"</span> 
+               <span class="attribute">Text</span>=<span class="string">"Подпись или дополнительная информация"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/StackPanel&gt;</span></code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Определение стилей типографики в ресурсах приложения обеспечивает единообразие внешнего вида текста во всем приложении и упрощает его изменение.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Стили элементов управления</h2>
+        <p>Стили позволяют определять внешний вид элементов управления и повторно использовать эти определения.</p>
+        
+        <h3>Базовые стили кнопок</h3>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример определения стилей кнопок</span>
+            </div>
+            <pre><code><span class="tag">&lt;Application.Resources&gt;</span>
+    <span class="comment">&lt;!-- Базовый стиль кнопки --&gt;</span>
+    <span class="tag">&lt;Style</span> <span class="attribute">x:Key</span>=<span class="string">"BaseButtonStyle"</span> <span class="attribute">TargetType</span>=<span class="string">"Button"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Padding"</span> <span class="attribute">Value</span>=<span class="string">"12,6"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Margin"</span> <span class="attribute">Value</span>=<span class="string">"5"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Foreground"</span> <span class="attribute">Value</span>=<span class="string">"White"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"BorderThickness"</span> <span class="attribute">Value</span>=<span class="string">"1"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"FontWeight"</span> <span class="attribute">Value</span>=<span class="string">"SemiBold"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Cursor"</span> <span class="attribute">Value</span>=<span class="string">"Hand"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Style&gt;</span>
+    
+    <span class="comment">&lt;!-- Основная кнопка --&gt;</span>
+    <span class="tag">&lt;Style</span> <span class="attribute">x:Key</span>=<span class="string">"PrimaryButtonStyle"</span> 
+           <span class="attribute">TargetType</span>=<span class="string">"Button"</span> 
+           <span class="attribute">BasedOn</span>=<span class="string">"{StaticResource BaseButtonStyle}"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"{StaticResource PrimaryBrush}"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"BorderBrush"</span> <span class="attribute">Value</span>=<span class="string">"{StaticResource PrimaryBrush}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Style&gt;</span>
+    
+    <span class="comment">&lt;!-- Вторичная кнопка --&gt;</span>
+    <span class="tag">&lt;Style</span> <span class="attribute">x:Key</span>=<span class="string">"SecondaryButtonStyle"</span> 
+           <span class="attribute">TargetType</span>=<span class="string">"Button"</span> 
+           <span class="attribute">BasedOn</span>=<span class="string">"{StaticResource BaseButtonStyle}"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"Transparent"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Foreground"</span> <span class="attribute">Value</span>=<span class="string">"{StaticResource PrimaryBrush}"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"BorderBrush"</span> <span class="attribute">Value</span>=<span class="string">"{StaticResource PrimaryBrush}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Style&gt;</span>
+    
+    <span class="comment">&lt;!-- Стиль по умолчанию для всех кнопок --&gt;</span>
+    <span class="tag">&lt;Style</span> <span class="attribute">TargetType</span>=<span class="string">"Button"</span> <span class="attribute">BasedOn</span>=<span class="string">"{StaticResource BaseButtonStyle}"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/Application.Resources&gt;</span></code></pre>
+        </div>
+        
+        <h3>Триггеры в стилях</h3>
+        <p>Триггеры позволяют изменять внешний вид элементов в ответ на различные события и состояния:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования триггеров в стилях</span>
+            </div>
+            <pre><code><span class="tag">&lt;Style</span> <span class="attribute">x:Key</span>=<span class="string">"ModernButtonStyle"</span> <span class="attribute">TargetType</span>=<span class="string">"Button"</span> 
+       <span class="attribute">BasedOn</span>=<span class="string">"{StaticResource BaseButtonStyle}"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"{StaticResource PrimaryBrush}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"BorderBrush"</span> <span class="attribute">Value</span>=<span class="string">"Transparent"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Template"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Setter.Value&gt;</span>
+            <span class="tag">&lt;ControlTemplate</span> <span class="attribute">TargetType</span>=<span class="string">"Button"</span><span class="tag">&gt;</span>
+                <span class="tag">&lt;Border</span> <span class="attribute">x:Name</span>=<span class="string">"border"</span> 
+                        <span class="attribute">Background</span>=<span class="string">"{TemplateBinding Background}"</span>
+                        <span class="attribute">BorderBrush</span>=<span class="string">"{TemplateBinding BorderBrush}"</span>
+                        <span class="attribute">BorderThickness</span>=<span class="string">"{TemplateBinding BorderThickness}"</span>
+                        <span class="attribute">CornerRadius</span>=<span class="string">"4"</span><span class="tag">&gt;</span>
+                    <span class="tag">&lt;ContentPresenter</span> <span class="attribute">HorizontalAlignment</span>=<span class="string">"Center"</span>
+                                      <span class="attribute">VerticalAlignment</span>=<span class="string">"Center"</span>
+                                      <span class="attribute">Margin</span>=<span class="string">"{TemplateBinding Padding}"</span><span class="tag">/&gt;</span>
+                <span class="tag">&lt;/Border&gt;</span>
+                <span class="tag">&lt;ControlTemplate.Triggers&gt;</span>
+                    <span class="tag">&lt;Trigger</span> <span class="attribute">Property</span>=<span class="string">"IsMouseOver"</span> <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">&gt;</span>
+                        <span class="tag">&lt;Setter</span> <span class="attribute">TargetName</span>=<span class="string">"border"</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> 
+                               <span class="attribute">Value</span>=<span class="string">"{StaticResource SecondaryBrush}"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;/Trigger&gt;</span>
+                    <span class="tag">&lt;Trigger</span> <span class="attribute">Property</span>=<span class="string">"IsPressed"</span> <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">&gt;</span>
+                        <span class="tag">&lt;Setter</span> <span class="attribute">TargetName</span>=<span class="string">"border"</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> 
+                               <span class="attribute">Value</span>=<span class="string">"{StaticResource AccentBrush}"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;/Trigger&gt;</span>
+                    <span class="tag">&lt;Trigger</span> <span class="attribute">Property</span>=<span class="string">"IsEnabled"</span> <span class="attribute">Value</span>=<span class="string">"False"</span><span class="tag">&gt;</span>
+                        <span class="tag">&lt;Setter</span> <span class="attribute">TargetName</span>=<span class="string">"border"</span> <span class="attribute">Property</span>=<span class="string">"Opacity"</span> <span class="attribute">Value</span>=<span class="string">"0.6"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;/Trigger&gt;</span>
+                <span class="tag">&lt;/ControlTemplate.Triggers&gt;</span>
+            <span class="tag">&lt;/ControlTemplate&gt;</span>
+        <span class="tag">&lt;/Setter.Value&gt;</span>
+    <span class="tag">&lt;/Setter&gt;</span>
+<span class="tag">&lt;/Style&gt;</span></code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте свойство BasedOn для наследования стилей. Это позволяет создавать базовый стиль и затем расширять его для конкретных случаев, уменьшая дублирование кода.</p>
+        </div>
+        
+        <h3>Темы и скины</h3>
+        <p>WPF поддерживает создание сменных тем через механизм ResourceDictionary:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример переключения тем</span>
+            </div>
+            <pre><code><span class="comment">&lt;!-- LightTheme.xaml --&gt;</span>
+<span class="tag">&lt;ResourceDictionary</span> <span class="attribute">xmlns</span>=<span class="string">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
+                    <span class="attribute">xmlns:x</span>=<span class="string">"http://schemas.microsoft.com/winfx/2006/xaml"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Color</span> <span class="attribute">x:Key</span>=<span class="string">"BackgroundColor"</span><span class="tag">&gt;</span>#FFFFFFFF<span class="tag">&lt;/Color&gt;</span>
+    <span class="tag">&lt;Color</span> <span class="attribute">x:Key</span>=<span class="string">"ForegroundColor"</span><span class="tag">&gt;</span>#FF333333<span class="tag">&lt;/Color&gt;</span>
+    <span class="tag">&lt;SolidColorBrush</span> <span class="attribute">x:Key</span>=<span class="string">"BackgroundBrush"</span> <span class="attribute">Color</span>=<span class="string">"{StaticResource BackgroundColor}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;SolidColorBrush</span> <span class="attribute">x:Key</span>=<span class="string">"ForegroundBrush"</span> <span class="attribute">Color</span>=<span class="string">"{StaticResource ForegroundColor}"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/ResourceDictionary&gt;</span>
+
+<span class="comment">&lt;!-- DarkTheme.xaml --&gt;</span>
+<span class="tag">&lt;ResourceDictionary</span> <span class="attribute">xmlns</span>=<span class="string">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
+                    <span class="attribute">xmlns:x</span>=<span class="string">"http://schemas.microsoft.com/winfx/2006/xaml"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Color</span> <span class="attribute">x:Key</span>=<span class="string">"BackgroundColor"</span><span class="tag">&gt;</span>#FF333333<span class="tag">&lt;/Color&gt;</span>
+    <span class="tag">&lt;Color</span> <span class="attribute">x:Key</span>=<span class="string">"ForegroundColor"</span><span class="tag">&gt;</span>#FFFFFFFF<span class="tag">&lt;/Color&gt;</span>
+    <span class="tag">&lt;SolidColorBrush</span> <span class="attribute">x:Key</span>=<span class="string">"BackgroundBrush"</span> <span class="attribute">Color</span>=<span class="string">"{StaticResource BackgroundColor}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;SolidColorBrush</span> <span class="attribute">x:Key</span>=<span class="string">"ForegroundBrush"</span> <span class="attribute">Color</span>=<span class="string">"{StaticResource ForegroundColor}"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/ResourceDictionary&gt;</span>
+
+<span class="comment">&lt;!-- Код для переключения тем --&gt;</span>
+<span class="tag">&lt;Button</span> <span class="attribute">Content</span>=<span class="string">"Светлая тема"</span> 
+        <span class="attribute">Click</span>=<span class="string">"LightTheme_Click"</span><span class="tag">/&gt;</span>
+<span class="tag">&lt;Button</span> <span class="attribute">Content</span>=<span class="string">"Темная тема"</span> 
+        <span class="attribute">Click</span>=<span class="string">"DarkTheme_Click"</span><span class="tag">/&gt;</span></code></pre>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Обработчики переключения тем</span>
+            </div>
+            <pre><code><span class="keyword">private</span> <span class="keyword">void</span> LightTheme_Click(<span class="keyword">object</span> sender, RoutedEventArgs e)
+{
+    <span class="comment">// Загружаем светлую тему</span>
+    <span class="type">Application</span>.Current.Resources.MergedDictionaries.Clear();
+    <span class="type">Application</span>.Current.Resources.MergedDictionaries.Add(
+        <span class="keyword">new</span> ResourceDictionary() { Source = <span class="keyword">new</span> Uri("LightTheme.xaml", UriKind.Relative) });
+}
+
+<span class="keyword">private</span> <span class="keyword">void</span> DarkTheme_Click(<span class="keyword">object</span> sender, RoutedEventArgs e)
+{
+    <span class="comment">// Загружаем темную тему</span>
+    <span class="type">Application</span>.Current.Resources.MergedDictionaries.Clear();
+    <span class="type">Application</span>.Current.Resources.MergedDictionaries.Add(
+        <span class="keyword">new</span> ResourceDictionary() { Source = <span class="keyword">new</span> Uri("DarkTheme.xaml", UriKind.Relative) });
+}</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Для динамического переключения тем используйте DynamicResource вместо StaticResource, чтобы изменения применялись без перезагрузки приложения.</p>
+        </div>
+    </div>
+
+</body>
+</html>
