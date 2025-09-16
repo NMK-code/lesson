@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лекции по WPF</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #6a11cb;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+            color: #2980b9;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        /* Стили для карточек лекций */
+        .lectures-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .lecture-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .lecture-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-header {
+            padding: 20px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            text-align: center;
+        }
+        
+        .card-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .card-desc {
+            margin-bottom: 20px;
+            color: #7f8c8d;
+            flex-grow: 1;
+        }
+        
+        .card-button {
+            display: block;
+            text-align: center;
+            padding: 12px 20px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        
+        .card-button:hover {
+            background: #2980b9;
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Стили для навигации */
+        .navigation {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .nav-button {
+            padding: 12px 25px;
+            margin: 0 10px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .lectures-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Лекции по Windows Presentation Foundation</h1>
+        <p>Изучите возможности WPF для создания современных desktop-приложений</p>
+    </header>
+
+    <div class="container">
+        <h2>Доступные лекции</h2>
+        <p>Выберите тему для изучения из списка ниже. Каждая лекция содержит подробную информацию, примеры кода и практические рекомендации.</p>
+        
+        <div class="lectures-grid">
+            <div class="lecture-card">
+                <div class="card-header">
+                    <div class="card-icon">📊</div>
+                    <h3 class="card-title">Анимации в WPF</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">Изучите различные виды анимаций в WPF Storyboard, их применение и лучшие практики для создания плавных и эффектных переходов.</p>
+                    <a href="less1.html" class="card-button">Перейти к лекции</a>
+                </div>
+            </div>
+            
+            <div class="lecture-card">
+                <div class="card-header">
+                    <div class="card-icon">🔄</div>
+                    <h3 class="card-title">Преобразования в WPF</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">Узнайте о Transform-классах в WPF, их типах и применении для изменения внешнего вида элементов без изменения их базовых характеристик.</p>
+                    <a href="less2.html" class="card-button">Перейти к лекции</a>
+                </div>
+            </div>
+            
+            <div class="lecture-card">
+                <div class="card-header">
+                    <div class="card-icon">🎨</div>
+                    <h3 class="card-title">Стили и шаблоны</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">Изучите создание согласованного внешнего вида приложения с помощью стилей, шаблонов элементов управления и ресурсов.</p>
+                    <a href="#" class="card-button">Скоро будет</a>
+                </div>
+            </div>
+            
+            <div class="lecture-card">
+                <div class="card-header">
+                    <div class="card-icon">🧩</div>
+                    <h3 class="card-title">Привязка данных</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">Освойте мощный механизм привязки данных в WPF для создания гибких и поддерживаемых приложений с разделением логики и представления.</p>
+                    <a href="#" class="card-button">Скоро будет</a>
+                </div>
+            </div>
+            
+            <div class="lecture-card">
+                <div class="card-header">
+                    <div class="card-icon">📝</div>
+                    <h3 class="card-title">Пользовательские элементы</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">Научитесь создавать собственные элементы управления и пользовательские компоненты для расширения функциональности WPF-приложений.</p>
+                    <a href="#" class="card-button">Скоро будет</a>
+                </div>
+            </div>
+            
+            <div class="lecture-card">
+                <div class="card-header">
+                    <div class="card-icon">⚡</div>
+                    <h3 class="card-title">Производительность</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-desc">Оптимизируйте производительность WPF-приложений с помощью лучших практик и методов отладки проблем с производительностью.</p>
+                    <a href="#" class="card-button">Скоро будет</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="navigation">
+            <a href="animation.html" class="nav-button">Первая лекция →</a>
+        </div>
+    </div>
+
+
+
+    
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Виды анимации в WPF Storyboard</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #6a11cb;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+            color: #2980b9;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        /* Стили для таблиц */
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+            min-width: 600px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4fc;
+            transition: background-color 0.3s;
+        }
+        
+        /* Стили для блоков кода */
+        .code-container {
+            background: #2d3a4b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .code-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #63b3ed;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .code-header .language {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .code-header .caption {
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .keyword {
+            color: #ff79c6;
+        }
+        
+        .type {
+            color: #8be9fd;
+        }
+        
+        .value {
+            color: #f1fa8c;
+        }
+        
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+        
+        .tag {
+            color: #ff79c6;
+        }
+        
+        .attribute {
+            color: #50fa7b;
+        }
+        
+        .string {
+            color: #f1fa8c;
+        }
+        
+        /* Стили для заметок и советов */
+        .note {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tip {
+            background: #f0f9eb;
+            border-left: 4px solid #52c41a;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background: #fef7ec;
+            border-left: 4px solid #fa8c16;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Виды анимации в WPF Storyboard</h1>
+        <p>Полное руководство по созданию анимаций в Windows Presentation Foundation</p>
+    </header>
+
+    <div class="container">
+        <h2>Основные виды анимаций в WPF</h2>
+        <p>В WPF анимации в <code>Storyboard</code> можно разделить на три основные категории, каждая из которых предназначена для разных сценариев и обеспечивает различные возможности управления изменением свойств во времени.</p>
+        
+        <h3>1. 📊 Линейная анимация (Linear Interpolation Animations)</h3>
+        <p>Плавно изменяют значение свойства от начального до конечного значения с использованием линейной интерполяции.</p>
+        
+        <h3>2. 🎞️ Анимация по ключевым кадрам (Key-Frame Animations)</h3>
+        <p>Позволяют определять сложные изменения свойств с использованием ключевых кадров, где каждый кадр задает значение в определенный момент времени.</p>
+        
+        <h3>3. 🛤️ Анимация по пути (Path-Based Animations)</h3>
+        <p>Перемещают объекты вдоль заданного геометрического пути. Это особенно полезно для создания движений по сложным траекториям.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример простой анимации</span>
+            </div>
+            <pre><code><span class="tag">&lt;DoubleAnimation</span>
+    <span class="attribute">Storyboard.TargetProperty</span>=<span class="string">"Width"</span>
+    <span class="attribute">From</span>=<span class="string">"100"</span>
+    <span class="attribute">To</span>=<span class="string">"200"</span>
+    <span class="attribute">Duration</span>=<span class="string">"0:0:5"</span><span class="tag">/&gt;</span></code></pre>
+        </div>
+        
+        <h2>Сводная таблица видов анимаций</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип анимации</th>
+                        <th>Классы анимаций</th>
+                        <th>Для каких свойств</th>
+                        <th>Ключевые особенности</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Линейная</strong></td>
+                        <td>DoubleAnimation, ColorAnimation</td>
+                        <td>Double, Color</td>
+                        <td>Плавное изменение значений</td>
+                    </tr>
+                    <tr>
+                        <td><strong>По ключевым кадрам</strong></td>
+                        <td>DoubleAnimationUsingKeyFrames</td>
+                        <td>Double, Color</td>
+                        <td>Контроль значений в конкретные моменты времени</td>
+                    </tr>
+                    <tr>
+                        <td><strong>По пути</strong></td>
+                        <td>DoubleAnimationUsingPath</td>
+                        <td>Double, Point</td>
+                        <td>Движение вдоль геометрического пути</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Специальные</strong></td>
+                        <td>Различные</td>
+                        <td>Сложные свойства</td>
+                        <td>Анимация вложенных свойств и преобразований</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Линейные анимации лучше всего подходят для простых переходов, таких как изменение размера, прозрачности или цвета.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Расширенная таблица видов анимаций</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип анимации</th>
+                        <th>Классы анимаций</th>
+                        <th>Для каких свойств</th>
+                        <th>Ключевые параметры</th>
+                        <th>Сценарии использования</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Линейная интерполяция</strong></td>
+                        <td>DoubleAnimation</td>
+                        <td>Double (Width, Height, Opacity)</td>
+                        <td>From, To, By, Duration</td>
+                        <td>Изменение размера, прозрачности, положения</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Линейная интерполяция</strong></td>
+                        <td>ColorAnimation</td>
+                        <td>Color (Background, Foreground)</td>
+                        <td>From, To, By, Duration</td>
+                        <td>Изменение цвета элементов</td>
+                    </tr>
+                    <tr>
+                        <td><strong>По ключевым кадрам</strong></td>
+                        <td>DoubleAnimationUsingKeyFrames</td>
+                        <td>Double</td>
+                        <td>KeyFrames, KeyTime, Value</td>
+                        <td>Сложные последовательности анимаций</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Типы ключевых кадров</strong></td>
+                        <td>LinearXxxKeyFrame</td>
+                        <td>Любые поддерживаемые</td>
+                        <td>KeyTime, Value</td>
+                        <td>Плавные переходы между значениями</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Типы ключевых кадров</strong></td>
+                        <td>DiscreteXxxKeyFrame</td>
+                        <td>Любые поддерживаемые</td>
+                        <td>KeyTime, Value</td>
+                        <td>Мгновенные изменения значения</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Типы ключевых кадров</strong></td>
+                        <td>SplineXxxKeyFrame</td>
+                        <td>Любые поддерживаемые</td>
+                        <td>KeyTime, Value, KeySpline</td>
+                        <td>Нелинейные easing-эффекты</td>
+                    </tr>
+                    <tr>
+                        <td><strong>По пути</strong></td>
+                        <td>DoubleAnimationUsingPath</td>
+                        <td>Double (X, Y координаты или угол)</td>
+                        <td>PathGeometry, Source, Duration</td>
+                        <td>Движение по сложной траектории</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Матричные преобразования</strong></td>
+                        <td>MatrixAnimation</td>
+                        <td>Matrix (Transformations)</td>
+                        <td>From, To, Duration</td>
+                        <td>Сложные трансформации</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <h3>Easing-функции</h3>
+        <p>Для создания более естественного движения можно применять easing-функции:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования Easing-функции</span>
+            </div>
+            <pre><code><span class="tag">&lt;DoubleAnimation</span> <span class="attribute">From</span>=<span class="string">"0"</span> <span class="attribute">To</span>=<span class="string">"100"</span> <span class="attribute">Duration</span>=<span class="string">"0:0:2"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;DoubleAnimation.EasingFunction&gt;</span>
+        <span class="tag">&lt;BounceEase</span> <span class="attribute">EasingMode</span>=<span class="string">"EaseOut"</span> <span class="attribute">Bounces</span>=<span class="string">"2"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/DoubleAnimation.EasingFunction&gt;</span>
+<span class="tag">&lt;/DoubleAnimation&gt;</span></code></pre>
+        </div>
+        
+        <h3>Пример сложной анимации</h3>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Комплексная анимация с несколькими эффектами</span>
+            </div>
+            <pre><code><span class="tag">&lt;Storyboard</span> <span class="attribute">x:Key</span>=<span class="string">"ComplexAnimation"</span><span class="tag">&gt;</span>
+    <span class="comment">&lt;!-- Анимация перемещения по пути --&gt;</span>
+    <span class="tag">&lt;DoubleAnimationUsingPath</span>
+        <span class="attribute">Storyboard.TargetName</span>=<span class="string">"myElement"</span>
+        <span class="attribute">Storyboard.TargetProperty</span>=<span class="string">"(Canvas.Left)"</span>
+        <span class="attribute">PathGeometry</span>=<span class="string">"{StaticResource MovementPath}"</span>
+        <span class="attribute">Source</span>=<span class="string">"X"</span>
+        <span class="attribute">Duration</span>=<span class="string">"0:0:5"</span><span class="tag">/&gt;</span>
+    
+    <span class="comment">&lt;!-- Анимация вращения с easing-функцией --&gt;</span>
+    <span class="tag">&lt;DoubleAnimation</span>
+        <span class="attribute">Storyboard.TargetName</span>=<span class="string">"myElement"</span>
+        <span class="attribute">Storyboard.TargetProperty</span>=<span class="string">"RenderTransform.Angle"</span>
+        <span class="attribute">From</span>=<span class="string">"0"</span> <span class="attribute">To</span>=<span class="string">"360"</span> <span class="attribute">Duration</span>=<span class="string">"0:0:5"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;DoubleAnimation.EasingFunction&gt;</span>
+            <span class="tag">&lt;CubicEase</span> <span class="attribute">EasingMode</span>=<span class="string">"EaseInOut"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/DoubleAnimation.EasingFunction&gt;</span>
+    <span class="tag">&lt;/DoubleAnimation&gt;</span>
+    
+    <span class="comment">&lt;!-- Цветовая анимация по ключевым кадрам --&gt;</span>
+    <span class="tag">&lt;ColorAnimationUsingKeyFrames</span>
+        <span class="attribute">Storyboard.TargetName</span>=<span class="string">"myElement"</span>
+        <span class="attribute">Storyboard.TargetProperty</span>=<span class="string">"(Panel.Background).(SolidColorBrush.Color)"</span>
+        <span class="attribute">Duration</span>=<span class="string">"0:0:5"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;LinearColorKeyFrame</span> <span class="attribute">KeyTime</span>=<span class="string">"0:0:0"</span> <span class="attribute">Value</span>=<span class="string">"Blue"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;SplineColorKeyFrame</span> <span class="attribute">KeyTime</span>=<span class="string">"0:0:2"</span> <span class="attribute">Value</span>=<span class="string">"Green"</span> <span class="attribute">KeySpline</span>=<span class="string">"0.5,0 0.5,1"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;DiscreteColorKeyFrame</span> <span class="attribute">KeyTime</span>=<span class="string">"0:0:4"</span> <span class="attribute">Value</span>=<span class="string">"Red"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/ColorAnimationUsingKeyFrames&gt;</span>
+<span class="tag">&lt;/Storyboard&gt;</span></code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Для анимации вложенных свойств используйте сложные выражения для TargetProperty, например: "Fill.GradientStops[1].Color"</p>
+        </div>
+        
+        <h3>Рекомендации по производительности</h3>
+        <ul>
+            <li>Используйте <code>RenderTransform</code> вместо <code>LayoutTransform</code> для анимации</li>
+            <li>Для анимации прозрачности устанавливайте <code>Opacity</code> вместо анимации цвета с альфа-каналом</li>
+            <li>Используйте <code>BitmapCache</code> для сложных визуальных элементов</li>
+            <li>Предпочитайте анимации по ключевым кадрам с easing-функциями вместо нескольких последовательных анимаций</li>
+        </ul>
+    </div>
+
+</body>
+</html>

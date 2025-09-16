@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Преобразования в WPF</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #6a11cb;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+            color: #2980b9;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        /* Стили для таблиц */
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+            min-width: 600px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4fc;
+            transition: background-color 0.3s;
+        }
+        
+        /* Стили для блоков кода */
+        .code-container {
+            background: #2d3a4b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .code-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #63b3ed;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .code-header .language {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .code-header .caption {
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .keyword {
+            color: #ff79c6;
+        }
+        
+        .type {
+            color: #8be9fd;
+        }
+        
+        .value {
+            color: #f1fa8c;
+        }
+        
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+        
+        .tag {
+            color: #ff79c6;
+        }
+        
+        .attribute {
+            color: #50fa7b;
+        }
+        
+        .string {
+            color: #f1fa8c;
+        }
+        
+        /* Стили для заметок и советов */
+        .note {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tip {
+            background: #f0f9eb;
+            border-left: 4px solid #52c41a;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background: #fef7ec;
+            border-left: 4px solid #fa8c16;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .visual-demo {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .demo-item {
+            width: 200px;
+            height: 200px;
+            margin: 15px;
+            border: 2px dashed #3498db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-rectangle {
+            width: 100px;
+            height: 50px;
+            background-color: #3498db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        .demo-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+            
+            .demo-item {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Преобразования в WPF</h1>
+        <p>Подробное руководство по Transform-классам в Windows Presentation Foundation</p>
+    </header>
+
+    <div class="container">
+        <h2>Обзор Transform-классов в WPF</h2>
+        <p>Классы преобразований в WPF позволяют изменять внешний вид элементов пользовательского интерфейса без изменения их базовых характеристик. Все преобразования наследуются от базового класса <code>Transform</code>.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Класс преобразования</th>
+                        <th>Назначение</th>
+                        <th>Ключевые свойства</th>
+                        <th>Применение</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Transform</strong></td>
+                        <td>Абстрактный базовый класс для всех преобразований</td>
+                        <td>—</td>
+                        <td>Определяет общую функциональность для всех преобразований</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MatrixTransform</strong></td>
+                        <td>Произвольное аффинное преобразование с использованием матрицы 3×3</td>
+                        <td>Matrix</td>
+                        <td>Создание пользовательских преобразований, не предоставляемых другими классами</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RotateTransform</strong></td>
+                        <td>Поворот элемента на заданный угол вокруг точки</td>
+                        <td>Angle, CenterX, CenterY</td>
+                        <td>Вращение элементов интерфейса</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ScaleTransform</strong></td>
+                        <td>Масштабирование элемента по осям X и Y</td>
+                        <td>ScaleX, ScaleY, CenterX, CenterY</td>
+                        <td>Увеличение/уменьшение элементов, создание эффектов глубины</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SkewTransform</strong></td>
+                        <td>Наклон (сдвиг) элемента по осям X и Y</td>
+                        <td>AngleX, AngleY, CenterX, CenterY</td>
+                        <td>Создание перспективы, наклонных элементов</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TranslateTransform</strong></td>
+                        <td>Перемещение элемента по осям X и Y</td>
+                        <td>X, Y</td>
+                        <td>Сдвиг элементов, анимация перемещения</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TransformGroup</strong></td>
+                        <td>Группа преобразований, применяемых последовательно</td>
+                        <td>Children (коллекция Transform)</td>
+                        <td>Комбинирование нескольких преобразований</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TransformCollection</strong></td>
+                        <td>Коллекция объектов Transform</td>
+                        <td>—</td>
+                        <td>Используется TransformGroup для хранения дочерних преобразований</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Преобразования не влияют на фактические размеры или положение элемента в layout-системе WPF, а только на его визуальное представление.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Подробное описание каждого преобразования</h2>
+        
+        <h3>1. MatrixTransform</h3>
+        <p>Создает произвольное аффинное преобразование с использованием матрицы 3×3. Это наиболее гибкое, но и наиболее сложное в использовании преобразование.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования MatrixTransform</span>
+            </div>
+            <pre><code><span class="tag">&lt;Rectangle</span> <span class="attribute">Width</span>=<span class="string">"50"</span> <span class="attribute">Height</span>=<span class="string">"50"</span> <span class="attribute">Fill</span>=<span class="string">"Blue"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Rectangle.RenderTransform&gt;</span>
+        <span class="tag">&lt;MatrixTransform</span> <span class="attribute">Matrix</span>=<span class="string">"1, 0.5, 0, 1, 0, 0"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Rectangle.RenderTransform&gt;</span>
+<span class="tag">&lt;/Rectangle&gt;</span></code></pre>
+        </div>
+        
+        <h3>2. RotateTransform</h3>
+        <p>Поворачивает элемент на заданный угол вокруг указанной точки. Если точка вращения не указана, используется верхний левый угол элемента (0,0).</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования RotateTransform</span>
+            </div>
+            <pre><code><span class="tag">&lt;Button</span> <span class="attribute">Content</span>=<span class="string">"Повернутая кнопка"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Button.RenderTransform&gt;</span>
+        <span class="tag">&lt;RotateTransform</span> <span class="attribute">Angle</span>=<span class="string">"45"</span> <span class="attribute">CenterX</span>=<span class="string">"25"</span> <span class="attribute">CenterY</span>=<span class="string">"25"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Button.RenderTransform&gt;</span>
+<span class="tag">&lt;/Button&gt;</span></code></pre>
+        </div>
+        
+        <h3>3. ScaleTransform</h3>
+        <p>Масштабирует элемент по осям X и Y. Значения меньше 1 уменьшают элемент, больше 1 — увеличивают.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования ScaleTransform</span>
+            </div>
+            <pre><code><span class="tag">&lt;Ellipse</span> <span class="attribute">Width</span>=<span class="string">"50"</span> <span class="attribute">Height</span>=<span class="string">"50"</span> <span class="attribute">Fill</span>=<span class="string">"Green"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Ellipse.RenderTransform&gt;</span>
+        <span class="tag">&lt;ScaleTransform</span> <span class="attribute">ScaleX</span>=<span class="string">"1.5"</span> <span class="attribute">ScaleY</span>=<span class="string">"0.5"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Ellipse.RenderTransform&gt;</span>
+<span class="tag">&lt;/Ellipse&gt;</span></code></pre>
+        </div>
+        
+        <h3>4. SkewTransform</h3>
+        <p>Наклоняет элемент на заданные углы по осям X и Y. Создает эффект перспективы или объема.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования SkewTransform</span>
+            </div>
+            <pre><code><span class="tag">&lt;Rectangle</span> <span class="attribute">Width</span>=<span class="string">"100"</span> <span class="attribute">Height</span>=<span class="string">"50"</span> <span class="attribute">Fill</span>=<span class="string">"Orange"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Rectangle.RenderTransform&gt;</span>
+        <span class="tag">&lt;SkewTransform</span> <span class="attribute">AngleX</span>=<span class="string">"20"</span> <span class="attribute">AngleY</span>=<span class="string">"0"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Rectangle.RenderTransform&gt;</span>
+<span class="tag">&lt;/Rectangle&gt;</span></code></pre>
+        </div>
+        
+        <h3>5. TranslateTransform</h3>
+        <p>Перемещает элемент на заданное расстояние по осям X и Y. Часто используется для анимации движения.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования TranslateTransform</span>
+            </div>
+            <pre><code><span class="tag">&lt;Border</span> <span class="attribute">Width</span>=<span class="string">"100"</span> <span class="attribute">Height</span>=<span class="string">"50"</span> <span class="attribute">Background</span>=<span class="string">"Red"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Border.RenderTransform&gt;</span>
+        <span class="tag">&lt;TranslateTransform</span> <span class="attribute">X</span>=<span class="string">"20"</span> <span class="attribute">Y</span>=<span class="string">"30"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Border.RenderTransform&gt;</span>
+<span class="tag">&lt;/Border&gt;</span></code></pre>
+        </div>
+        
+        <h3>6. TransformGroup</h3>
+        <p>Объединяет несколько преобразований, которые применяются последовательно к элементу.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования TransformGroup</span>
+            </div>
+            <pre><code><span class="tag">&lt;Canvas</span> <span class="attribute">Width</span>=<span class="string">"200"</span> <span class="attribute">Height</span>=<span class="string">"200"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Rectangle</span> <span class="attribute">Width</span>=<span class="string">"50"</span> <span class="attribute">Height</span>=<span class="string">"50"</span> <span class="attribute">Fill</span>=<span class="string">"Purple"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Rectangle.RenderTransform&gt;</span>
+            <span class="tag">&lt;TransformGroup&gt;</span>
+                <span class="tag">&lt;RotateTransform</span> <span class="attribute">Angle</span>=<span class="string">"45"</span><span class="tag">/&gt;</span>
+                <span class="tag">&lt;ScaleTransform</span> <span class="attribute">ScaleX</span>=<span class="string">"1.5"</span> <span class="attribute">ScaleY</span>=<span class="string">"1.5"</span><span class="tag">/&gt;</span>
+                <span class="tag">&lt;TranslateTransform</span> <span class="attribute">X</span>=<span class="string">"50"</span> <span class="attribute">Y</span>=<span class="string">"30"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;/TransformGroup&gt;</span>
+        <span class="tag">&lt;/Rectangle.RenderTransform&gt;</span>
+    <span class="tag">&lt;/Rectangle&gt;</span>
+<span class="tag">&lt;/Canvas&gt;</span></code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Порядок преобразований в TransformGroup важен — они применяются в том порядке, в котором указаны.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Визуальные примеры преобразований</h2>
+        
+        <div class="visual-demo">
+            <div class="demo-item">
+                <div class="demo-rectangle">Оригинал</div>
+                <div class="demo-label">Без преобразования</div>
+            </div>
+            
+            <div class="demo-item">
+                <div class="demo-rectangle" style="transform: rotate(45deg);">RotateTransform</div>
+                <div class="demo-label">RotateTransform</div>
+            </div>
+            
+            <div class="demo-item">
+                <div class="demo-rectangle" style="transform: scale(1.5, 0.8);">ScaleTransform</div>
+                <div class="demo-label">ScaleTransform</div>
+            </div>
+            
+            <div class="demo-item">
+                <div class="demo-rectangle" style="transform: skew(20deg, 0);">SkewTransform</div>
+                <div class="demo-label">SkewTransform</div>
+            </div>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> В реальном WPF-приложении для преобразований используются соответствующие классы, а не CSS-свойства, как в этих демонстрационных примерах.</p>
+        </div>
+        
+        <h2>Размещение преобразований в WPF</h2>
+        <p>В WPF преобразования можно применять к нескольким свойствам:</p>
+        
+        <ul>
+            <li><strong>RenderTransform</strong> - применяется после этапа компоновки, не влияет на позиционирование элемента</li>
+            <li><strong>LayoutTransform</strong> - применяется до этапа компоновки, влияет на позиционирование элемента</li>
+            <li><strong>Transform</strong> в свойствах кистей и других визуальных элементов</li>
+        </ul>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Различные способы применения преобразований</span>
+            </div>
+            <pre><code><span class="comment">&lt;!-- RenderTransform --&gt;</span>
+<span class="tag">&lt;Button</span> <span class="attribute">RenderTransform</span>=<span class="string">"</span>
+    <span class="tag">&lt;RotateTransform</span> <span class="attribute">Angle</span>=<span class="string">"30"</span><span class="tag">/&gt;</span>
+<span class="string">"</span><span class="tag">&gt;</span>Кнопка<span class="tag">&lt;/Button&gt;</span>
+
+<span class="comment">&lt;!-- LayoutTransform --&gt;</span>
+<span class="tag">&lt;Button</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Button.LayoutTransform&gt;</span>
+        <span class="tag">&lt;RotateTransform</span> <span class="attribute">Angle</span>=<span class="string">"30"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Button.LayoutTransform&gt;</span>
+    Кнопка
+<span class="tag">&lt;/Button&gt;</span>
+
+<span class="comment">&lt;!-- Transform в кисти --&gt;</span>
+<span class="tag">&lt;Rectangle</span> <span class="attribute">Fill</span>=<span class="string">"Blue"</span> <span class="attribute">Width</span>=<span class="string">"100"</span> <span class="attribute">Height</span>=<span class="string">"100"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Rectangle.Fill&gt;</span>
+        <span class="tag">&lt;SolidColorBrush&gt;</span>
+            <span class="tag">&lt;SolidColorBrush.Transform&gt;</span>
+                <span class="tag">&lt;RotateTransform</span> <span class="attribute">Angle</span>=<span class="string">"45"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;/SolidColorBrush.Transform&gt;</span>
+        <span class="tag">&lt;/SolidColorBrush&gt;</span>
+    <span class="tag">&lt;/Rectangle.Fill&gt;</span>
+<span class="tag">&lt;/Rectangle&gt;</span></code></pre>
+        </div>
+        
+        <div class="warning">
+            <p><strong>Важно:</strong> LayoutTransform работает медленнее, чем RenderTransform, так как требует пересчета компоновки после преобразования.</p>
+        </div>
+    </div>
+
+</body>
+</html>
