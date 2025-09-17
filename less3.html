@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Триггеры в WPF</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #6a11cb;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+            color: #2980b9;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        /* Стили для таблиц */
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+            min-width: 600px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4fc;
+            transition: background-color 0.3s;
+        }
+        
+        /* Стили для блоков кода */
+        .code-container {
+            background: #2d3a4b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .code-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #63b3ed;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .code-header .language {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .code-header .caption {
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .keyword {
+            color: #ff79c6;
+        }
+        
+        .type {
+            color: #8be9fd;
+        }
+        
+        .value {
+            color: #f1fa8c;
+        }
+        
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+        
+        .tag {
+            color: #ff79c6;
+        }
+        
+        .attribute {
+            color: #50fa7b;
+        }
+        
+        .string {
+            color: #f1fa8c;
+        }
+        
+        /* Стили для заметок и советов */
+        .note {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tip {
+            background: #f0f9eb;
+            border-left: 4px solid #52c41a;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background: #fef7ec;
+            border-left: 4px solid #fa8c16;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .interactive-demo {
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .demo-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .demo-item {
+            padding: 15px;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            background: white;
+            min-width: 200px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .trigger-example {
+            margin: 15px 0;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            background: #f8f9fa;
+        }
+        
+        .state-visualization {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .state-item {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            border-radius: 5px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .state-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .state-description {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+            
+            .demo-item {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Состояния и интерактивность в WPF</h1>
+        <p>Использование триггеров для создания отзывчивых и интерактивных интерфейсов</p>
+    </header>
+
+    <div class="container">
+        <h2>Типы триггеров в WPF</h2>
+        <p>Триггеры в WPF позволяют автоматически изменять свойства элементов или применять действия при выполнении определенных условий. Они являются ключевым механизмом для создания интерактивных интерфейсов.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип триггера</th>
+                        <th>Назначение</th>
+                        <th>Условие срабатывания</th>
+                        <th>Пример использования</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Property Trigger</strong></td>
+                        <td>Изменение свойств при изменении значения другого свойства</td>
+                        <td>Когда свойство элемента достигает определенного значения</td>
+                        <td>Изменение внешнего вида кнопки при наведении курсора</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Trigger</strong></td>
+                        <td>Изменение свойств на основе данных привязки</td>
+                        <td>Когда свойство привязанного объекта достигает определенного значения</td>
+                        <td>Изменение цвета текста при отрицательном значении</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Event Trigger</strong></td>
+                        <td>Запуск действий при возникновении события</td>
+                        <td>При возникновении определенного события</td>
+                        <td>Запуск анимации при нажатии на элемент</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MultiTrigger</strong></td>
+                        <td>Изменение свойств при выполнении нескольких условий</td>
+                        <td>Когда несколько свойств одновременно удовлетворяют условиям</td>
+                        <td>Изменение вида кнопки только когда она активна и наведена</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MultiDataTrigger</strong></td>
+                        <td>Изменение свойств на основе нескольких условий привязки</td>
+                        <td>Когда несколько свойств привязанных объектов удовлетворяют условиям</td>
+                        <td>Визуализация сложных бизнес-правил</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Триггеры позволяют создавать богатые пользовательские интерфейсы без написания кода на C#, определяя поведение непосредственно в XAML.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Property Trigger (Триггеры свойств)</h2>
+        <p>Property Trigger срабатывают при изменении значения свойства элемента управления.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример триггера для кнопки при наведении</span>
+            </div>
+            <pre><code><span class="tag">&lt;Style</span> <span class="attribute">TargetType</span>=<span class="string">"Button"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"LightBlue"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Foreground"</span> <span class="attribute">Value</span>=<span class="string">"Black"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;Style.Triggers&gt;</span>
+        <span class="tag">&lt;Trigger</span> <span class="attribute">Property</span>=<span class="string">"IsMouseOver"</span> <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"Blue"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Foreground"</span> <span class="attribute">Value</span>=<span class="string">"White"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"FontWeight"</span> <span class="attribute">Value</span>=<span class="string">"Bold"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/Trigger&gt;</span>
+        <span class="tag">&lt;Trigger</span> <span class="attribute">Property</span>=<span class="string">"IsPressed"</span> <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"DarkBlue"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Foreground"</span> <span class="attribute">Value</span>=<span class="string">"White"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/Trigger&gt;</span>
+    <span class="tag">&lt;/Style.Triggers&gt;</span>
+<span class="tag">&lt;/Style&gt;</span></code></pre>
+        </div>
+        
+        <h3>Состояния элементов управления</h3>
+        <p>Элементы управления в WPF имеют различные состояния, которые можно отслеживать с помощью триггеров:</p>
+        
+        <div class="state-visualization">
+            <div class="state-item">
+                <div class="state-title">IsMouseOver</div>
+                <div class="state-description">Курсор мыши находится над элементом</div>
+            </div>
+            <div class="state-item">
+                <div class="state-title">IsPressed</div>
+                <div class="state-description">Элемент нажат (для кнопок)</div>
+            </div>
+            <div class="state-item">
+                <div class="state-title">IsFocused</div>
+                <div class="state-description">Элемент имеет фокус ввода</div>
+            </div>
+            <div class="state-item">
+                <div class="state-title">IsEnabled</div>
+                <div class="state-description">Элемент доступен для взаимодействия</div>
+            </div>
+            <div class="state-item">
+                <div class="state-title">IsSelected</div>
+                <div class="state-description">Элемент выбран (для списков)</div>
+            </div>
+            <div class="state-item">
+                <div class="state-title">IsChecked</div>
+                <div class="state-description">Элемент отмечен (для чекбоксов)</div>
+            </div>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования нескольких триггеров свойств</span>
+            </div>
+            <pre><code><span class="tag">&lt;Style</span> <span class="attribute">x:Key</span>=<span class="string">"FancyTextBoxStyle"</span> <span class="attribute">TargetType</span>=<span class="string">"TextBox"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"White"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"BorderBrush"</span> <span class="attribute">Value</span>=<span class="string">"Gray"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"BorderThickness"</span> <span class="attribute">Value</span>=<span class="string">"1"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;Style.Triggers&gt;</span>
+        <span class="comment">&lt;!-- При фокусе --&gt;</span>
+        <span class="tag">&lt;Trigger</span> <span class="attribute">Property</span>=<span class="string">"IsFocused"</span> <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"BorderBrush"</span> <span class="attribute">Value</span>=<span class="string">"Blue"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"BorderThickness"</span> <span class="attribute">Value</span>=<span class="string">"2"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/Trigger&gt;</span>
+        
+        <span class="comment">&lt;!-- При наведении --&gt;</span>
+        <span class="tag">&lt;Trigger</span> <span class="attribute">Property</span>=<span class="string">"IsMouseOver"</span> <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"#FFF5F5F5"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/Trigger&gt;</span>
+        
+        <span class="comment">&lt;!-- Если поле не заполнено --&gt;</span>
+        <span class="tag">&lt;Trigger</span> <span class="attribute">Property</span>=<span class="string">"Text"</span> <span class="attribute">Value</span>=<span class="string">""</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"#FFFFF0F0"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"ToolTip"</span> 
+                   <span class="attribute">Value</span>=<span class="string">"Это поле обязательно для заполнения"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/Trigger&gt;</span>
+    <span class="tag">&lt;/Style.Triggers&gt;</span>
+<span class="tag">&lt;/Style&gt;</span></code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте триггеры для визуальной обратной связи - это делает интерфейс более отзывчивым и понятным для пользователя.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Data Trigger (Триггеры данных)</h2>
+        <p>Data Trigger срабатывают при изменении свойств привязанных данных, а не свойств элементов управления.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример DataTrigger для изменения цвета в зависимости от значения</span>
+            </div>
+            <pre><code><span class="tag">&lt;Style</span> <span class="attribute">TargetType</span>=<span class="string">"TextBlock"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Style.Triggers&gt;</span>
+        <span class="tag">&lt;DataTrigger</span> <span class="attribute">Binding</span>=<span class="string">"{Binding Status}"</span> <span class="attribute">Value</span>=<span class="string">"Error"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Foreground"</span> <span class="attribute">Value</span>=<span class="string">"Red"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"FontWeight"</span> <span class="attribute">Value</span>=<span class="string">"Bold"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/DataTrigger&gt;</span>
+        <span class="tag">&lt;DataTrigger</span> <span class="attribute">Binding</span>=<span class="string">"{Binding Status}"</span> <span class="attribute">Value</span>=<span class="string">"Warning"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Foreground"</span> <span class="attribute">Value</span>=<span class="string">"Orange"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/DataTrigger&gt;</span>
+        <span class="tag">&lt;DataTrigger</span> <span class="attribute">Binding</span>=<span class="string">"{Binding Status}"</span> <span class="attribute">Value</span>=<span class="string">"Success"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Foreground"</span> <span class="attribute">Value</span>=<span class="string">"Green"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/DataTrigger&gt;</span>
+    <span class="tag">&lt;/Style.Triggers&gt;</span>
+<span class="tag">&lt;/Style&gt;</span></code></pre>
+        </div>
+        
+        <h3>DataTrigger с преобразованием значений</h3>
+        <p>DataTrigger можно комбинировать с конвертерами для реализации сложной логики:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример с использованием конвертера</span>
+            </div>
+            <pre><code><span class="comment">&lt;!-- Конвертер для проверки отрицательных значений --&gt;</span>
+<span class="tag">&lt;local:NegativeValueConverter</span> <span class="attribute">x:Key</span>=<span class="string">"NegativeConverter"</span><span class="tag">/&gt;</span>
+
+<span class="tag">&lt;Style</span> <span class="attribute">TargetType</span>=<span class="string">"TextBlock"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Style.Triggers&gt;</span>
+        <span class="tag">&lt;DataTrigger</span> 
+            <span class="attribute">Binding</span>=<span class="string">"{Binding Balance, Converter={StaticResource NegativeConverter}}"</span> 
+            <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Foreground"</span> <span class="attribute">Value</span>=<span class="string">"Red"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"FontWeight"</span> <span class="attribute">Value</span>=<span class="string">"Bold"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"ToolTip"</span> 
+                   <span class="attribute">Value</span>=<span class="string">"Отрицательный баланс! Пожалуйста, пополните счет."</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/DataTrigger&gt;</span>
+    <span class="tag">&lt;/Style.Triggers&gt;</span>
+<span class="tag">&lt;/Style&gt;</span></code></pre>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Реализация конвертера</span>
+            </div>
+            <pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="type">NegativeValueConverter</span> : <span class="type">IValueConverter</span>
+{
+    <span class="keyword">public</span> <span class="keyword">object</span> Convert(<span class="keyword">object</span> value, <span class="type">Type</span> targetType, 
+                          <span class="keyword">object</span> parameter, <span class="type">CultureInfo</span> culture)
+    {
+        <span class="keyword">if</span> (value <span class="keyword">is</span> <span class="type">double</span> numericValue)
+            <span class="keyword">return</span> numericValue &lt; <span class="value">0</span>;
+        
+        <span class="keyword">if</span> (value <span class="keyword">is</span> <span class="type">int</span> intValue)
+            <span class="keyword">return</span> intValue &lt; <span class="value">0</span>;
+            
+        <span class="keyword">return</span> <span class="value">false</span>;
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">object</span> ConvertBack(<span class="keyword">object</span> value, <span class="type">Type</span> targetType, 
+                              <span class="keyword">object</span> parameter, <span class="type">CultureInfo</span> culture)
+    {
+        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="type">NotImplementedException</span>();
+    }
+}</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> DataTrigger особенно полезны в сценариях MVVM, где логика отображения отделена от кода, и изменения интерфейса зависят от состояния данных.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Event Trigger (Триггеры событий)</h2>
+        <p>Event Trigger запускают действия (обычно анимации) при возникновении определенных событий.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример EventTrigger с анимацией</span>
+            </div>
+            <pre><code><span class="tag">&lt;Button</span> <span class="attribute">Content</span>=<span class="string">"Нажми меня"</span> <span class="attribute">Width</span>=<span class="string">"100"</span> <span class="attribute">Height</span>=<span class="string">"30"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Button.Triggers&gt;</span>
+        <span class="tag">&lt;EventTrigger</span> <span class="attribute">RoutedEvent</span>=<span class="string">"Button.Click"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;BeginStoryboard&gt;</span>
+                <span class="tag">&lt;Storyboard&gt;</span>
+                    <span class="tag">&lt;DoubleAnimation</span>
+                        <span class="attribute">Storyboard.TargetProperty</span>=<span class="string">"(Button.Width)"</span>
+                        <span class="attribute">To</span>=<span class="string">"150"</span>
+                        <span class="attribute">Duration</span>=<span class="string">"0:0:0.3"</span>
+                        <span class="attribute">AutoReverse</span>=<span class="string">"True"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;ColorAnimation</span>
+                        <span class="attribute">Storyboard.TargetProperty</span>=<span class="string">"(Button.Background).(SolidColorBrush.Color)"</span>
+                        <span class="attribute">To</span>=<span class="string">"Green"</span>
+                        <span class="attribute">Duration</span>=<span class="string">"0:0:0.5"</span>
+                        <span class="attribute">AutoReverse</span>=<span class="string">"True"</span><span class="tag">/&gt;</span>
+                <span class="tag">&lt;/Storyboard&gt;</span>
+            <span class="tag">&lt;/BeginStoryboard&gt;</span>
+        <span class="tag">&lt;/EventTrigger&gt;</span>
+    <span class="tag">&lt;/Button.Triggers&gt;</span>
+<span class="tag">&lt;/Button&gt;</span></code></pre>
+        </div>
+        
+        <h3>Триггеры для загрузки элементов</h3>
+        <p>EventTrigger часто используются для анимации при загрузке элементов:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример анимации при загрузке элемента</span>
+            </div>
+            <pre><code><span class="tag">&lt;Border</span> <span class="attribute">Width</span>=<span class="string">"200"</span> <span class="attribute">Height</span>=<span class="string">"100"</span> <span class="attribute">Background</span>=<span class="string">"LightBlue"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Border.Triggers&gt;</span>
+        <span class="tag">&lt;EventTrigger</span> <span class="attribute">RoutedEvent</span>=<span class="string">"FrameworkElement.Loaded"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;BeginStoryboard&gt;</span>
+                <span class="tag">&lt;Storyboard&gt;</span>
+                    <span class="tag">&lt;DoubleAnimation</span>
+                        <span class="attribute">Storyboard.TargetProperty</span>=<span class="string">"Opacity"</span>
+                        <span class="attribute">From</span>=<span class="string">"0"</span>
+                        <span class="attribute">To</span>=<span class="string">"1"</span>
+                        <span class="attribute">Duration</span>=<span class="string">"0:0:1"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;ThicknessAnimation</span>
+                        <span class="attribute">Storyboard.TargetProperty</span>=<span class="string">"Margin"</span>
+                        <span class="attribute">From</span>=<span class="string">"0,20,0,0"</span>
+                        <span class="attribute">To</span>=<span class="string">"0,0,0,0"</span>
+                        <span class="attribute">Duration</span>=<span class="string">"0:0:1"</span><span class="tag">/&gt;</span>
+                <span class="tag">&lt;/Storyboard&gt;</span>
+            <span class="tag">&lt;/BeginStoryboard&gt;</span>
+        <span class="tag">&lt;/EventTrigger&gt;</span>
+    <span class="tag">&lt;/Border.Triggers&gt;</span>
+<span class="tag">&lt;/Border&gt;</span></code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте EventTrigger с анимациями для плавного перехода между состояниями, что создает более профессиональное впечатление от приложения.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>MultiTrigger и MultiDataTrigger</h2>
+        <p>MultiTrigger и MultiDataTrigger позволяют задавать условия, которые должны выполняться одновременно для нескольких свойств.</p>
+        
+        <h3>MultiTrigger</h3>
+        <p>MultiTrigger срабатывает, когда несколько условий свойств выполняются одновременно:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример MultiTrigger для кнопки</span>
+            </div>
+            <pre><code><span class="tag">&lt;Style</span> <span class="attribute">TargetType</span>=<span class="string">"Button"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Style.Triggers&gt;</span>
+        <span class="tag">&lt;MultiTrigger&gt;</span>
+            <span class="tag">&lt;MultiTrigger.Conditions&gt;</span>
+                <span class="tag">&lt;Condition</span> <span class="attribute">Property</span>=<span class="string">"IsMouseOver"</span> <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">/&gt;</span>
+                <span class="tag">&lt;Condition</span> <span class="attribute">Property</span>=<span class="string">"IsEnabled"</span> <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;/MultiTrigger.Conditions&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"LightGreen"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Cursor"</span> <span class="attribute">Value</span>=<span class="string">"Hand"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/MultiTrigger&gt;</span>
+    <span class="tag">&lt;/Style.Triggers&gt;</span>
+<span class="tag">&lt;/Style&gt;</span></code></pre>
+        </div>
+        
+        <h3>MultiDataTrigger</h3>
+        <p>MultiDataTrigger срабатывает, когда несколько условий привязки данных выполняются одновременно:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример MultiDataTrigger для сложного условия</span>
+            </div>
+            <pre><code><span class="tag">&lt;Style</span> <span class="attribute">TargetType</span>=<span class="string">"TextBox"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Style.Triggers&gt;</span>
+        <span class="tag">&lt;MultiDataTrigger&gt;</span>
+            <span class="tag">&lt;MultiDataTrigger.Conditions&gt;</span>
+                <span class="tag">&lt;Condition</span> <span class="attribute">Binding</span>=<span class="string">"{Binding IsRequired}"</span> <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">/&gt;</span>
+                <span class="tag">&lt;Condition</span> <span class="attribute">Binding</span>=<span class="string">"{Binding Text, RelativeSource={RelativeSource Self}}"</span> 
+                         <span class="attribute">Value</span>=<span class="string">""</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;/MultiDataTrigger.Conditions&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"#FFFFE0E0"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"BorderBrush"</span> <span class="attribute">Value</span>=<span class="string">"Red"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"ToolTip"</span> 
+                   <span class="attribute">Value</span>=<span class="string">"Это поле обязательно для заполнения"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/MultiDataTrigger&gt;</span>
+    <span class="tag">&lt;/Style.Triggers&gt;</span>
+<span class="tag">&lt;/Style&gt;</span></code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> MultiTrigger и MultiDataTrigger особенно полезны для реализации сложной бизнес-логики, когда изменение внешнего вида зависит от комбинации нескольких условий.</p>
+        </div>
+        
+        <h3>Практический пример: форма входа</h3>
+        <p>Рассмотрим пример использования триггеров в форме входа:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Форма входа с различными триггерами</span>
+            </div>
+            <pre><code><span class="tag">&lt;StackPanel</span> <span class="attribute">Width</span>=<span class="string">"300"</span> <span class="attribute">Margin</span>=<span class="string">"20"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;TextBox</span> <span class="attribute">x:Name</span>=<span class="string">"UsernameTextBox"</span> <span class="attribute">Margin</span>=<span class="string">"0,0,0,10"</span>
+             <span class="attribute">Text</span>=<span class="string">"{Binding Username}"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;TextBox.Style&gt;</span>
+            <span class="tag">&lt;Style</span> <span class="attribute">TargetType</span>=<span class="string">"TextBox"</span><span class="tag">&gt;</span>
+                <span class="tag">&lt;Style.Triggers&gt;</span>
+                    <span class="tag">&lt;DataTrigger</span> <span class="attribute">Binding</span>=<span class="string">"{Binding Text, ElementName=UsernameTextBox}"</span> 
+                                 <span class="attribute">Value</span>=<span class="string">""</span><span class="tag">&gt;</span>
+                        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> <span class="attribute">Value</span>=<span class="string">"#FFFFF0F0"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;/DataTrigger&gt;</span>
+                <span class="tag">&lt;/Style.Triggers&gt;</span>
+            <span class="tag">&lt;/Style&gt;</span>
+        <span class="tag">&lt;/TextBox.Style&gt;</span>
+    <span class="tag">&lt;/TextBox&gt;</span>
+    
+    <span class="tag">&lt;PasswordBox</span> <span class="attribute">x:Name</span>=<span class="string">"PasswordBox"</span> <span class="attribute">Margin</span>=<span class="string">"0,0,0,20"</span><span class="tag">/&gt;</span>
+    
+    <span class="tag">&lt;Button</span> <span class="attribute">Content</span>=<span class="string">"Войти"</span> <span class="attribute">Command</span>=<span class="string">"{Binding LoginCommand}"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Button.Style&gt;</span>
+            <span class="tag">&lt;Style</span> <span class="attribute">TargetType</span>=<span class="string">"Button"</span><span class="tag">&gt;</span>
+                <span class="tag">&lt;Style.Triggers&gt;</span>
+                    <span class="tag">&lt;MultiDataTrigger&gt;</span>
+                        <span class="tag">&lt;MultiDataTrigger.Conditions&gt;</span>
+                            <span class="tag">&lt;Condition</span> <span class="attribute">Binding</span>=<span class="string">"{Binding Text, ElementName=UsernameTextBox}"</span> 
+                                     <span class="attribute">Value</span>=<span class="string">""</span><span class="tag">/&gt;</span>
+                            <span class="tag">&lt;Condition</span> <span class="attribute">Binding</span>=<span class="string">"{Binding Password, ElementName=PasswordBox}"</span> 
+                                     <span class="attribute">Value</span>=<span class="string">""</span><span class="tag">/&gt;</span>
+                        <span class="tag">&lt;/MultiDataTrigger.Conditions&gt;</span>
+                        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"IsEnabled"</span> <span class="attribute">Value</span>=<span class="string">"False"</span><span class="tag">/&gt;</span>
+                        <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Opacity"</span> <span class="attribute">Value</span>=<span class="string">"0.5"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;/MultiDataTrigger&gt;</span>
+                <span class="tag">&lt;/Style.Triggers&gt;</span>
+            <span class="tag">&lt;/Style&gt;</span>
+        <span class="tag">&lt;/Button.Style&gt;</span>
+        <span class="tag">&lt;Button.Triggers&gt;</span>
+            <span class="tag">&lt;EventTrigger</span> <span class="attribute">RoutedEvent</span>=<span class="string">"Button.Click"</span><span class="tag">&gt;</span>
+                <span class="tag">&lt;BeginStoryboard&gt;</span>
+                    <span class="tag">&lt;Storyboard&gt;</span>
+                        <span class="tag">&lt;DoubleAnimation</span>
+                            <span class="attribute">Storyboard.TargetProperty</span>=<span class="string">"Opacity"</span>
+                            <span class="attribute">To</span>=<span class="string">"0.5"</span>
+                            <span class="attribute">Duration</span>=<span class="string">"0:0:0.2"</span>
+                            <span class="attribute">AutoReverse</span>=<span class="string">"True"</span>
+                            <span class="attribute">RepeatBehavior</span>=<span class="string">"2x"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;/Storyboard&gt;</span>
+                <span class="tag">&lt;/BeginStoryboard&gt;</span>
+            <span class="tag">&lt;/EventTrigger&gt;</span>
+        <span class="tag">&lt;/Button.Triggers&gt;</span>
+    <span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;/StackPanel&gt;</span></code></pre>
+        </div>
+        
+        <div class="warning">
+            <p><strong>Важно:</strong> Хотя триггеры мощны и удобны, избегайте создания слишком сложных условий, так как это может затруднить понимание и поддержку кода.</p>
+        </div>
+    </div>
+
+</body>
+</html>

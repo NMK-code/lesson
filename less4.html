@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Современные паттерны в WPF</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #6a11cb;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+            color: #2980b9;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        /* Стили для таблиц */
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+            min-width: 600px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4fc;
+            transition: background-color 0.3s;
+        }
+        
+        /* Стили для блоков кода */
+        .code-container {
+            background: #2d3a4b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .code-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #63b3ed;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .code-header .language {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .code-header .caption {
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .keyword {
+            color: #ff79c6;
+        }
+        
+        .type {
+            color: #8be9fd;
+        }
+        
+        .value {
+            color: #f1fa8c;
+        }
+        
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+        
+        .tag {
+            color: #ff79c6;
+        }
+        
+        .attribute {
+            color: #50fa7b;
+        }
+        
+        .string {
+            color: #f1fa8c;
+        }
+        
+        /* Стили для заметок и советов */
+        .note {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tip {
+            background: #f0f9eb;
+            border-left: 4px solid #52c41a;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background: #fef7ec;
+            border-left: 4px solid #fa8c16;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .pattern-visualization {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .pattern-item {
+            flex: 1;
+            min-width: 280px;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+        }
+        
+        .pattern-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+        
+        .pattern-description {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        
+        .pattern-benefits {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .architecture-diagram {
+            text-align: center;
+            margin: 25px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .diagram-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .comparison-table {
+            margin: 20px 0;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+            
+            .pattern-item {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Современные паттерны в WPF</h1>
+        <p>Использование ControlTemplate и UserControl для создания переиспользуемых компонентов</p>
+    </header>
+
+    <div class="container">
+        <h2>Паттерны разработки в WPF</h2>
+        <p>Современная разработка на WPF использует различные паттерны для создания поддерживаемых, тестируемых и масштабируемых приложений.</p>
+        
+        <div class="pattern-visualization">
+            <div class="pattern-item">
+                <div class="pattern-title">ControlTemplate</div>
+                <div class="pattern-description">Позволяет полностью изменить визуальное представление элемента управления, сохраняя его функциональность.</div>
+                <div class="pattern-benefits">
+                    <strong>Преимущества:</strong>
+                    <ul>
+                        <li>Полный контроль над внешним видом</li>
+                        <li>Сохранение поведения элемента</li>
+                        <li>Переиспользование в разных проектах</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pattern-item">
+                <div class="pattern-title">UserControl</div>
+                <div class="pattern-description">Композитные элементы, объединяющие стандартные контролы в переиспользуемые компоненты.</div>
+                <div class="pattern-benefits">
+                    <strong>Преимущества:</strong>
+                    <ul>
+                        <li>Быстрая разработка</li>
+                        <li>Инкапсуляция функциональности</li>
+                        <li>Простота использования</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pattern-item">
+                <div class="pattern-title">Custom Control</div>
+                <div class="pattern-description">Полностью кастомные элементы управления с собственным шаблоном и поведением.</div>
+                <div class="pattern-benefits">
+                    <strong>Преимущества:</strong>
+                    <ul>
+                        <li>Максимальная гибкость</li>
+                        <li>Высокая производительность</li>
+                        <li>Полный контроль над логикой</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="architecture-diagram">
+            <div class="diagram-title">Иерархия элементов управления в WPF</div>
+            <pre>
+┌───────────────────────────────────────────────────┐
+│                  Control (Базовый класс)          │
+└───────────────────────────────────────────────────┘
+                           △
+┌───────────────────────────────────────────────────┐
+│             UserControl (Композитный контрол)     │
+└───────────────────────────────────────────────────┘
+                           △
+┌───────────────────────────────────────────────────┐
+│           CustomControl (Полностью кастомный)     │
+└───────────────────────────────────────────────────┘
+            </pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Выбор между UserControl и Custom Control зависит от требований к сложности, производительности и возможности повторного использования.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>ControlTemplate: Изменение внешнего вида элементов</h2>
+        <p>ControlTemplate позволяет полностью переопределить визуальное представление элемента управления, сохраняя его функциональность.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример кастомного ControlTemplate для кнопки</span>
+            </div>
+            <pre><code><span class="tag">&lt;Style</span> <span class="attribute">TargetType</span>=<span class="string">"Button"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Template"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Setter.Value&gt;</span>
+            <span class="tag">&lt;ControlTemplate</span> <span class="attribute">TargetType</span>=<span class="string">"Button"</span><span class="tag">&gt;</span>
+                <span class="tag">&lt;Border</span> <span class="attribute">x:Name</span>=<span class="string">"border"</span> 
+                        <span class="attribute">Background</span>=<span class="string">"{TemplateBinding Background}"</span>
+                        <span class="attribute">BorderBrush</span>=<span class="string">"{TemplateBinding BorderBrush}"</span>
+                        <span class="attribute">BorderThickness</span>=<span class="string">"{TemplateBinding BorderThickness}"</span>
+                        <span class="attribute">CornerRadius</span>=<span class="string">"8"</span>
+                        <span class="attribute">Padding</span>=<span class="string">"{TemplateBinding Padding}"</span><span class="tag">&gt;</span>
+                    <span class="tag">&lt;ContentPresenter</span> 
+                        <span class="attribute">HorizontalAlignment</span>=<span class="string">"{TemplateBinding HorizontalContentAlignment}"</span>
+                        <span class="attribute">VerticalAlignment</span>=<span class="string">"{TemplateBinding VerticalContentAlignment}"</span><span class="tag">/&gt;</span>
+                <span class="tag">&lt;/Border&gt;</span>
+                <span class="tag">&lt;ControlTemplate.Triggers&gt;</span>
+                    <span class="tag">&lt;Trigger</span> <span class="attribute">Property</span>=<span class="string">"IsMouseOver"</span> <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">&gt;</span>
+                        <span class="tag">&lt;Setter</span> <span class="attribute">TargetName</span>=<span class="string">"border"</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> 
+                               <span class="attribute">Value</span>=<span class="string">"#FF2575FC"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;/Trigger&gt;</span>
+                    <span class="tag">&lt;Trigger</span> <span class="attribute">Property</span>=<span class="string">"IsPressed"</span> <span class="attribute">Value</span>=<span class="string">"True"</span><span class="tag">&gt;</span>
+                        <span class="tag">&lt;Setter</span> <span class="attribute">TargetName</span>=<span class="string">"border"</span> <span class="attribute">Property</span>=<span class="string">"Background"</span> 
+                               <span class="attribute">Value</span>=<span class="string">"#FF6A11CB"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;/Trigger&gt;</span>
+                <span class="tag">&lt;/ControlTemplate.Triggers&gt;</span>
+            <span class="tag">&lt;/ControlTemplate&gt;</span>
+        <span class="tag">&lt;/Setter.Value&gt;</span>
+    <span class="tag">&lt;/Setter&gt;</span>
+<span class="tag">&lt;/Style&gt;</span></code></pre>
+        </div>
+        
+        <h3>Использование TemplateBinding</h3>
+        <p>TemplateBinding связывает свойства в шаблоне со свойствами элемента управления:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования TemplateBinding</span>
+            </div>
+            <pre><code><span class="tag">&lt;ControlTemplate</span> <span class="attribute">TargetType</span>=<span class="string">"Button"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Grid&gt;</span>
+        <span class="tag">&lt;Ellipse</span> <span class="attribute">x:Name</span>=<span class="string">"ellipse"</span> 
+                 <span class="attribute">Fill</span>=<span class="string">"{TemplateBinding Background}"</span>
+                 <span class="attribute">Stroke</span>=<span class="string">"{TemplateBinding BorderBrush}"</span>
+                 <span class="attribute">StrokeThickness</span>=<span class="string">"{TemplateBinding BorderThickness}"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;ContentPresenter</span> 
+            <span class="attribute">HorizontalAlignment</span>=<span class="string">"Center"</span>
+            <span class="attribute">VerticalAlignment</span>=<span class="string">"Center"</span>
+            <span class="attribute">Margin</span>=<span class="string">"{TemplateBinding Padding}"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Grid&gt;</span>
+<span class="tag">&lt;/ControlTemplate&gt;</span></code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте TemplateBinding для связывания свойств шаблона со свойствами элемента управления. Это обеспечивает согласованность и позволяет использовать стили.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Создание UserControl</h2>
+        <p>UserControl - это композитный элемент управления, который объединяет несколько стандартных элементов в переиспользуемый компонент.</p>
+        
+        <h3>Пример: UserControl для ввода адреса</h3>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">AddressInputControl.xaml</span>
+            </div>
+            <pre><code><span class="tag">&lt;UserControl</span> <span class="attribute">x:Class</span>=<span class="string">"MyApp.Controls.AddressInputControl"</span>
+             <span class="attribute">xmlns</span>=<span class="string">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
+             <span class="attribute">xmlns:x</span>=<span class="string">"http://schemas.microsoft.com/winfx/2006/xaml"</span>
+             <span class="attribute">Name</span>=<span class="string">"uc"</span><span class="tag">&gt;</span>
+    
+    <span class="tag">&lt;Grid&gt;</span>
+        <span class="tag">&lt;Grid.RowDefinitions&gt;</span>
+            <span class="tag">&lt;RowDefinition</span> <span class="attribute">Height</span>=<span class="string">"Auto"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;RowDefinition</span> <span class="attribute">Height</span>=<span class="string">"Auto"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;RowDefinition</span> <span class="attribute">Height</span>=<span class="string">"Auto"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;RowDefinition</span> <span class="attribute">Height</span>=<span class="string">"Auto"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/Grid.RowDefinitions&gt;</span>
+        <span class="tag">&lt;Grid.ColumnDefinitions&gt;</span>
+            <span class="tag">&lt;ColumnDefinition</span> <span class="attribute">Width</span>=<span class="string">"Auto"</span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;ColumnDefinition</span> <span class="attribute">Width</span>=<span class="string">"*"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;/Grid.ColumnDefinitions&gt;</span>
+        
+        <span class="tag">&lt;TextBlock</span> <span class="attribute">Text</span>=<span class="string">"Улица:"</span> <span class="attribute">Margin</span>=<span class="string">"5"</span> <span class="attribute">VerticalAlignment</span>=<span class="string">"Center"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;TextBox</span> <span class="attribute">Grid.Column</span>=<span class="string">"1"</span> <span class="attribute">Text</span>=<span class="string">"{Binding Street, ElementName=uc}"</span> <span class="attribute">Margin</span>=<span class="string">"5"</span><span class="tag">/&gt;</span>
+        
+        <span class="tag">&lt;TextBlock</span> <span class="attribute">Grid.Row</span>=<span class="string">"1"</span> <span class="attribute">Text</span>=<span class="string">"Дом:"</span> <span class="attribute">Margin</span>=<span class="string">"5"</span> <span class="attribute">VerticalAlignment</span>=<span class="string">"Center"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;TextBox</span> <span class="attribute">Grid.Row</span>=<span class="string">"1"</span> <span class="attribute">Grid.Column</span>=<span class="string">"1"</span> 
+               <span class="attribute">Text</span>=<span class="string">"{Binding HouseNumber, ElementName=uc}"</span> <span class="attribute">Margin</span>=<span class="string">"5"</span><span class="tag">/&gt;</span>
+        
+        <span class="tag">&lt;TextBlock</span> <span class="attribute">Grid.Row</span>=<span class="string">"2"</span> <span class="attribute">Text</span>=<span class="string">"Город:"</span> <span class="attribute">Margin</span>=<span class="string">"5"</span> <span class="attribute">VerticalAlignment</span>=<span class="string">"Center"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;TextBox</span> <span class="attribute">Grid.Row</span>=<span class="string">"2"</span> <span class="attribute">Grid.Column</span>=<span class="string">"1"</span> 
+               <span class="attribute">Text</span>=<span class="string">"{Binding City, ElementName=uc}"</span> <span class="attribute">Margin</span>=<span class="string">"5"</span><span class="tag">/&gt;</span>
+        
+        <span class="tag">&lt;TextBlock</span> <span class="attribute">Grid.Row</span>=<span class="string">"3"</span> <span class="attribute">Text</span>=<span class="string">"Индекс:"</span> <span class="attribute">Margin</span>=<span class="string">"5"</span> <span class="attribute">VerticalAlignment</span>=<span class="string">"Center"</span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;TextBox</span> <span class="attribute">Grid.Row</span>=<span class="string">"3"</span> <span class="attribute">Grid.Column</span>=<span class="string">"1"</span> 
+               <span class="attribute">Text</span>=<span class="string">"{Binding PostalCode, ElementName=uc}"</span> <span class="attribute">Margin</span>=<span class="string">"5"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Grid&gt;</span>
+<span class="tag">&lt;/UserControl&gt;</span></code></pre>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">AddressInputControl.xaml.cs</span>
+            </div>
+            <pre><code><span class="keyword">public</span> <span class="keyword">partial</span> <span class="keyword">class</span> <span class="type">AddressInputControl</span> : <span class="type">UserControl</span>
+{
+    <span class="keyword">public</span> AddressInputControl()
+    {
+        InitializeComponent();
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="type">DependencyProperty</span> StreetProperty =
+        <span class="type">DependencyProperty</span>.Register(<span class="string">"Street"</span>, <span class="keyword">typeof</span>(<span class="type">string</span>), 
+            <span class="keyword">typeof</span>(<span class="type">AddressInputControl</span>), <span class="keyword">new</span> <span class="type">PropertyMetadata</span>(<span class="string">""</span>));
+    
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="type">DependencyProperty</span> HouseNumberProperty =
+        <span class="type">DependencyProperty</span>.Register(<span class="string">"HouseNumber"</span>, <span class="keyword">typeof</span>(<span class="type">string</span>), 
+            <span class="keyword">typeof</span>(<span class="type">AddressInputControl</span>), <span class="keyword">new</span> <span class="type">PropertyMetadata</span>(<span class="string">""</span>));
+    
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="type">DependencyProperty</span> CityProperty =
+        <span class="type">DependencyProperty</span>.Register(<span class="string">"City"</span>, <span class="keyword">typeof</span>(<span class="type">string</span>), 
+            <span class="keyword">typeof</span>(<span class="type">AddressInputControl</span>), <span class="keyword">new</span> <span class="type">PropertyMetadata</span>(<span class="string">""</span>));
+    
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="type">DependencyProperty</span> PostalCodeProperty =
+        <span class="type">DependencyProperty</span>.Register(<span class="string">"PostalCode"</span>, <span class="keyword">typeof</span>(<span class="type">string</span>), 
+            <span class="keyword">typeof</span>(<span class="type">AddressInputControl</span>), <span class="keyword">new</span> <span class="type">PropertyMetadata</span>(<span class="string">""</span>));
+    
+    <span class="keyword">public</span> <span class="type">string</span> Street
+    {
+        <span class="keyword">get</span> =&gt; (<span class="type">string</span>)GetValue(StreetProperty);
+        <span class="keyword">set</span> =&gt; SetValue(StreetProperty, <span class="keyword">value</span>);
+    }
+    
+    <span class="keyword">public</span> <span class="type">string</span> HouseNumber
+    {
+        <span class="keyword">get</span> =&gt; (<span class="type">string</span>)GetValue(HouseNumberProperty);
+        <span class="keyword">set</span> =&gt; SetValue(HouseNumberProperty, <span class="keyword">value</span>);
+    }
+    
+    <span class="keyword">public</span> <span class="type">string</span> City
+    {
+        <span class="keyword">get</span> =&gt; (<span class="type">string</span>)GetValue(CityProperty);
+        <span class="keyword">set</span> =&gt; SetValue(CityProperty, <span class="keyword">value</span>);
+    }
+    
+    <span class="keyword">public</span> <span class="type">string</span> PostalCode
+    {
+        <span class="keyword">get</span> =&gt; (<span class="type">string</span>)GetValue(PostalCodeProperty);
+        <span class="keyword">set</span> =&gt; SetValue(PostalCodeProperty, <span class="keyword">value</span>);
+    }
+}</code></pre>
+        </div>
+        
+        <h3>Использование UserControl</h3>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Пример использования UserControl</span>
+            </div>
+            <pre><code><span class="tag">&lt;Window</span> <span class="attribute">xmlns:controls</span>=<span class="string">"clr-namespace:MyApp.Controls"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Grid&gt;</span>
+        <span class="tag">&lt;controls:AddressInputControl</span>
+            <span class="attribute">Street</span>=<span class="string">"{Binding CurrentAddress.Street}"</span>
+            <span class="attribute">HouseNumber</span>=<span class="string">"{Binding CurrentAddress.HouseNumber}"</span>
+            <span class="attribute">City</span>=<span class="string">"{Binding CurrentAddress.City}"</span>
+            <span class="attribute">PostalCode</span>=<span class="string">"{Binding CurrentAddress.PostalCode}"</span>
+            <span class="attribute">Margin</span>=<span class="string">"10"</span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/Grid&gt;</span>
+<span class="tag">&lt;/Window&gt;</span></code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> UserControl идеально подходит для создания сложных, многоразовых компонентов интерфейса, которые инкапсулируют определенную функциональность.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Создание кастомных элементов управления</h2>
+        <p>Custom Control предоставляет полный контроль над внешним видом и поведением элемента через шаблоны.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">CircularProgressBar.cs</span>
+            </div>
+            <pre><code>[<span class="type">TemplatePart</span>(<span class="type">Name</span> = <span class="string">"PART_ProgressPath"</span>, <span class="type">Type</span> = <span class="keyword">typeof</span>(<span class="type">Path</span>))]
+[<span class="type">TemplatePart</span>(<span class="type">Name</span> = <span class="string">"PART_Text"</span>, <span class="type">Type</span> = <span class="keyword">typeof</span>(<span class="type">TextBlock</span>))]
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="type">CircularProgressBar</span> : <span class="type">Control</span>
+{
+    <span class="keyword">static</span> CircularProgressBar()
+    {
+        <span class="type">DefaultStyleKeyProperty</span>.OverrideMetadata(
+            <span class="keyword">typeof</span>(<span class="type">CircularProgressBar</span>), 
+            <span class="keyword">new</span> <span class="type">FrameworkPropertyMetadata</span>(<span class="keyword">typeof</span>(<span class="type">CircularProgressBar</span>)));
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="type">DependencyProperty</span> ProgressProperty =
+        <span class="type">DependencyProperty</span>.Register(<span class="string">"Progress"</span>, <span class="keyword">typeof</span>(<span class="type">double</span>), 
+            <span class="keyword">typeof</span>(<span class="type">CircularProgressBar</span>), 
+            <span class="keyword">new</span> <span class="type">PropertyMetadata</span>(<span class="value">0.0</span>, OnProgressChanged));
+    
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">readonly</span> <span class="type">DependencyProperty</span> MaximumProperty =
+        <span class="type">DependencyProperty</span>.Register(<span class="string">"Maximum"</span>, <span class="keyword">typeof</span>(<span class="type">double</span>), 
+            <span class="keyword">typeof</span>(<span class="type">CircularProgressBar</span>), 
+            <span class="keyword">new</span> <span class="type">PropertyMetadata</span>(<span class="value">100.0</span>));
+    
+    <span class="keyword">public</span> <span class="type">double</span> Progress
+    {
+        <span class="keyword">get</span> =&gt; (<span class="type">double</span>)GetValue(ProgressProperty);
+        <span class="keyword">set</span> =&gt; SetValue(ProgressProperty, <span class="keyword">value</span>);
+    }
+    
+    <span class="keyword">public</span> <span class="type">double</span> Maximum
+    {
+        <span class="keyword">get</span> =&gt; (<span class="type">double</span>)GetValue(MaximumProperty);
+        <span class="keyword">set</span> =&gt; SetValue(MaximumProperty, <span class="keyword">value</span>);
+    }
+    
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> OnProgressChanged(<span class="type">DependencyObject</span> d, <span class="type">DependencyPropertyChangedEventArgs</span> e)
+    {
+        <span class="keyword">var</span> control = (CircularProgressBar)d;
+        control.UpdateProgress();
+    }
+    
+    <span class="keyword">private</span> <span class="keyword">void</span> UpdateProgress()
+    {
+        <span class="comment">// Логика обновления визуального представления</span>
+    }
+    
+    <span class="keyword">public</span> <span class="keyword">override</span> <span class="keyword">void</span> OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+        
+        <span class="comment">// Получаем ссылки на части шаблона</span>
+        <span class="keyword">var</span> progressPath = GetTemplateChild(<span class="string">"PART_ProgressPath"</span>) <span class="keyword">as</span> <span class="type">Path</span>;
+        <span class="keyword">var</span> textBlock = GetTemplateChild(<span class="string">"PART_Text"</span>) <span class="keyword">as</span> <span class="type">TextBlock</span>;
+        
+        <span class="comment">// Обновляем представление</span>
+        UpdateProgress();
+    }
+}</code></pre>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">XAML</span>
+                <span class="caption">Generic.xaml (шаблон для CircularProgressBar)</span>
+            </div>
+            <pre><code><span class="tag">&lt;Style</span> <span class="attribute">TargetType</span>=<span class="string">"local:CircularProgressBar"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;Setter</span> <span class="attribute">Property</span>=<span class="string">"Template"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;Setter.Value&gt;</span>
+            <span class="tag">&lt;ControlTemplate</span> <span class="attribute">TargetType</span>=<span class="string">"local:CircularProgressBar"</span><span class="tag">&gt;</span>
+                <span class="tag">&lt;Grid&gt;</span>
+                    <span class="tag">&lt;Ellipse</span> <span class="attribute">Stroke</span>=<span class="string">"LightGray"</span> <span class="attribute">StrokeThickness</span>=<span class="string">"10"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;Path</span> <span class="attribute">x:Name</span>=<span class="string">"PART_ProgressPath"</span> 
+                          <span class="attribute">Stroke</span>=<span class="string">"#FF6A11CB"</span> 
+                          <span class="attribute">StrokeThickness</span>=<span class="string">"10"</span>
+                          <span class="attribute">StrokeLineCap</span>=<span class="string">"Round"</span><span class="tag">/&gt;</span>
+                    <span class="tag">&lt;TextBlock</span> <span class="attribute">x:Name</span>=<span class="string">"PART_Text"</span> 
+                             <span class="attribute">HorizontalAlignment</span>=<span class="string">"Center"</span>
+                             <span class="attribute">VerticalAlignment</span>=<span class="string">"Center"</span>
+                             <span class="attribute">FontSize</span>=<span class="string">"16"</span>
+                             <span class="attribute">FontWeight</span>=<span class="string">"Bold"</span><span class="tag">/&gt;</span>
+                <span class="tag">&lt;/Grid&gt;</span>
+            <span class="tag">&lt;/ControlTemplate&gt;</span>
+        <span class="tag">&lt;/Setter.Value&gt;</span>
+    <span class="tag">&lt;/Setter&gt;</span>
+<span class="tag">&lt;/Style&gt;</span></code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Для кастомных элементов управления помещайте шаблоны в файл Themes/Generic.xaml, чтобы они автоматически подхватывались WPF.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Сравнение подходов</h2>
+        <p>Выбор между ControlTemplate, UserControl и Custom Control зависит от конкретных требований проекта.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Критерий</th>
+                        <th>ControlTemplate</th>
+                        <th>UserControl</th>
+                        <th>Custom Control</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Сложность</strong></td>
+                        <td>Низкая</td>
+                        <td>Средняя</td>
+                        <td>Высокая</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Гибкость</strong></td>
+                        <td>Ограниченная</td>
+                        <td>Средняя</td>
+                        <td>Максимальная</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Производительность</strong></td>
+                        <td>Высокая</td>
+                        <td>Средняя</td>
+                        <td>Высокая</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Переиспользование</strong></td>
+                        <td>Хорошее</td>
+                        <td>Хорошее</td>
+                        <td>Отличное</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Сложность стилизации</strong></td>
+                        <td>Низкая</td>
+                        <td>Средняя</td>
+                        <td>Высокая</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <h3>Рекомендации по выбору подхода</h3>
+        
+        <div class="pattern-visualization">
+            <div class="pattern-item">
+                <div class="pattern-title">Используйте ControlTemplate когда:</div>
+                <div class="pattern-description">
+                    <ul>
+                        <li>Нужно изменить внешний вид стандартного элемента</li>
+                        <li>Требуется сохранить всю функциональность элемента</li>
+                        <li>Нужно быстро создать кастомный вид</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pattern-item">
+                <div class="pattern-title">Используйте UserControl когда:</div>
+                <div class="pattern-description">
+                    <ul>
+                        <li>Нужно объединить несколько элементов в компонент</li>
+                        <li>Требуется инкапсулировать определенную функциональность</li>
+                        <li>Нужно быстро разработать сложный интерфейс</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pattern-item">
+                <div class="pattern-title">Используйте Custom Control когда:</div>
+                <div class="pattern-description">
+                    <ul>
+                        <li>Требуется полностью кастомное поведение</li>
+                        <li>Нужен максимальный контроль над отрисовкой</li>
+                        <li>Планируется многократное использование в разных проектах</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="warning">
+            <p><strong>Важно:</strong> Не создавайте Custom Control без необходимости. Часто UserControl или стилизация через ControlTemplate достаточно для решения задачи.</p>
+        </div>
+    </div>
+
+</body>
+</html>
