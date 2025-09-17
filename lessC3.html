@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Массивы и циклы в C#</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #6a11cb;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+            color: #2980b9;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        /* Стили для таблиц */
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+            min-width: 600px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4fc;
+            transition: background-color 0.3s;
+        }
+        
+        /* Стили для блоков кода */
+        .code-container {
+            background: #2d3a4b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .code-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #63b3ed;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .code-header .language {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .code-header .caption {
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .keyword {
+            color: #ff79c6;
+        }
+        
+        .type {
+            color: #8be9fd;
+        }
+        
+        .value {
+            color: #f1fa8c;
+        }
+        
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+        
+        .tag {
+            color: #ff79c6;
+        }
+        
+        .attribute {
+            color: #50fa7b;
+        }
+        
+        .string {
+            color: #f1fa8c;
+        }
+        
+        /* Стили для заметок и советов */
+        .note {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tip {
+            background: #f0f9eb;
+            border-left: 4px solid #52c41a;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background: #fef7ec;
+            border-left: 4px solid #fa8c16;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .visual-demo {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .demo-item {
+            width: 200px;
+            height: 200px;
+            margin: 15px;
+            border: 2px dashed #3498db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-rectangle {
+            width: 100px;
+            height: 50px;
+            background-color: #3498db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        .demo-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .demo-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 15px 0;
+            background-color: #f9f9f9;
+        }
+        
+        .alignment-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .alignment-example {
+            flex: 1;
+            min-width: 250px;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 5px;
+            background: white;
+        }
+        
+        .alignment-visual {
+            height: 150px;
+            border: 1px dashed #3498db;
+            margin: 10px 0;
+            position: relative;
+        }
+        
+        .alignment-box {
+            width: 60px;
+            height: 40px;
+            background-color: #3498db;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 0.7rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+            
+            .demo-item {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Массивы и циклы в C#</h1>
+        <p>Изучение массивов, циклов и их взаимосвязи в языке программирования C#</p>
+    </header>
+
+    <div class="container">
+        <h2>Массивы в C#</h2>
+        <p>Массивы представляют собой структуры данных для хранения наборов элементов одного типа. Они являются фундаментальной частью большинства языков программирования, включая C#.</p>
+        
+        <h3>Типы массивов</h3>
+        <p>В C# существуют различные типы массивов:</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип массива</th>
+                        <th>Описание</th>
+                        <th>Пример объявления</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Одномерный</td>
+                        <td>Простой массив с одним измерением</td>
+                        <td><code>int[] numbers = new int[5];</code></td>
+                    </tr>
+                    <tr>
+                        <td>Многомерный</td>
+                        <td>Массив с несколькими измерениями (например, 2D, 3D)</td>
+                        <td><code>int[,] matrix = new int[3, 3];</code></td>
+                    </tr>
+                    <tr>
+                        <td>Зубчатый (Jagged)</td>
+                        <td>Массив массивов, где каждый внутренний массив может иметь разную длину</td>
+                        <td><code>int[][] jagged = new int[3][];</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры объявления и инициализации массивов</span>
+            </div>
+            <pre><code><span class="comment">// Одномерный массив</span>
+<span class="keyword">int</span>[] numbers = <span class="keyword">new</span> <span class="keyword">int</span>[5]; <span class="comment">// массив из 5 целых чисел</span>
+<span class="keyword">string</span>[] names = { <span class="string">"Анна"</span>, <span class="string">"Борис"</span>, <span class="string">"Сергей"</span> }; <span class="comment">// инициализированный массив</span>
+
+<span class="comment">// Многомерный массив (матрица 3x3)</span>
+<span class="keyword">int</span>[,] matrix = <span class="keyword">new</span> <span class="keyword">int</span>[3, 3];
+matrix[0, 0] = 1; <span class="comment">// установка значения элемента</span>
+
+<span class="comment">// Зубчатый массив</span>
+<span class="keyword">int</span>[][] jaggedArray = <span class="keyword">new</span> <span class="keyword">int</span>[3][];
+jaggedArray[0] = <span class="keyword">new</span> <span class="keyword">int</span>[2] { 1, 2 };
+jaggedArray[1] = <span class="keyword">new</span> <span class="keyword">int</span>[3] { 3, 4, 5 };
+jaggedArray[2] = <span class="keyword">new</span> <span class="keyword">int</span>[1] { 6 };</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Индексы массивов в C# начинаются с 0. Первый элемент массива имеет индекс 0, второй - индекс 1 и так далее.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Циклы в C#</h2>
+        <p>Циклы позволяют выполнять блок кода многократно, пока выполняется определенное условие. В C# существует несколько типов циклов.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип цикла</th>
+                        <th>Описание</th>
+                        <th>Когда использовать</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>for</strong></td>
+                        <td>Цикл с счетчиком, выполняющийся определенное количество раз</td>
+                        <td>Когда известно точное количество итераций</td>
+                    </tr>
+                    <tr>
+                        <td><strong>foreach</strong></td>
+                        <td>Цикл для перебора элементов коллекции или массива</td>
+                        <td>Для перебора всех элементов коллекции без использования индексов</td>
+                    </tr>
+                    <tr>
+                        <td><strong>while</strong></td>
+                        <td>Цикл, выполняющийся пока условие истинно</td>
+                        <td>Когда количество итераций неизвестно заранее</td>
+                    </tr>
+                    <tr>
+                        <td><strong>do-while</strong></td>
+                        <td>Похож на while, но гарантирует至少 одно выполнение тела цикла</td>
+                        <td>Когда нужно выполнить цикл至少 один раз, даже если условие ложно</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры использования циклов</span>
+            </div>
+            <pre><code><span class="comment">// Цикл for</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; 5; i++)
+{
+    Console.WriteLine(<span class="string">$"Итерация: {i}"</span>);
+}
+
+<span class="comment">// Цикл foreach</span>
+<span class="keyword">string</span>[] fruits = { <span class="string">"яблоко"</span>, <span class="string">"банан"</span>, <span class="string">"апельсин"</span> };
+<span class="keyword">foreach</span> (<span class="keyword">string</span> fruit <span class="keyword">in</span> fruits)
+{
+    Console.WriteLine(fruit);
+}
+
+<span class="comment">// Цикл while</span>
+<span class="keyword">int</span> counter = 0;
+<span class="keyword">while</span> (counter &lt; 3)
+{
+    Console.WriteLine(<span class="string">$"Счетчик: {counter}"</span>);
+    counter++;
+}
+
+<span class="comment">// Цикл do-while</span>
+<span class="keyword">int</span> x = 0;
+<span class="keyword">do</span>
+{
+    Console.WriteLine(<span class="string">$"x = {x}"</span>);
+    x++;
+} <span class="keyword">while</span> (x &lt; 3);</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте цикл foreach для чтения данных из коллекций, когда не нужно изменять элементы или знать их индексы. Для изменения элементов или работы с индексами используйте цикл for.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Взаимосвязь массивов и циклов</h2>
+        <p>Массивы и циклы тесно связаны, так как циклы часто используются для обработки элементов массивов. Без циклов работа с массивами была бы крайне ограничена.</p>
+        
+        <h3>Обработка массивов с помощью циклов</h3>
+        <p>Циклы позволяют выполнять операции над каждым элементом массива:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Обработка массива с помощью цикла for</span>
+            </div>
+            <pre><code><span class="comment">// Инициализация массива</span>
+<span class="keyword">int</span>[] numbers = <span class="keyword">new</span> <span class="keyword">int</span>[10];
+
+<span class="comment">// Заполнение массива значениями</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; numbers.Length; i++)
+{
+    numbers[i] = i * 2; <span class="comment">// каждый элемент равен удвоенному индексу</span>
+}
+
+<span class="comment">// Вывод значений массива</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; numbers.Length; i++)
+{
+    Console.WriteLine(<span class="string">$"numbers[{i}] = {numbers[i]}"</span>);
+}
+
+<span class="comment">// Поиск суммы всех элементов</span>
+<span class="keyword">int</span> sum = 0;
+<span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; numbers.Length; i++)
+{
+    sum += numbers[i];
+}
+Console.WriteLine(<span class="string">$"Сумма элементов: {sum}"</span>);</code></pre>
+        </div>
+        
+        <h3>Использование foreach для перебора массивов</h3>
+        <p>Цикл foreach упрощает перебор элементов массива, когда не нужен доступ к индексам:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Использование foreach для работы с массивом</span>
+            </div>
+            <pre><code><span class="keyword">string</span>[] countries = { <span class="string">"Россия"</span>, <span class="string">"США"</span>, <span class="string">"Германия"</span>, <span class="string">"Китай"</span> };
+
+<span class="comment">// Вывод всех элементов массива</span>
+<span class="keyword">foreach</span> (<span class="keyword">string</span> country <span class="keyword">in</span> countries)
+{
+    Console.WriteLine(country);
+}
+
+<span class="comment">// Поиск элемента в массиве</span>
+<span class="keyword">string</span> search = <span class="string">"Германия"</span>;
+<span class="keyword">bool</span> found = <span class="keyword">false</span>;
+<span class="keyword">foreach</span> (<span class="keyword">string</span> country <span class="keyword">in</span> countries)
+{
+    <span class="keyword">if</span> (country == search)
+    {
+        found = <span class="keyword">true</span>;
+        <span class="keyword">break</span>; <span class="comment">// прерывание цикла при нахождении элемента</span>
+    }
+}
+Console.WriteLine(<span class="string">$"Страна {search} {(found ? "найдена" : "не найдена")}"</span>);</code></pre>
+        </div>
+        
+        <h3>Многомерные массивы и вложенные циклы</h3>
+        <p>Для работы с многомерными массивами часто используются вложенные циклы:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Обработка многомерного массива с помощью вложенных циклов</span>
+            </div>
+            <pre><code><span class="comment">// Создание и инициализация двумерного массива (матрицы)</span>
+<span class="keyword">int</span>[,] matrix = <span class="keyword">new</span> <span class="keyword">int</span>[3, 4];
+<span class="keyword">int</span> value = 1;
+
+<span class="comment">// Заполнение матрицы значениями</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> row = 0; row &lt; matrix.GetLength(0); row++)
+{
+    <span class="keyword">for</span> (<span class="keyword">int</span> col = 0; col &lt; matrix.GetLength(1); col++)
+    {
+        matrix[row, col] = value++;
+    }
+}
+
+<span class="comment">// Вывод матрицы</span>
+Console.WriteLine(<span class="string">"Матрица:"</span>);
+<span class="keyword">for</span> (<span class="keyword">int</span> row = 0; row &lt; matrix.GetLength(0); row++)
+{
+    <span class="keyword">for</span> (<span class="keyword">int</span> col = 0; col &lt; matrix.GetLength(1); col++)
+    {
+        Console.Write(<span class="string">$"{matrix[row, col],3}"</span>);
+    }
+    Console.WriteLine();
+}
+
+<span class="comment">// Вычисление суммы всех элементов матрицы</span>
+<span class="keyword">int</span> total = 0;
+<span class="keyword">foreach</span> (<span class="keyword">int</span> element <span class="keyword">in</span> matrix)
+{
+    total += element;
+}
+Console.WriteLine(<span class="string">$"Сумма всех элементов: {total}"</span>);</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Метод <code>GetLength(dimension)</code> возвращает длину указанного измерения многомерного массива. Для двумерного массива <code>GetLength(0)</code> возвращает количество строк, а <code>GetLength(1)</code> - количество столбцов.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Практические примеры</h2>
+        <p>Рассмотрим несколько практических примеров использования массивов и циклов вместе.</p>
+        
+        <h3>Поиск минимального и максимального значения в массиве</h3>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Поиск min и max значений в массиве</span>
+            </div>
+            <pre><code><span class="keyword">int</span>[] numbers = { 12, 45, 67, 23, 9, 56, 78, 34, 90, 11 };
+
+<span class="keyword">int</span> min = numbers[0]; <span class="comment">// предполагаем, что первый элемент - минимальный</span>
+<span class="keyword">int</span> max = numbers[0]; <span class="comment">// предполагаем, что первый элемент - максимальный</span>
+
+<span class="keyword">for</span> (<span class="keyword">int</span> i = 1; i &lt; numbers.Length; i++)
+{
+    <span class="keyword">if</span> (numbers[i] &lt; min)
+    {
+        min = numbers[i]; <span class="comment">// нашли новый минимум</span>
+    }
+    
+    <span class="keyword">if</span> (numbers[i] &gt; max)
+    {
+        max = numbers[i]; <span class="comment">// нашли новый максимум</span>
+    }
+}
+
+Console.WriteLine(<span class="string">$"Минимальное значение: {min}"</span>);
+Console.WriteLine(<span class="string">$"Максимальное значение: {max}"</span>);
+Console.WriteLine(<span class="string">$"Разность между max и min: {max - min}"</span>);</code></pre>
+        </div>
+        
+        <h3>Сортировка массива методом пузырька</h3>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Сортировка массива методом пузырька</span>
+            </div>
+            <pre><code><span class="keyword">int</span>[] arr = { 64, 34, 25, 12, 22, 11, 90 };
+
+Console.WriteLine(<span class="string">"Исходный массив:"</span>);
+<span class="keyword">foreach</span> (<span class="keyword">int</span> num <span class="keyword">in</span> arr)
+{
+    Console.Write(num + <span class="string">" "</span>);
+}
+Console.WriteLine();
+
+<span class="comment">// Реализация алгоритма пузырьковой сортировки</span>
+<span class="keyword">int</span> n = arr.Length;
+<span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; n - 1; i++)
+{
+    <span class="keyword">for</span> (<span class="keyword">int</span> j = 0; j &lt; n - i - 1; j++)
+    {
+        <span class="keyword">if</span> (arr[j] &gt; arr[j + 1])
+        {
+            <span class="comment">// Обмен элементов</span>
+            <span class="keyword">int</span> temp = arr[j];
+            arr[j] = arr[j + 1];
+            arr[j + 1] = temp;
+        }
+    }
+}
+
+Console.WriteLine(<span class="string">"Отсортированный массив:"</span>);
+<span class="keyword">foreach</span> (<span class="keyword">int</span> num <span class="keyword">in</span> arr)
+{
+    Console.Write(num + <span class="string">" "</span>);
+}</code></pre>
+        </div>
+        
+        <h3>Работа с зубчатым массивом</h3>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример работы с зубчатым массивом</span>
+            </div>
+            <pre><code><span class="comment">// Создание зубчатого массива</span>
+<span class="keyword">int</span>[][] jagged = <span class="keyword">new</span> <span class="keyword">int</span>[3][];
+jagged[0] = <span class="keyword">new</span> <span class="keyword">int</span>[] { 1, 2, 3 };
+jagged[1] = <span class="keyword">new</span> <span class="keyword">int</span>[] { 4, 5 };
+jagged[2] = <span class="keyword">new</span> <span class="keyword">int</span>[] { 6, 7, 8, 9 };
+
+<span class="comment">// Вывод элементов зубчатого массива</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = 0; i &lt; jagged.Length; i++)
+{
+    Console.Write(<span class="string">$"Строка {i + 1}: "</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> j = 0; j &lt; jagged[i].Length; j++)
+    {
+        Console.Write(jagged[i][j] + <span class="string">" "</span>);
+    }
+    Console.WriteLine();
+}
+
+<span class="comment">// Вычисление суммы всех элементов зубчатого массива</span>
+<span class="keyword">int</span> totalSum = 0;
+<span class="keyword">foreach</span> (<span class="keyword">int</span>[] innerArray <span class="keyword">in</span> jagged)
+{
+    <span class="keyword">foreach</span> (<span class="keyword">int</span> value <span class="keyword">in</span> innerArray)
+    {
+        totalSum += value;
+    }
+}
+Console.WriteLine(<span class="string">$"Общая сумма всех элементов: {totalSum}"</span>);</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Для работы с наборами данных в C# также полезно изучить коллекции (List, Dictionary, HashSet), которые предоставляют больше возможностей, чем простые массивы.</p>
+        </div>
+    </div>
+
+</body>
+</html>

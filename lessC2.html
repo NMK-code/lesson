@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Операции и преобразования в C#</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #6a11cb;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+            color: #2980b9;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        /* Стили для таблиц */
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+            min-width: 600px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4fc;
+            transition: background-color 0.3s;
+        }
+        
+        /* Стили для блоков кода */
+        .code-container {
+            background: #2d3a4b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .code-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #63b3ed;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .code-header .language {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .code-header .caption {
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .keyword {
+            color: #ff79c6;
+        }
+        
+        .type {
+            color: #8be9fd;
+        }
+        
+        .value {
+            color: #f1fa8c;
+        }
+        
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+        
+        .tag {
+            color: #ff79c6;
+        }
+        
+        .attribute {
+            color: #50fa7b;
+        }
+        
+        .string {
+            color: #f1fa8c;
+        }
+        
+        /* Стили для заметок и советов */
+        .note {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tip {
+            background: #f0f9eb;
+            border-left: 4px solid #52c41a;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background: #fef7ec;
+            border-left: 4px solid #fa8c16;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .visual-demo {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .demo-item {
+            width: 200px;
+            height: 200px;
+            margin: 15px;
+            border: 2px dashed #3498db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8f9fa;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-rectangle {
+            width: 100px;
+            height: 50px;
+            background-color: #3498db;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        .demo-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .demo-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 15px 0;
+            background-color: #f9f9f9;
+        }
+        
+        .alignment-demo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .alignment-example {
+            flex: 1;
+            min-width: 250px;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 5px;
+            background: white;
+        }
+        
+        .alignment-visual {
+            height: 150px;
+            border: 1px dashed #3498db;
+            margin: 10px 0;
+            position: relative;
+        }
+        
+        .alignment-box {
+            width: 60px;
+            height: 40px;
+            background-color: #3498db;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 0.7rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+            
+            .demo-item {
+                width: 150px;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Операции и преобразования в C#</h1>
+        <p>Арифметические, поразрядные операции, операции присваивания, преобразования типов и условные выражения</p>
+    </header>
+
+    <div class="container">
+        <h2>Арифметические операции языка C#</h2>
+        <p>Арифметические операции выполняют математические вычисления над числовыми операндами.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Операция</th>
+                        <th>Оператор</th>
+                        <th>Пример</th>
+                        <th>Результат</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Сложение</td>
+                        <td>+</td>
+                        <td>a + b</td>
+                        <td>Сумма a и b</td>
+                    </tr>
+                    <tr>
+                        <td>Вычитание</td>
+                        <td>-</td>
+                        <td>a - b</td>
+                        <td>Разность a и b</td>
+                    </tr>
+                    <tr>
+                        <td>Умножение</td>
+                        <td>*</td>
+                        <td>a * b</td>
+                        <td>Произведение a и b</td>
+                    </tr>
+                    <tr>
+                        <td>Деление</td>
+                        <td>/</td>
+                        <td>a / b</td>
+                        <td>Частное от деления a на b</td>
+                    </tr>
+                    <tr>
+                        <td>Остаток от деления</td>
+                        <td>%</td>
+                        <td>a % b</td>
+                        <td>Остаток от деления a на b</td>
+                    </tr>
+                    <tr>
+                        <td>Инкремент</td>
+                        <td>++</td>
+                        <td>a++ или ++a</td>
+                        <td>Увеличение значения на 1</td>
+                    </tr>
+                    <tr>
+                        <td>Декремент</td>
+                        <td>--</td>
+                        <td>a-- или --a</td>
+                        <td>Уменьшение значения на 1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры арифметических операций</span>
+            </div>
+            <pre><code><span class="keyword">int</span> a = 10;
+<span class="keyword">int</span> b = 3;
+
+<span class="keyword">int</span> sum = a + b;        <span class="comment">// 13</span>
+<span class="keyword">int</span> difference = a - b; <span class="comment">// 7</span>
+<span class="keyword">int</span> product = a * b;    <span class="comment">// 30</span>
+<span class="keyword">int</span> quotient = a / b;   <span class="comment">// 3 (целочисленное деление)</span>
+<span class="keyword">int</span> remainder = a % b;  <span class="comment">// 1</span>
+
+<span class="keyword">double</span> x = 10.0;
+<span class="keyword">double</span> y = 3.0;
+<span class="keyword">double</span> result = x / y;   <span class="comment">// 3.333...</span>
+
+<span class="comment">// Инкремент и декремент</span>
+<span class="keyword">int</span> counter = 5;
+counter++;               <span class="comment">// counter становится 6</span>
+counter--;               <span class="comment">// counter снова становится 5</span></code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Результат деления целых чисел всегда является целым числом. Для получения дробного результата нужно использовать числа с плавающей точкой.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Поразрядные операции в C#</h2>
+        <p>Поразрядные операции выполняются над отдельными битами целочисленных операндов.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Операция</th>
+                        <th>Оператор</th>
+                        <th>Пример</th>
+                        <th>Результат (для a=5, b=3)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Побитовое И</td>
+                        <td>&amp;</td>
+                        <td>a &amp; b</td>
+                        <td>1 (0101 & 0011 = 0001)</td>
+                    </tr>
+                    <tr>
+                        <td>Побитовое ИЛИ</td>
+                        <td>|</td>
+                        <td>a | b</td>
+                        <td>7 (0101 | 0011 = 0111)</td>
+                    </tr>
+                    <tr>
+                        <td>Исключающее ИЛИ</td>
+                        <td>^</td>
+                        <td>a ^ b</td>
+                        <td>6 (0101 ^ 0011 = 0110)</td>
+                    </tr>
+                    <tr>
+                        <td>Побитовое НЕ</td>
+                        <td>~</td>
+                        <td>~a</td>
+                        <td>-6 (инвертированные биты 0101)</td>
+                    </tr>
+                    <tr>
+                        <td>Сдвиг влево</td>
+                        <td>&lt;&lt;</td>
+                        <td>a &lt;&lt; 1</td>
+                        <td>10 (0101 &lt;&lt; 1 = 1010)</td>
+                    </tr>
+                    <tr>
+                        <td>Сдвиг вправо</td>
+                        <td>&gt;&gt;</td>
+                        <td>a &gt;&gt; 1</td>
+                        <td>2 (0101 &gt;&gt; 1 = 0010)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры поразрядных операций</span>
+            </div>
+            <pre><code><span class="keyword">int</span> a = 5;    <span class="comment">// 0101 в двоичной системе</span>
+<span class="keyword">int</span> b = 3;    <span class="comment">// 0011 в двоичной системе</span>
+
+<span class="comment">// Побитовые операции</span>
+<span class="keyword">int</span> and = a & b;      <span class="comment">// 1 (0001)</span>
+<span class="keyword">int</span> or = a | b;       <span class="comment">// 7 (0111)</span>
+<span class="keyword">int</span> xor = a ^ b;      <span class="comment">// 6 (0110)</span>
+<span class="keyword">int</span> not = ~a;         <span class="comment">// -6 (инверсия всех битов)</span>
+
+<span class="comment">// Операции сдвига</span>
+<span class="keyword">int</span> leftShift = a &lt;&lt; 1;  <span class="comment">// 10 (1010)</span>
+<span class="keyword">int</span> rightShift = a &gt;&gt; 1; <span class="comment">// 2 (0010)</span>
+
+<span class="comment">// Практическое применение: проверка флагов</span>
+<span class="keyword">const int</span> FLAG_A = 1; <span class="comment">// 0001</span>
+<span class="keyword">const int</span> FLAG_B = 2; <span class="comment">// 0010</span>
+<span class="keyword">const int</span> FLAG_C = 4; <span class="comment">// 0100</span>
+
+<span class="keyword">int</span> settings = FLAG_A | FLAG_C;  <span class="comment">// 0101 (установлены флаги A и C)</span>
+<span class="keyword">bool</span> hasFlagA = (settings & FLAG_A) != 0;  <span class="comment">// true</span>
+<span class="keyword">bool</span> hasFlagB = (settings & FLAG_B) != 0;  <span class="comment">// false</span></code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Поразрядные операции часто используются для работы с флагами, упаковки нескольких значений в одно число и оптимизации某些 вычислений.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Операции присваивания в C#</h2>
+        <p>Операции присваивания используются для установки значений переменных. C# поддерживает составные операции присваивания, которые объединяют арифметические или поразрядные операции с присваиванием.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Операция</th>
+                        <th>Оператор</th>
+                        <th>Пример</th>
+                        <th>Эквивалент</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Присваивание</td>
+                        <td>=</td>
+                        <td>a = b</td>
+                        <td>a = b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание со сложением</td>
+                        <td>+=</td>
+                        <td>a += b</td>
+                        <td>a = a + b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с вычитанием</td>
+                        <td>-=</td>
+                        <td>a -= b</td>
+                        <td>a = a - b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с умножением</td>
+                        <td>*=</td>
+                        <td>a *= b</td>
+                        <td>a = a * b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с делением</td>
+                        <td>/=</td>
+                        <td>a /= b</td>
+                        <td>a = a / b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с остатком</td>
+                        <td>%=</td>
+                        <td>a %= b</td>
+                        <td>a = a % b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с И</td>
+                        <td>&amp;=</td>
+                        <td>a &amp;= b</td>
+                        <td>a = a &amp; b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с ИЛИ</td>
+                        <td>|=</td>
+                        <td>a |= b</td>
+                        <td>a = a | b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с исключающим ИЛИ</td>
+                        <td>^=</td>
+                        <td>a ^= b</td>
+                        <td>a = a ^ b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание со сдвигом влево</td>
+                        <td>&lt;&lt;=</td>
+                        <td>a &lt;&lt;= b</td>
+                        <td>a = a &lt;&lt; b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание со сдвигом вправо</td>
+                        <td>&gt;&gt;=</td>
+                        <td>a &gt;&gt;= b</td>
+                        <td>a = a &gt;&gt; b</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры операций присваивания</span>
+            </div>
+            <pre><code><span class="comment">// Базовое присваивание</span>
+<span class="keyword">int</span> x = 10;
+<span class="keyword">string</span> text = "Hello";
+
+<span class="comment">// Составные операции присваивания</span>
+<span class="keyword">int</span> a = 5;
+a += 3;   <span class="comment">// эквивалентно a = a + 3; теперь a = 8</span>
+a -= 2;   <span class="comment">// эквивалентно a = a - 2; теперь a = 6</span>
+a *= 4;   <span class="comment">// эквивалентно a = a * 4; теперь a = 24</span>
+a /= 3;   <span class="comment">// эквивалентно a = a / 3; теперь a = 8</span>
+a %= 5;   <span class="comment">// эквивалентно a = a % 5; теперь a = 3</span>
+
+<span class="comment">// Составные операции с поразрядными операциями</span>
+<span class="keyword">int</span> flags = 1;  <span class="comment">// 0001</span>
+flags |= 2;      <span class="comment">// эквивалентно flags = flags | 2; теперь flags = 3 (0011)</span>
+flags &amp;= 1;      <span class="comment">// эквивалентно flags = flags & 1; теперь flags = 1 (0001)</span>
+
+<span class="comment">// Составные операции со сдвигом</span>
+<span class="keyword">int</span> value = 8;  <span class="comment">// 1000 в двоичной</span>
+value &lt;&lt;= 1;     <span class="comment">// эквивалентно value = value &lt;&lt; 1; теперь value = 16 (10000)</span>
+value &gt;&gt;= 2;     <span class="comment">// эквивалентно value = value &gt;&gt; 2; теперь value = 4 (00100)</span></code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Составные операции присваивания не только сокращают код, но и могут улучшить производительность, поскольку переменная вычисляется только один раз.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Преобразования базовых типов данных в C#</h2>
+        <p>В C# существует два основных типа преобразований: неявные (автоматические) и явные (приведение типов).</p>
+        
+        <h3>Неявные преобразования</h3>
+        <p>Выполняются автоматически компилятором, когда преобразование безопасно и не приводит к потере данных:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры неявных преобразований</span>
+            </div>
+            <pre><code><span class="keyword">int</span> intValue = 100;
+<span class="keyword">long</span> longValue = intValue;  <span class="comment">// неявное преобразование int в long</span>
+
+<span class="keyword">float</span> floatValue = 3.14f;
+<span class="keyword">double</span> doubleValue = floatValue;  <span class="comment">// неявное преобразование float в double</span>
+
+<span class="keyword">char</span> charValue = 'A';
+<span class="keyword">int</span> intFromChar = charValue;  <span class="comment">// неявное преобразование char в int (получим код символа 'A')</span>
+
+<span class="keyword">int</span> smallInt = 100;
+<span class="keyword">decimal</span> decimalValue = smallInt;  <span class="comment">// неявное преобразование int в decimal</span></code></pre>
+        </div>
+        
+        <h3>Явные преобразования (приведение типов)</h3>
+        <p>Требуют указания целевого типа в скобках и используются, когда преобразование может привести к потере данных:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры явных преобразований</span>
+            </div>
+            <pre><code><span class="keyword">double</span> doubleValue = 9.78;
+<span class="keyword">int</span> intValue = (<span class="keyword">int</span>)doubleValue;  <span class="comment">// явное преобразование: intValue = 9 (дробная часть отбрасывается)</span>
+
+<span class="keyword">long</span> longValue = 9223372036854775807;
+<span class="keyword">int</span> intFromLong = (<span class="keyword">int</span>)longValue;  <span class="comment">// возможна потеря данных, если longValue слишком велико</span>
+
+<span class="keyword">int</span> code = 65;
+<span class="keyword">char</span> charFromCode = (<span class="keyword">char</span>)code;  <span class="comment">// явное преобразование int в char (символ 'A')</span>
+
+<span class="keyword">decimal</span> decimalValue = 19.99m;
+<span class="keyword">int</span> intFromDecimal = (<span class="keyword">int</span>)decimalValue;  <span class="comment">// intFromDecimal = 19</span></code></pre>
+        </div>
+        
+        <h3>Методы преобразования</h3>
+        <p>Класс Convert предоставляет методы для преобразования между различными типами:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Использование класса Convert</span>
+            </div>
+            <pre><code><span class="keyword">string</span> numberString = "123";
+<span class="keyword">int</span> convertedInt = Convert.ToInt32(numberString);  <span class="comment">// преобразование строки в int</span>
+
+<span class="keyword">double</span> doubleNumber = 45.67;
+<span class="keyword">string</span> stringFromDouble = Convert.ToString(doubleNumber);  <span class="comment">// преобразование double в строку</span>
+
+<span class="keyword">bool</span> boolValue = true;
+<span class="keyword">int</span> intFromBool = Convert.ToInt32(boolValue);  <span class="comment">// преобразование bool в int (true = 1, false = 0)</span>
+
+<span class="comment">// Преобразование с различными системами счисления</span>
+<span class="keyword">string</span> binaryString = "1010";
+<span class="keyword">int</span> fromBinary = Convert.ToInt32(binaryString, 2);  <span class="comment">// преобразование из двоичной системы: результат 10</span>
+
+<span class="keyword">string</span> hexString = "1A";
+<span class="keyword">int</span> fromHex = Convert.ToInt32(hexString, 16);  <span class="comment">// преобразование из шестнадцатеричной системы: результат 26</span></code></pre>
+        </div>
+        
+        <div class="warning">
+            <p><strong>Важно:</strong> При явном преобразовании возможна потеря данных (например, при преобразовании double в int теряется дробная часть) или возникновение исключения OverflowException, если значение не помещается в целевой тип.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Условные выражения в C#</h2>
+        <p>Условные выражения позволяют выполнять различные действия в зависимости от условий. В C# основными условными конструкциями являются if-else, switch и тернарный оператор.</p>
+        
+        <h3>Конструкция if-else</h3>
+        <p>Позволяет выполнять код в зависимости от условия:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры использования if-else</span>
+            </div>
+            <pre><code><span class="keyword">int</span> number = 10;
+
+<span class="comment">// Простая форма if</span>
+<span class="keyword">if</span> (number > 0)
+{
+    Console.WriteLine("Число положительное");
+}
+
+<span class="comment">// Форма if-else</span>
+<span class="keyword">if</span> (number % 2 == 0)
+{
+    Console.WriteLine("Число четное");
+}
+<span class="keyword">else</span>
+{
+    Console.WriteLine("Число нечетное");
+}
+
+<span class="comment">// Цепочка условий else if</span>
+<span class="keyword">if</span> (number > 0)
+{
+    Console.WriteLine("Положительное число");
+}
+<span class="keyword">else if</span> (number < 0)
+{
+    Console.WriteLine("Отрицательное число");
+}
+<span class="keyword">else</span>
+{
+    Console.WriteLine("Ноль");
+}
+
+<span class="comment">// Вложенные условия</span>
+<span class="keyword">int</span> age = 25;
+<span class="keyword">bool</span> hasLicense = true;
+
+<span class="keyword">if</span> (age >= 18)
+{
+    <span class="keyword">if</span> (hasLicense)
+    {
+        Console.WriteLine("Можно водить машину");
+    }
+    <span class="keyword">else</span>
+    {
+        Console.WriteLine("Нужны права для вождения");
+    }
+}
+<span class="keyword">else</span>
+{
+    Console.WriteLine("Слишком молод для вождения");
+}</code></pre>
+        </div>
+        
+        <h3>Тернарный оператор</h3>
+        <p>Краткая форма записи простых условных выражений:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры использования тернарного оператора</span>
+            </div>
+            <pre><code><span class="keyword">int</span> number = 7;
+
+<span class="comment">// Простой тернарный оператор</span>
+<span class="keyword">string</span> result = (number % 2 == 0) ? "четное" : "нечетное";
+Console.WriteLine($"Число {number} - {result}");
+
+<span class="comment">// Тернарный оператор для присваивания</span>
+<span class="keyword">int</span> max = (a > b) ? a : b;
+
+<span class="comment">// Вложенные тернарные операторы (не рекомендуется для сложных условий)</span>
+<span class="keyword">int</span> score = 85;
+<span class="keyword">string</span> grade = (score >= 90) ? "A" : 
+              (score >= 80) ? "B" : 
+              (score >= 70) ? "C" : 
+              (score >= 60) ? "D" : "F";
+
+Console.WriteLine($"Оценка: {grade}");</code></pre>
+        </div>
+        
+        <h3>Конструкция switch</h3>
+        <p>Позволяет выбирать действие из множества вариантов:</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры использования switch</span>
+            </div>
+            <pre><code><span class="keyword">int</span> dayOfWeek = 3;
+<span class="keyword">string</span> dayName;
+
+<span class="comment">// Классический switch</span>
+<span class="keyword">switch</span> (dayOfWeek)
+{
+    <span class="keyword">case</span> 1:
+        dayName = "Понедельник";
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> 2:
+        dayName = "Вторник";
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> 3:
+        dayName = "Среда";
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> 4:
+        dayName = "Четверг";
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> 5:
+        dayName = "Пятница";
+        <span class="keyword">break</span>;
+    <span class="keyword">case</span> 6:
+    <span class="keyword">case</span> 7:
+        dayName = "Выходной";
+        <span class="keyword">break</span>;
+    <span class="keyword">default</span>:
+        dayName = "Неизвестный день";
+        <span class="keyword">break</span>;
+}
+
+<span class="comment">// Switch выражение (C# 8.0 и выше)</span>
+dayName = dayOfWeek <span class="keyword">switch</span>
+{
+    1 => "Понедельник",
+    2 => "Вторник",
+    3 => "Среда",
+    4 => "Четверг",
+    5 => "Пятница",
+    6 or 7 => "Выходной",
+    _ => "Неизвестный день"
+};
+
+<span class="comment">// Switch с pattern matching (C# 7.0 и выше)</span>
+<span class="keyword">object</span> obj = "Hello";
+<span class="keyword">string</span> typeInfo = obj <span class="keyword">switch</span>
+{
+    <span class="keyword">int</span> i => $"Целое число: {i}",
+    <span class="keyword">string</span> s => $"Строка: {s}",
+    <span class="keyword">double</span> d => $"Дробное число: {d}",
+    _ => "Неизвестный тип"
+};</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Для простых условий используйте тернарный оператор, для множественного выбора - switch, а для сложных условий с несколькими переменными - if-else.</p>
+        </div>
+    </div>
+</body>
+</html>
