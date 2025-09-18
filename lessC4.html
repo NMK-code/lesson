@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Методы и функции в C#</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #6a11cb;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+            color: #2c3e50;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+            color: #2980b9;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            margin: 25px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 1rem;
+            min-width: 600px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background: linear-gradient(to bottom, #3498db, #2980b9);
+            color: white;
+            font-weight: 600;
+            text-align: center;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e8f4fc;
+            transition: background-color 0.3s;
+        }
+        
+        .code-container {
+            background: #2d3a4b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            overflow-x: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .code-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #63b3ed;
+            font-family: 'Consolas', monospace;
+        }
+        
+        .code-header .language {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .code-header .caption {
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        
+        .keyword {
+            color: #ff79c6;
+        }
+        
+        .type {
+            color: #8be9fd;
+        }
+        
+        .value {
+            color: #f1fa8c;
+        }
+        
+        .comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+        
+        .note {
+            background: #e8f4fc;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .tip {
+            background: #f0f9eb;
+            border-left: 4px solid #52c41a;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning {
+            background: #fef7ec;
+            border-left: 4px solid #fa8c16;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .demo-container {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 15px 0;
+            background-color: #f9f9f9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Методы, параметры и возвращение значений в C#</h1>
+        <p>Изучение основ работы с методами, параметрами и возвращаемыми значениями</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое методы в C#</h2>
+        <p>Методы — это блоки кода, которые содержат ряд инструкций. Они позволяют организовать код в логические единицы, которые можно многократно использовать.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Компонент метода</th>
+                        <th>Описание</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Модификатор доступа</td>
+                        <td>Определяет видимость метода</td>
+                        <td>public, private, protected</td>
+                    </tr>
+                    <tr>
+                        <td>Тип возвращаемого значения</td>
+                        <td>Тип данных, который возвращает метод</td>
+                        <td>int, string, void (если ничего не возвращает)</td>
+                    </tr>
+                    <tr>
+                        <td>Имя метода</td>
+                        <td>Уникальный идентификатор метода</td>
+                        <td>CalculateSum, PrintMessage</td>
+                    </tr>
+                    <tr>
+                        <td>Параметры</td>
+                        <td>Данные, передаваемые в метод</td>
+                        <td>(int a, int b)</td>
+                    </tr>
+                    <tr>
+                        <td>Тело метода</td>
+                        <td>Блок кода, выполняющий нужные операции</td>
+                        <td>{ return a + b; }</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример простого метода</span>
+            </div>
+            <pre><code><span class="comment">// Метод без параметров и возвращаемого значения</span>
+<span class="keyword">public void</span> PrintHello()
+{
+    Console.WriteLine(<span class="string">"Hello, World!"</span>);
+}
+
+<span class="comment">// Метод с параметрами и возвращаемым значением</span>
+<span class="keyword">public int</span> CalculateSum(<span class="keyword">int</span> a, <span class="keyword">int</span> b)
+{
+    <span class="keyword">return</span> a + b;
+}
+
+<span class="comment">// Вызов методов</span>
+PrintHello();
+<span class="keyword">int</span> result = CalculateSum(5, 3);
+Console.WriteLine(<span class="string">$"Сумма: {result}"</span>);</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> В C# все методы должны быть объявлены внутри класса. В отличие от некоторых других языков, в C# нет глобальных функций.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Параметры методов</h2>
+        <p>Параметры позволяют передавать данные в методы для обработки. В C# существует несколько способов передачи параметров.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип параметра</th>
+                        <th>Описание</th>
+                        <th>Синтаксис</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Параметры по значению</td>
+                        <td>Значение копируется в параметр, исходная переменная не изменяется</td>
+                        <td>void Method(int param)</td>
+                    </tr>
+                    <tr>
+                        <td>Параметры по ссылке (ref)</td>
+                        <td>Передается ссылка на переменную, метод может изменить исходное значение</td>
+                        <td>void Method(ref int param)</td>
+                    </tr>
+                    <tr>
+                        <td>Выходные параметры (out)</td>
+                        <td>Аналогично ref, но переменная должна быть инициализирована в методе</td>
+                        <td>void Method(out int param)</td>
+                    </tr>
+                    <tr>
+                        <td>Массив параметров (params)</td>
+                        <td>Позволяет передавать переменное количество аргументов</td>
+                        <td>void Method(params int[] values)</td>
+                    </tr>
+                    <tr>
+                        <td>Необязательные параметры</td>
+                        <td>Параметры со значениями по умолчанию</td>
+                        <td>void Method(int a, int b = 10)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры различных типов параметров</span>
+            </div>
+            <pre><code><span class="comment">// Параметры по значению (по умолчанию)</span>
+<span class="keyword">void</span> SquareValue(<span class="keyword">int</span> number)
+{
+    number = number * number;
+    Console.WriteLine(<span class="string">$"Внутри метода: {number}"</span>);
+}
+
+<span class="comment">// Параметры по ссылке (ref)</span>
+<span class="keyword">void</span> SquareRef(<span class="keyword">ref</span> <span class="keyword">int</span> number)
+{
+    number = number * number;
+    Console.WriteLine(<span class="string">$"Внутри метода: {number}"</span>);
+}
+
+<span class="comment">// Выходные параметры (out)</span>
+<span class="keyword">bool</span> TryDivide(<span class="keyword">int</span> dividend, <span class="keyword">int</span> divisor, <span class="keyword">out</span> <span class="keyword">int</span> result)
+{
+    <span class="keyword">if</span> (divisor == 0)
+    {
+        result = 0;
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    }
+    result = dividend / divisor;
+    <span class="keyword">return</span> <span class="keyword">true</span>;
+}
+
+<span class="comment">// Массив параметров (params)</span>
+<span class="keyword">int</span> Sum(<span class="keyword">params</span> <span class="keyword">int</span>[] numbers)
+{
+    <span class="keyword">int</span> total = 0;
+    <span class="keyword">foreach</span> (<span class="keyword">int</span> num <span class="keyword">in</span> numbers)
+    {
+        total += num;
+    }
+    <span class="keyword">return</span> total;
+}
+
+<span class="comment">// Необязательные параметры</span>
+<span class="keyword">void</span> PrintInfo(<span class="keyword">string</span> name, <span class="keyword">int</span> age = 18, <span class="keyword">string</span> country = "Russia")
+{
+    Console.WriteLine(<span class="string">$"Имя: {name}, Возраст: {age}, Страна: {country}"</span>);
+}
+
+<span class="comment">// Использование</span>
+<span class="keyword">int</span> x = 5;
+SquareValue(x); <span class="comment">// x останется равным 5</span>
+SquareRef(<span class="keyword">ref</span> x); <span class="comment">// x изменится на 25</span>
+
+<span class="keyword">if</span> (TryDivide(10, 2, <span class="keyword">out</span> <span class="keyword">int</span> result))
+{
+    Console.WriteLine(<span class="string">$"Результат: {result}"</span>);
+}
+
+<span class="keyword">int</span> total = Sum(1, 2, 3, 4, 5);
+PrintInfo("Анна");
+PrintInfo("Борис", 25, "USA");</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте выходные параметры (out), когда метод должен вернуть несколько значений. Для сложных сценариев рассмотрите использование кортежей или классов.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Возвращение значений и оператор return</h2>
+        <p>Оператор <code>return</code> используется для возврата значения из метода и завершения его выполнения.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип возврата</th>
+                        <th>Описание</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Возврат значения</td>
+                        <td>Метод возвращает конкретное значение указанного типа</td>
+                        <td>return 42;</td>
+                    </tr>
+                    <tr>
+                        <td>Возврат без значения</td>
+                        <td>В методах с void для досрочного завершения</td>
+                        <td>return;</td>
+                    </tr>
+                    <tr>
+                        <td>Возврат выражения</td>
+                        <td>Возвращается результат вычисления выражения</td>
+                        <td>return a + b;</td>
+                    </tr>
+                    <tr>
+                        <td>Условный возврат</td>
+                        <td>Возврат в зависимости от условия</td>
+                        <td>if (condition) return true;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры использования оператора return</span>
+            </div>
+            <pre><code><span class="comment">// Простой возврат значения</span>
+<span class="keyword">int</span> GetAnswer()
+{
+    <span class="keyword">return</span> 42;
+}
+
+<span class="comment">// Возврат результата выражения</span>
+<span class="keyword">double</span> CalculateCircleArea(<span class="keyword">double</span> radius)
+{
+    <span class="keyword">return</span> Math.PI * radius * radius;
+}
+
+<span class="comment">// Условный возврат</span>
+<span class="keyword">string</span> GetGrade(<span class="keyword">int</span> score)
+{
+    <span class="keyword">if</span> (score >= 90) <span class="keyword">return</span> <span class="string">"A"</span>;
+    <span class="keyword">if</span> (score >= 80) <span class="keyword">return</span> <span class="string">"B"</span>;
+    <span class="keyword">if</span> (score >= 70) <span class="keyword">return</span> <span class="string">"C"</span>;
+    <span class="keyword">if</span> (score >= 60) <span class="keyword">return</span> <span class="string">"D"</span>;
+    <span class="keyword">return</span> <span class="string">"F"</span>;
+}
+
+<span class="comment">// Возврат в методах с void</span>
+<span class="keyword">void</span> ProcessData(<span class="keyword">string</span> data)
+{
+    <span class="keyword">if</span> (string.IsNullOrEmpty(data))
+    {
+        Console.WriteLine(<span class="string">"Данные пустые"</span>);
+        <span class="keyword">return</span>; <span class="comment">// Досрочное завершение метода</span>
+    }
+    
+    <span class="comment">// Обработка данных</span>
+    Console.WriteLine(<span class="string">$"Обработка: {data}"</span>);
+    <span class="comment">// Неявный return в конце void метода</span>
+}
+
+<span class="comment">// Возврат нескольких значений с помощью кортежей</span>
+(<span class="keyword">int</span>, <span class="keyword">int</span>) GetMinMax(<span class="keyword">int</span>[] numbers)
+{
+    <span class="keyword">if</span> (numbers.Length == 0) <span class="keyword">return</span> (0, 0);
+    
+    <span class="keyword">int</span> min = numbers[0];
+    <span class="keyword">int</span> max = numbers[0];
+    
+    <span class="keyword">foreach</span> (<span class="keyword">int</span> num <span class="keyword">in</span> numbers)
+    {
+        <span class="keyword">if</span> (num < min) min = num;
+        <span class="keyword">if</span> (num > max) max = num;
+    }
+    
+    <span class="keyword">return</span> (min, max);
+}</code></pre>
+        </div>
+        
+        <div class="warning">
+            <p><strong>Важно:</strong> Для методов с возвращаемым типом (не void) компилятор проверяет, что все возможные пути выполнения содержат оператор return с возвращаемым значением соответствующего типа.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Практические примеры</h2>
+        <p>Рассмотрим несколько практических примеров использования методов в C#.</p>
+        
+        <h3>Рекурсивные методы</h3>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример рекурсивного метода (вычисление факториала)</span>
+            </div>
+            <pre><code><span class="keyword">long</span> Factorial(<span class="keyword">int</span> n)
+{
+    <span class="comment">// Базовый случай рекурсии</span>
+    <span class="keyword">if</span> (n <= 1)
+    {
+        <span class="keyword">return</span> 1;
+    }
+    
+    <span class="comment">// Рекурсивный вызов</span>
+    <span class="keyword">return</span> n * Factorial(n - 1);
+}
+
+<span class="comment">// Использование</span>
+<span class="keyword">long</span> result = Factorial(5); <span class="comment">// 5! = 5 × 4 × 3 × 2 × 1 = 120</span>
+Console.WriteLine(<span class="string">$"Факториал 5: {result}"</span>);</code></pre>
+        </div>
+        
+        <h3>Перегрузка методов</h3>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример перегрузки методов</span>
+            </div>
+            <pre><code><span class="keyword">public class</span> Calculator
+{
+    <span class="comment">// Версия с двумя целыми числами</span>
+    <span class="keyword">public int</span> Add(<span class="keyword">int</span> a, <span class="keyword">int</span> b)
+    {
+        <span class="keyword">return</span> a + b;
+    }
+    
+    <span class="comment">// Версия с тремя целыми числами</span>
+    <span class="keyword">public int</span> Add(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c)
+    {
+        <span class="keyword">return</span> a + b + c;
+    }
+    
+    <span class="comment">// Версия с числами с плавающей точкой</span>
+    <span class="keyword">public double</span> Add(<span class="keyword">double</span> a, <span class="keyword">double</span> b)
+    {
+        <span class="keyword">return</span> a + b;
+    }
+    
+    <span class="comment">// Версия с массивом чисел</span>
+    <span class="keyword">public int</span> Add(<span class="keyword">params</span> <span class="keyword">int</span>[] numbers)
+    {
+        <span class="keyword">int</span> sum = 0;
+        <span class="keyword">foreach</span> (<span class="keyword">int</span> num <span class="keyword">in</span> numbers)
+        {
+            sum += num;
+        }
+        <span class="keyword">return</span> sum;
+    }
+}
+
+<span class="comment">// Использование перегруженных методов</span>
+Calculator calc = <span class="keyword">new</span> Calculator();
+Console.WriteLine(calc.Add(2, 3)); <span class="comment">// 5</span>
+Console.WriteLine(calc.Add(2, 3, 5)); <span class="comment">// 10</span>
+Console.WriteLine(calc.Add(2.5, 3.7)); <span class="comment">// 6.2</span>
+Console.WriteLine(calc.Add(1, 2, 3, 4, 5)); <span class="comment">// 15</span></code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте перегрузку методов для предоставления различных способов вызова метода с разными наборами параметров, но с одинаковой семантикой.</p>
+        </div>
+    </div>
+</body>
+</html>
