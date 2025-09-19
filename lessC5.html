@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Классы и объекты в C#</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Классы, объекты, конструкторы, инициализаторы и деконструкторы в C#</h1>
+        <p>Основы объектно-ориентированного программирования в C#</p>
+    </header>
+
+    <div class="container">
+        <h2>Классы и объекты</h2>
+        <p>Классы являются основными строительными блоками объектно-ориентированного программирования в C#. Они определяют структуру и поведение объектов.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Концепция</th>
+                        <th>Описание</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Класс</td>
+                        <td>Шаблон или blueprint для создания объектов</td>
+                        <td><code>class Person { }</code></td>
+                    </tr>
+                    <tr>
+                        <td>Объект</td>
+                        <td>Экземпляр класса, созданный в памяти</td>
+                        <td><code>Person person = new Person();</code></td>
+                    </tr>
+                    <tr>
+                        <td>Поле</td>
+                        <td>Переменная, объявленная внутри класса</td>
+                        <td><code>public string Name;</code></td>
+                    </tr>
+                    <tr>
+                        <td>Свойство</td>
+                        <td>Механизм для чтения и записи значений полей</td>
+                        <td><code>public string Name { get; set; }</code></td>
+                    </tr>
+                    <tr>
+                        <td>Метод</td>
+                        <td>Функция, объявленная внутри класса</td>
+                        <td><code>public void Speak() { }</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример класса и создания объектов</span>
+            </div>
+            <pre><code><span class="comment">// Определение класса</span>
+<span class="keyword">public class</span> Person
+{
+    <span class="comment">// Поля</span>
+    <span class="keyword">public string</span> Name;
+    <span class="keyword">public int</span> Age;
+    
+    <span class="comment">// Свойства</span>
+    <span class="keyword">public string</span> Address { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    
+    <span class="comment">// Метод</span>
+    <span class="keyword">public void</span> Introduce()
+    {
+        Console.WriteLine(<span class="string">$"Меня зовут {Name}, мне {Age} лет."</span>);
+    }
+}
+
+<span class="comment">// Создание объектов (экземпляров класса)</span>
+Person person1 = <span class="keyword">new</span> Person();
+person1.Name = "Анна";
+person1.Age = 25;
+person1.Introduce();
+
+Person person2 = <span class="keyword">new</span> Person 
+{ 
+    Name = "Борис", 
+    Age = 30 
+};
+person2.Introduce();</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Класс описывает тип объекта, а объект представляет собой конкретный экземпляр этого типа с реальными данными.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Конструкторы</h2>
+        <p>Конструкторы — это специальные методы, которые вызываются при создании объекта. Они используются для инициализации полей класса.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип конструктора</th>
+                        <th>Описание</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Конструктор по умолчанию</td>
+                        <td>Создается автоматически, если не определены другие конструкторы</td>
+                        <td><code>Person() { }</code></td>
+                    </tr>
+                    <tr>
+                        <td>Параметризованный конструктор</td>
+                        <td>Принимает параметры для инициализации объекта</td>
+                        <td><code>Person(string name, int age) { }</code></td>
+                    </tr>
+                    <tr>
+                        <td>Статический конструктор</td>
+                        <td>Вызывается автоматически перед созданием первого экземпляра класса</td>
+                        <td><code>static Person() { }</code></td>
+                    </tr>
+                    <tr>
+                        <td>Конструктор копирования</td>
+                        <td>Создает новый объект как копию существующего</td>
+                        <td><code>Person(Person other) { }</code></td>
+                    </tr>
+                    <tr>
+                        <td>Частный конструктор</td>
+                        <td>Используется в классах с только статическими членами</td>
+                        <td><code>private Person() { }</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры конструкторов</span>
+            </div>
+            <pre><code><span class="keyword">public class</span> Person
+{
+    <span class="keyword">public string</span> Name;
+    <span class="keyword">public int</span> Age;
+    
+    <span class="comment">// Конструктор по умолчанию</span>
+    <span class="keyword">public</span> Person()
+    {
+        Name = "Неизвестно";
+        Age = 0;
+    }
+    
+    <span class="comment">// Параметризованный конструктор</span>
+    <span class="keyword">public</span> Person(<span class="keyword">string</span> name, <span class="keyword">int</span> age)
+    {
+        Name = name;
+        Age = age;
+    }
+    
+    <span class="comment">// Конструктор копирования</span>
+    <span class="keyword">public</span> Person(Person otherPerson)
+    {
+        Name = otherPerson.Name;
+        Age = otherPerson.Age;
+    }
+    
+    <span class="comment">// Статический конструктор</span>
+    <span class="keyword">static</span> Person()
+    {
+        Console.WriteLine("Статический конструктор вызван");
+    }
+}
+
+<span class="comment">// Использование конструкторов</span>
+Person defaultPerson = <span class="keyword">new</span> Person(); <span class="comment">// Конструктор по умолчанию</span>
+Person john = <span class="keyword">new</span> Person("John", 30); <span class="comment">// Параметризованный конструктор</span>
+Person johnCopy = <span class="keyword">new</span> Person(john); <span class="comment">// Конструктор копирования</span></code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте конструкторы для обеспечения valid state объекта — убедитесь, что после создания объект находится в consistent состоянии.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Инициализаторы объектов</h2>
+        <p>Инициализаторы объектов предоставляют удобный синтаксис для инициализации свойств объекта при его создании.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры инициализаторов объектов</span>
+            </div>
+            <pre><code><span class="keyword">public class</span> Person
+{
+    <span class="keyword">public string</span> Name { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public int</span> Age { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public string</span> Address { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    
+    <span class="keyword">public</span> Person() { }
+    
+    <span class="keyword">public</span> Person(<span class="keyword">string</span> name)
+    {
+        Name = name;
+    }
+}
+
+<span class="comment">// Использование инициализаторов объектов</span>
+Person person1 = <span class="keyword">new</span> Person
+{
+    Name = "Анна",
+    Age = 25,
+    Address = "Москва"
+};
+
+Person person2 = <span class="keyword">new</span> Person("Борис")
+{
+    Age = 30,
+    Address = "Санкт-Петербург"
+};
+
+<span class="comment">// Инициализаторы с коллекциями</span>
+<span class="keyword">public class</span> Classroom
+{
+    <span class="keyword">public List</span>&lt;Person&gt; Students { <span class="keyword">get</span>; <span class="keyword">set</span>; } = <span class="keyword">new</span> List&lt;Person&gt;();
+}
+
+Classroom classroom = <span class="keyword">new</span> Classroom
+{
+    Students =
+    {
+        <span class="keyword">new</span> Person { Name = "Анна", Age = 20 },
+        <span class="keyword">new</span> Person { Name = "Борис", Age = 21 },
+        <span class="keyword">new</span> Person { Name = "Сергей", Age = 22 }
+    }
+};</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Инициализаторы объектов работают только со свойствами, имеющими public setter, или с полями, объявленными как public.</p>
+        </div>
+        
+        <h3>Инициализаторы с анонимными типами</h3>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Анонимные типы и их инициализация</span>
+            </div>
+            <pre><code><span class="comment">// Создание анонимного типа</span>
+<span class="keyword">var</span> person = <span class="keyword">new</span>
+{
+    Name = "Анна",
+    Age = 25,
+    Address = "Москва"
+};
+
+Console.WriteLine(<span class="string">$"Имя: {person.Name}, Возраст: {person.Age}"</span>);
+
+<span class="comment">// Анонимные типы в коллекциях</span>
+<span class="keyword">var</span> people = <span class="keyword">new</span>[]
+{
+    <span class="keyword">new</span> { Name = "Анна", Age = 25 },
+    <span class="keyword">new</span> { Name = "Борис", Age = 30 },
+    <span class="keyword">new</span> { Name = "Сергей", Age = 28 }
+};
+
+<span class="keyword">foreach</span> (<span class="keyword">var</span> p <span class="keyword">in</span> people)
+{
+    Console.WriteLine(<span class="string">$"Имя: {p.Name}, Возраст: {p.Age}"</span>);
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Деконструкторы</h2>
+        <p>Деконструкторы позволяют разложить объект на отдельные части. Они особенно полезны для работы с кортежами и pattern matching.</p>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Примеры деконструкторов</span>
+            </div>
+            <pre><code><span class="keyword">public class</span> Person
+{
+    <span class="keyword">public string</span> Name { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public int</span> Age { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public string</span> Address { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    
+    <span class="comment">// Деконструктор</span>
+    <span class="keyword">public void</span> Deconstruct(<span class="keyword">out</span> <span class="keyword">string</span> name, <span class="keyword">out</span> <span class="keyword">int</span> age)
+    {
+        name = Name;
+        age = Age;
+    }
+    
+    <span class="comment">// Перегрузка деконструктора</span>
+    <span class="keyword">public void</span> Deconstruct(<span class="keyword">out</span> <span class="keyword">string</span> name, <span class="keyword">out</span> <span class="keyword">int</span> age, <span class="keyword">out</span> <span class="keyword">string</span> address)
+    {
+        name = Name;
+        age = Age;
+        address = Address;
+    }
+}
+
+<span class="comment">// Использование деконструктора</span>
+Person person = <span class="keyword">new</span> Person 
+{ 
+    Name = "Анна", 
+    Age = 25, 
+    Address = "Москва" 
+};
+
+<span class="comment">// Деконструкция на две переменные</span>
+(<span class="keyword">string</span> name, <span class="keyword">int</span> age) = person;
+Console.WriteLine(<span class="string">$"Имя: {name}, Возраст: {age}"</span>);
+
+<span class="comment">// Деконструкция на три переменные</span>
+(<span class="keyword">string</span> name, <span class="keyword">int</span> age, <span class="keyword">string</span> address) = person;
+Console.WriteLine(<span class="string">$"Имя: {name}, Возраст: {age}, Адрес: {address}"</span>);
+
+<span class="comment">// Использование с pattern matching</span>
+<span class="keyword">if</span> (person <span class="keyword">is</span> (_, < 30, _))
+{
+    Console.WriteLine("Молодой человек");
+}</code></pre>
+        </div>
+        
+        <h3>Деконструкция с кортежами</h3>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Деконструкция кортежей</span>
+            </div>
+            <pre><code><span class="comment">// Создание кортежа</span>
+(<span class="keyword">string</span> name, <span class="keyword">int</span> age, <span class="keyword">string</span> address) = ("Анна", 25, "Москва");
+
+<span class="comment">// Деконструкция кортежа</span>
+<span class="keyword">var</span> personInfo = (Name: "Анна", Age: 25, Address: "Москва");
+<span class="keyword">var</span> (personName, personAge, personAddress) = personInfo;
+
+Console.WriteLine(<span class="string">$"Имя: {personName}, Возраст: {personAge}"</span>);
+
+<span class="comment">// Игнорирование некоторых элементов при деконструкции</span>
+(<span class="keyword">string</span> firstName, _, <span class="keyword">string</span> city) = personInfo;
+Console.WriteLine(<span class="string">$"Имя: {firstName}, Город: {city}"</span>);</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Деконструкторы особенно полезны, когда вам нужно извлечь несколько значений из объекта одновременно, например, при работе с кортежами или в операциях pattern matching.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Практические примеры</h2>
+        <p>Рассмотрим практические примеры использования классов, конструкторов, инициализаторов и деконструкторов.</p>
+        
+        <h3>Пример класса с различными конструкторами</h3>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Полный пример класса</span>
+            </div>
+            <pre><code><span class="keyword">public class</span> Rectangle
+{
+    <span class="keyword">public double</span> Width { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public double</span> Height { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public double</span> Area => Width * Height;
+    <span class="keyword">public double</span> Perimeter => 2 * (Width + Height);
+    
+    <span class="comment">// Конструктор по умолчанию</span>
+    <span class="keyword">public</span> Rectangle()
+    {
+        Width = 1;
+        Height = 1;
+    }
+    
+    <span class="comment">// Параметризованный конструктор</span>
+    <span class="keyword">public</span> Rectangle(<span class="keyword">double</span> width, <span class="keyword">double</span> height)
+    {
+        Width = width;
+        Height = height;
+    }
+    
+    <span class="comment">// Конструктор копирования</span>
+    <span class="keyword">public</span> Rectangle(Rectangle other)
+    {
+        Width = other.Width;
+        Height = other.Height;
+    }
+    
+    <span class="comment">// Деконструктор</span>
+    <span class="keyword">public void</span> Deconstruct(<span class="keyword">out</span> <span class="keyword">double</span> width, <span class="keyword">out</span> <span class="keyword">double</span> height)
+    {
+        width = Width;
+        height = Height;
+    }
+    
+    <span class="comment">// Метод для масштабирования</span>
+    <span class="keyword">public void</span> Scale(<span class="keyword">double</span> factor)
+    {
+        Width *= factor;
+        Height *= factor;
+    }
+    
+    <span class="comment">// Переопределение метода ToString()</span>
+    <span class="keyword">public override string</span> ToString()
+    {
+        <span class="keyword">return</span> <span class="string">$"Прямоугольник: Width = {Width}, Height = {Height}, Area = {Area}"</span>;
+    }
+}
+
+<span class="comment">// Использование</span>
+Rectangle rect1 = <span class="keyword">new</span> Rectangle(); <span class="comment">// Конструктор по умолчанию</span>
+Rectangle rect2 = <span class="keyword">new</span> Rectangle(5, 3); <span class="comment">// Параметризованный конструктор</span>
+Rectangle rect3 = <span class="keyword">new</span> Rectangle(rect2); <span class="comment">// Конструктор копирования</span>
+
+<span class="comment">// Использование инициализатора</span>
+Rectangle rect4 = <span class="keyword">new</span> Rectangle
+{
+    Width = 4,
+    Height = 6
+};
+
+<span class="comment">// Использование деконструктора</span>
+(<span class="keyword">double</span> width, <span class="keyword">double</span> height) = rect2;
+Console.WriteLine(<span class="string">$"Width: {width}, Height: {height}"</span>);
+
+<span class="comment">// Демонстрация методов</span>
+rect2.Scale(2);
+Console.WriteLine(rect2.ToString());</code></pre>
+        </div>
+        
+        <h3>Пример с наследованием и конструкторами</h3>
+        
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Наследование и цепочка конструкторов</span>
+            </div>
+            <pre><code><span class="keyword">public class</span> Shape
+{
+    <span class="keyword">public string</span> Color { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    
+    <span class="keyword">public</span> Shape()
+    {
+        Color = "Black";
+        Console.WriteLine("Конструктор Shape() вызван");
+    }
+    
+    <span class="keyword">public</span> Shape(<span class="keyword">string</span> color)
+    {
+        Color = color;
+        Console.WriteLine(<span class="string">$"Конструктор Shape({color}) вызван"</span>);
+    }
+}
+
+<span class="keyword">public class</span> Circle : Shape
+{
+    <span class="keyword">public double</span> Radius { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    
+    <span class="keyword">public</span> Circle() <span class="comment">// Неявно вызывает base()</span>
+    {
+        Radius = 1;
+        Console.WriteLine("Конструктор Circle() вызван");
+    }
+    
+    <span class="keyword">public</span> Circle(<span class="keyword">double</span> radius) : <span class="keyword">base</span>() <span class="comment">// Явно вызывает base()</span>
+    {
+        Radius = radius;
+        Console.WriteLine(<span class="string">$"Конструктор Circle({radius}) вызван"</span>);
+    }
+    
+    <span class="keyword">public</span> Circle(<span class="keyword">string</span> color, <span class="keyword">double</span> radius) : <span class="keyword">base</span>(color) <span class="comment">// Вызывает base(color)</span>
+    {
+        Radius = radius;
+        Console.WriteLine(<span class="string">$"Конструктор Circle({color}, {radius}) вызван"</span>);
+    }
+}
+
+<span class="comment">// Использование</span>
+Circle circle1 = <span class="keyword">new</span> Circle();
+Console.WriteLine();
+
+Circle circle2 = <span class="keyword">new</span> Circle(5);
+Console.WriteLine();
+
+Circle circle3 = <span class="keyword">new</span> Circle("Red", 10);
+Console.WriteLine();</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> При наследовании конструкторы базового класса вызываются перед конструкторами производного класса. Используйте ключевое слово <code>base</code> для явного вызова конкретного конструктора базового класса.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2023 Классы и объекты в C#. Все права защищены.</p>
+    </footer>
+</body>
+</html>
