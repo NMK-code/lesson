@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Инкапсуляция в C#</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Инкапсуляция в C#</h1>
+        <p>Принцип ООП для защиты данных и управления доступом</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое инкапсуляция?</h2>
+        <p>
+            Инкапсуляция — это объединение данных (полей) и методов для работы с ними в одном классе, 
+            а также сокрытие деталей реализации от внешнего мира. 
+        </p>
+        <p>
+            Основная идея: <strong>скрыть внутреннее устройство объекта и предоставить удобный интерфейс для работы с ним</strong>.
+        </p>
+        <div class="note">
+            <p><strong>Пример из жизни:</strong> Автомобиль. 
+            Водитель пользуется педалями и рулём, но не вмешивается напрямую в работу двигателя. 
+            Внутренние механизмы скрыты (инкапсулированы).</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Модификаторы доступа</h2>
+        <p>Модификаторы определяют, кто может обращаться к полям и методам класса:</p>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Модификатор</th>
+                        <th>Доступность</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>public</strong></td>
+                        <td>Доступен отовсюду</td>
+                        <td><code>public void Print()</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>private</strong></td>
+                        <td>Только внутри класса</td>
+                        <td><code>private int id;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>protected</strong></td>
+                        <td>Класс + его наследники</td>
+                        <td><code>protected string Name;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>internal</strong></td>
+                        <td>В пределах одной сборки</td>
+                        <td><code>internal int counter;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>protected internal</strong></td>
+                        <td>Сборка + наследники</td>
+                        <td><code>protected internal int code;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>private protected</strong></td>
+                        <td>Текущий класс + наследники внутри сборки</td>
+                        <td><code>private protected int key;</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Инкапсуляция с помощью свойств</h2>
+        <p>
+            В C# обычно поля делают <code>private</code>, а доступ к ним предоставляют через 
+            <strong>свойства</strong> (properties).
+        </p>
+
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример банковского счёта</span>
+            </div>
+<pre><code><span class="keyword">class</span> <span class="type">BankAccount</span>
+{
+    <span class="keyword">private decimal</span> balance; <span class="comment">// скрытое поле</span>
+
+    <span class="keyword">public decimal</span> Balance
+    {
+        <span class="keyword">get</span> { <span class="keyword">return</span> balance; } 
+        <span class="keyword">private set</span> 
+        {
+            <span class="keyword">if</span> (value &gt;= 0) balance = value;
+        }
+    }
+
+    <span class="keyword">public void</span> Deposit(<span class="type">decimal</span> amount)
+    {
+        <span class="keyword">if</span> (amount &gt; 0)
+            Balance += amount;
+    }
+
+    <span class="keyword">public bool</span> Withdraw(<span class="type">decimal</span> amount)
+    {
+        <span class="keyword">if</span> (amount &lt;= Balance)
+        {
+            Balance -= amount;
+            <span class="keyword">return true</span>;
+        }
+        <span class="keyword">return false</span>;
+    }
+}
+</code></pre>
+        </div>
+
+        <div class="tip">
+            <p><strong>Совет:</strong> В сеттерах (set) удобно добавлять проверки и ограничения, чтобы защитить данные.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Автосвойства</h2>
+        <p>
+            Автосвойства упрощают запись: компилятор сам создаёт скрытое поле.
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Автосвойство с private set</span>
+            </div>
+<pre><code><span class="keyword">class</span> <span class="type">Person</span>
+{
+    <span class="keyword">public string</span> Name { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+    <span class="keyword">public int</span> Age { <span class="keyword">get</span>; <span class="keyword">private set</span>; }
+
+    <span class="keyword">public</span> Person(<span class="type">string</span> name, <span class="type">int</span> age)
+    {
+        Name = name;
+        Age = age;
+    }
+}
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>readonly и const</h2>
+        <p>
+            Для инкапсуляции часто применяют <code>readonly</code> (значение задаётся только в конструкторе) 
+            и <code>const</code> (постоянное значение).
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">readonly и const</span>
+            </div>
+<pre><code><span class="keyword">class</span> <span class="type">Config</span>
+{
+    <span class="keyword">public const</span> <span class="type">string</span> AppName = "MyApp";
+    <span class="keyword">public readonly int</span> MaxUsers;
+
+    <span class="keyword">public</span> Config(<span class="type">int</span> max)
+    {
+        MaxUsers = max;
+    }
+}
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Практический пример</h2>
+        <p>
+            Представим класс пользователя, где пароль должен быть скрыт, а логирование доступно только через методы.
+        </p>
+
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">User с инкапсуляцией</span>
+            </div>
+<pre><code><span class="keyword">class</span> <span class="type">User</span>
+{
+    <span class="keyword">private string</span> password;
+
+    <span class="keyword">public string</span> Username { <span class="keyword">get</span>; }
+
+    <span class="keyword">public</span> User(<span class="type">string</span> username, <span class="type">string</span> password)
+    {
+        Username = username;
+        SetPassword(password);
+    }
+
+    <span class="keyword">public void</span> SetPassword(<span class="type">string</span> newPassword)
+    {
+        <span class="keyword">if</span> (newPassword.Length &gt;= 6)
+            password = newPassword;
+    }
+
+    <span class="keyword">public bool</span> CheckPassword(<span class="type">string</span> input)
+    {
+        <span class="keyword">return</span> password == input;
+    }
+}
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Вывод</h2>
+        <p>
+            Инкапсуляция — это фундаментальный принцип ООП, позволяющий:
+        </p>
+        <ul>
+            <li>Защитить данные от некорректного использования</li>
+            <li>Скрыть детали реализации</li>
+            <li>Создавать удобный и безопасный интерфейс для работы с классом</li>
+            <li>Упрощать сопровождение и расширение кода</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>© 2025 Лекции по C# и WPF</p>
+    </footer>
+</body>
+</html>

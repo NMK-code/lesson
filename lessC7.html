@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наследование в C#</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Наследование в C#</h1>
+        <p>Принцип ООП для повторного использования и расширения функциональности классов</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое наследование?</h2>
+        <p>
+            Наследование — это механизм, позволяющий создавать новые классы на основе существующих. 
+            Класс, от которого наследуют, называется <strong>базовым</strong>, 
+            а новый класс — <strong>производным</strong>.
+        </p>
+        <p>
+            Производный класс получает все открытые (<code>public</code>) и защищённые (<code>protected</code>) 
+            члены базового класса и может расширять или изменять их поведение.
+        </p>
+        <div class="note">
+            <p><strong>Пример из жизни:</strong> Класс «Транспорт» может быть базовым. 
+            «Машина» и «Самолёт» — производные классы, которые наследуют общие свойства 
+            (скорость, движение) и добавляют свои особенности.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Простейший пример</h2>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Наследование от базового класса</span>
+            </div>
+<pre><code><span class="keyword">class</span> <span class="type">Animal</span>
+{
+    <span class="keyword">public string</span> Name { <span class="keyword">get</span>; <span class="keyword">set</span>; }
+
+    <span class="keyword">public void</span> Eat()
+    {
+        Console.WriteLine($"{Name} ест.");
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Dog</span> : <span class="type">Animal</span>
+{
+    <span class="keyword">public void</span> Bark()
+    {
+        Console.WriteLine($"{Name} лает!");
+    }
+}
+</code></pre>
+        </div>
+        <p>Класс <code>Dog</code> наследует свойство <code>Name</code> и метод <code>Eat()</code> от <code>Animal</code>, 
+        а также добавляет свой метод <code>Bark()</code>.</p>
+    </div>
+
+    <div class="container">
+        <h2>Ключевое слово base</h2>
+        <p>
+            С помощью <code>base</code> можно обращаться к членам базового класса и вызывать его конструкторы.
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример использования base</span>
+            </div>
+<pre><code><span class="keyword">class</span> <span class="type">Person</span>
+{
+    <span class="keyword">public string</span> Name { <span class="keyword">get</span>; }
+
+    <span class="keyword">public</span> Person(<span class="type">string</span> name)
+    {
+        Name = name;
+    }
+
+    <span class="keyword">public void</span> Introduce()
+    {
+        Console.WriteLine($"Я {Name}");
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Student</span> : <span class="type">Person</span>
+{
+    <span class="keyword">public int</span> Grade { <span class="keyword">get</span>; }
+
+    <span class="keyword">public</span> Student(<span class="type">string</span> name, <span class="type">int</span> grade) 
+        : <span class="keyword">base</span>(name)
+    {
+        Grade = grade;
+    }
+}
+</code></pre>
+        </div>
+        <p>
+            Класс <code>Student</code> вызывает конструктор базового класса <code>Person</code> с помощью <code>base(name)</code>.
+        </p>
+    </div>
+
+    <div class="container">
+        <h2>Виртуальные методы и override</h2>
+        <p>
+            Наследование позволяет переопределять поведение методов. 
+            Для этого используется ключевое слово <code>virtual</code> в базовом классе 
+            и <code>override</code> в производном.
+        </p>
+
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">virtual и override</span>
+            </div>
+<pre><code><span class="keyword">class</span> <span class="type">Shape</span>
+{
+    <span class="keyword">public virtual void</span> Draw()
+    {
+        Console.WriteLine("Рисуем фигуру...");
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Circle</span> : <span class="type">Shape</span>
+{
+    <span class="keyword">public override void</span> Draw()
+    {
+        Console.WriteLine("Рисуем круг");
+    }
+}
+</code></pre>
+        </div>
+
+        <p>
+            При вызове <code>Draw()</code> у <code>Circle</code> будет использован переопределённый метод.
+        </p>
+    </div>
+
+    <div class="container">
+        <h2>Запрет наследования</h2>
+        <p>
+            Чтобы запретить наследование от класса, используется <code>sealed</code>. 
+            Чтобы запретить переопределение метода — <code>sealed override</code>.
+        </p>
+
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">sealed класс и методы</span>
+            </div>
+<pre><code><span class="keyword">sealed class</span> <span class="type">Logger</span>
+{
+    <span class="keyword">public void</span> Log(<span class="type">string</span> message)
+    {
+        Console.WriteLine(message);
+    }
+}
+
+<span class="keyword">class</span> <span class="type">BasePrinter</span>
+{
+    <span class="keyword">public virtual void</span> Print()
+    {
+        Console.WriteLine("Печать документа...");
+    }
+}
+
+<span class="keyword">class</span> <span class="type">FastPrinter</span> : <span class="type">BasePrinter</span>
+{
+    <span class="keyword">public sealed override void</span> Print()
+    {
+        Console.WriteLine("Быстрая печать документа...");
+    }
+}
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Интерфейсы и множественное наследование</h2>
+        <p>
+            В C# нет множественного наследования классов, но можно наследовать несколько интерфейсов.
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Реализация нескольких интерфейсов</span>
+            </div>
+<pre><code><span class="keyword">interface</span> <span class="type">IMovable</span>
+{
+    <span class="keyword">void</span> Move();
+}
+
+<span class="keyword">interface</span> <span class="type">IDrawable</span>
+{
+    <span class="keyword">void</span> Draw();
+}
+
+<span class="keyword">class</span> <span class="type">Player</span> : <span class="type">IMovable</span>, <span class="type">IDrawable</span>
+{
+    <span class="keyword">public void</span> Move()
+    {
+        Console.WriteLine("Игрок двигается");
+    }
+
+    <span class="keyword">public void</span> Draw()
+    {
+        Console.WriteLine("Игрок отрисован на экране");
+    }
+}
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Практический пример</h2>
+        <p>
+            Построим иерархию классов для работников компании.
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Иерархия сотрудников</span>
+            </div>
+<pre><code><span class="keyword">class</span> <span class="type">Employee</span>
+{
+    <span class="keyword">public string</span> Name { <span class="keyword">get</span>; }
+    <span class="keyword">public decimal</span> Salary { <span class="keyword">get</span>; }
+
+    <span class="keyword">public</span> Employee(<span class="type">string</span> name, <span class="type">decimal</span> salary)
+    {
+        Name = name;
+        Salary = salary;
+    }
+
+    <span class="keyword">public virtual void</span> Work()
+    {
+        Console.WriteLine($"{Name} работает.");
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Manager</span> : <span class="type">Employee</span>
+{
+    <span class="keyword">public</span> Manager(<span class="type">string</span> name, <span class="type">decimal</span> salary) 
+        : <span class="keyword">base</span>(name, salary) { }
+
+    <span class="keyword">public override void</span> Work()
+    {
+        Console.WriteLine($"{Name} управляет проектом.");
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Developer</span> : <span class="type">Employee</span>
+{
+    <span class="keyword">public</span> Developer(<span class="type">string</span> name, <span class="type">decimal</span> salary) 
+        : <span class="keyword">base</span>(name, salary) { }
+
+    <span class="keyword">public override void</span> Work()
+    {
+        Console.WriteLine($"{Name} пишет код.");
+    }
+}
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Вывод</h2>
+        <ul>
+            <li>Наследование позволяет повторно использовать код и расширять функциональность.</li>
+            <li>Ключевые инструменты: <code>base</code>, <code>virtual</code>, <code>override</code>, <code>sealed</code>.</li>
+            <li>В C# нет множественного наследования классов, но можно реализовывать несколько интерфейсов.</li>
+            <li>Глубокие иерархии нежелательны — лучше использовать композицию и интерфейсы.</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>© 2025 Лекции по C# и WPF</p>
+    </footer>
+</body>
+</html>
