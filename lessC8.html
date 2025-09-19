@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Полиморфизм в C#</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Полиморфизм в C#</h1>
+        <p>Принцип ООП для изменения поведения объектов в зависимости от их типа</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое полиморфизм?</h2>
+        <p>
+            Полиморфизм — это возможность объектов с одинаковым интерфейсом 
+            вести себя по-разному в зависимости от их конкретного типа.
+        </p>
+        <p>
+            Существует два вида полиморфизма:
+        </p>
+        <ul>
+            <li><strong>Компиляционный (перегрузка)</strong> — определяется на этапе компиляции (например, перегрузка методов).</li>
+            <li><strong>Времени выполнения (наследование и override)</strong> — определяется во время работы программы (виртуальные методы, интерфейсы).</li>
+        </ul>
+        <div class="note">
+            <p><strong>Пример из жизни:</strong> Кнопка «Печать» может печатать на принтер, сохранять в PDF или отправлять в облако. 
+            Действие одно — результат зависит от конкретной реализации.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Перегрузка методов (Compile-time полиморфизм)</h2>
+        <p>
+            В C# можно создавать несколько методов с одинаковым именем, 
+            если их параметры отличаются по типу или количеству.
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Перегрузка методов</span>
+            </div>
+<pre><code><span class="keyword">class</span> <span class="type">Calculator</span>
+{
+    <span class="keyword">public int</span> Add(<span class="type">int</span> a, <span class="type">int</span> b) =&gt; a + b;
+    <span class="keyword">public double</span> Add(<span class="type">double</span> a, <span class="type">double</span> b) =&gt; a + b;
+    <span class="keyword">public int</span> Add(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c) =&gt; a + b + c;
+}
+</code></pre>
+        </div>
+        <p>Компилятор сам определяет, какой метод вызвать, исходя из аргументов.</p>
+    </div>
+
+    <div class="container">
+        <h2>Виртуальные методы и override (Run-time полиморфизм)</h2>
+        <p>
+            Если метод помечен как <code>virtual</code>, его можно переопределить 
+            в производных классах с помощью <code>override</code>.
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример run-time полиморфизма</span>
+            </div>
+<pre><code><span class="keyword">class</span> <span class="type">Animal</span>
+{
+    <span class="keyword">public virtual void</span> Speak()
+    {
+        Console.WriteLine("Животное издаёт звук");
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Dog</span> : <span class="type">Animal</span>
+{
+    <span class="keyword">public override void</span> Speak()
+    {
+        Console.WriteLine("Собака лает");
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Cat</span> : <span class="type">Animal</span>
+{
+    <span class="keyword">public override void</span> Speak()
+    {
+        Console.WriteLine("Кошка мяукает");
+    }
+}
+</code></pre>
+        </div>
+        <p>
+            Если переменная имеет тип <code>Animal</code>, но хранит <code>Dog</code> или <code>Cat</code>, 
+            то вызов <code>Speak()</code> приведёт к разному результату.
+        </p>
+    </div>
+
+    <div class="container">
+        <h2>Абстрактные классы</h2>
+        <p>
+            Если метод не имеет реализации и должен быть переопределён в наследниках, 
+            используется ключевое слово <code>abstract</code>.
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример с абстрактным классом</span>
+            </div>
+<pre><code><span class="keyword">abstract class</span> <span class="type">Shape</span>
+{
+    <span class="keyword">public abstract void</span> Draw();
+}
+
+<span class="keyword">class</span> <span class="type">Circle</span> : <span class="type">Shape</span>
+{
+    <span class="keyword">public override void</span> Draw()
+    {
+        Console.WriteLine("Рисуем круг");
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Rectangle</span> : <span class="type">Shape</span>
+{
+    <span class="keyword">public override void</span> Draw()
+    {
+        Console.WriteLine("Рисуем прямоугольник");
+    }
+}
+</code></pre>
+        </div>
+        <p>
+            Абстрактные классы задают общий интерфейс, но требуют реализации в наследниках.
+        </p>
+    </div>
+
+    <div class="container">
+        <h2>Полиморфизм через интерфейсы</h2>
+        <p>
+            Интерфейсы — ещё один способ реализации полиморфизма: 
+            разные классы могут реализовать один интерфейс по-своему.
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример с интерфейсом</span>
+            </div>
+<pre><code><span class="keyword">interface</span> <span class="type">IDrawable</span>
+{
+    <span class="keyword">void</span> Draw();
+}
+
+<span class="keyword">class</span> <span class="type">Line</span> : <span class="type">IDrawable</span>
+{
+    <span class="keyword">public void</span> Draw()
+    {
+        Console.WriteLine("Рисуем линию");
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Triangle</span> : <span class="type">IDrawable</span>
+{
+    <span class="keyword">public void</span> Draw()
+    {
+        Console.WriteLine("Рисуем треугольник");
+    }
+}
+</code></pre>
+        </div>
+        <p>
+            Оба класса реализуют <code>IDrawable</code>, но делают это по-разному.
+        </p>
+    </div>
+
+    <div class="container">
+        <h2>Практический пример</h2>
+        <p>
+            Создадим систему оплаты, где разные способы оплаты реализуют один интерфейс.
+        </p>
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Полиморфизм в оплате</span>
+            </div>
+<pre><code><span class="keyword">interface</span> <span class="type">IPayment</span>
+{
+    <span class="keyword">void</span> Pay(<span class="type">decimal</span> amount);
+}
+
+<span class="keyword">class</span> <span class="type">CardPayment</span> : <span class="type">IPayment</span>
+{
+    <span class="keyword">public void</span> Pay(<span class="type">decimal</span> amount)
+    {
+        Console.WriteLine($"Оплата {amount}₽ картой");
+    }
+}
+
+<span class="keyword">class</span> <span class="type">CashPayment</span> : <span class="type">IPayment</span>
+{
+    <span class="keyword">public void</span> Pay(<span class="type">decimal</span> amount)
+    {
+        Console.WriteLine($"Оплата {amount}₽ наличными");
+    }
+}
+</code></pre>
+        </div>
+        <p>
+            Мы можем хранить коллекцию <code>IPayment</code> и обрабатывать все виды оплат одинаково, 
+            не зная конкретный тип.
+        </p>
+    </div>
+
+    <div class="container">
+        <h2>Вывод</h2>
+        <ul>
+            <li>Полиморфизм позволяет писать гибкий и расширяемый код.</li>
+            <li>Компиляционный полиморфизм реализуется перегрузкой методов.</li>
+            <li>Полиморфизм времени выполнения — через наследование, virtual/override и интерфейсы.</li>
+            <li>Абстрактные классы и интерфейсы задают единый контракт для всех реализаций.</li>
+        </ul>
+    </div>
+
+    <footer>
+        <p>© 2025 Лекции по C# и WPF</p>
+    </footer>
+</body>
+</html>
