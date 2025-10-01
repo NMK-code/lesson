@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лямбда-выражения и анонимные методы в C#</title>
+    
+    <!-- Ваш CSS -->
+    <link rel="stylesheet" href="stylesForLesson.css">
+    
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Лямбда-выражения и анонимные методы в C#</h1>
+        <p>Современные способы создания компактного и гибкого кода</p>
+    </header>
+
+    <div class="container">
+        <h2>История и назначение</h2>
+        <p>До появления лямбда-выражений (C# 3.0, .NET Framework 3.5) программисты использовали <strong>анонимные методы</strong> 
+           (C# 2.0), чтобы создавать <em>одноразовые функции</em> без необходимости определять отдельный метод в классе. 
+           Лямбда-выражения стали логическим развитием этой идеи: они предоставляют более лаконичный и удобный синтаксис.</p>
+
+        <div class="note">
+            <p><strong>Примечание:</strong> Лямбда-выражения тесно связаны с LINQ, так как позволяют передавать функции как параметры.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Анонимные методы</h2>
+        <p>Анонимные методы были введены в C# 2.0 и позволяют создавать делегаты "на месте". 
+           Их синтаксис использует ключевое слово <code>delegate</code>.</p>
+
+        <div class="code-container">
+            <div class="code-header">C#: Пример анонимного метода</div>
+            <pre><code class="language-csharp">delegate void ShowMessage(string msg);
+
+class Program
+{
+    static void Main()
+    {
+        ShowMessage sm = delegate(string text)
+        {
+            Console.WriteLine(text);
+        };
+
+        sm("Привет из анонимного метода!");
+        
+        // Анонимный метод без параметров
+        Action action = delegate
+        {
+            Console.WriteLine("Анонимный метод без параметров");
+        };
+        action();
+    }
+}</code></pre>
+        </div>
+
+        <div class="tip">
+            <p><strong>Совет:</strong> Анонимные методы полезны для простых обработчиков событий или делегатов, когда не нужно создавать отдельный метод.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Лямбда-выражения</h2>
+        <p>Лямбда-выражения позволяют записывать тот же самый код компактнее. 
+           Синтаксис строится по схеме:</p>
+        <pre><code>(параметры) => { тело }</code></pre>
+
+        <p>Возможны разные формы записи:</p>
+        <ul>
+            <li><strong>Полная форма:</strong> <code>(x, y) => { return x + y; }</code></li>
+            <li><strong>Короткая форма:</strong> <code>(x, y) => x + y</code></li>
+            <li><strong>Одна переменная:</strong> <code>x => x * x</code></li>
+            <li><strong>Без параметров:</strong> <code>() => Console.WriteLine("Hello")</code></li>
+        </ul>
+
+        <div class="code-container">
+            <div class="code-header">C#: Пример лямбда-выражения</div>
+            <pre><code class="language-csharp">Func<int, int, int> add = (a, b) => a + b;
+Console.WriteLine(add(3, 5)); // 8
+
+Action show = () => Console.WriteLine("Лямбда без параметров");
+show();
+
+// Разные формы лямбда-выражений
+Func<int, int> square = x => x * x;
+Func<int, int, int> multiply = (x, y) => x * y;
+Action<string> print = message => Console.WriteLine(message);
+
+Console.WriteLine(square(5)); // 25
+Console.WriteLine(multiply(4, 6)); // 24
+print("Привет, лямбда!");</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Сравнение анонимных методов и лямбд</h2>
+        <p>Оба механизма решают похожие задачи, но у лямбда-выражений есть преимущества:</p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Анонимные методы</th>
+                        <th>Лямбда-выражения</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Синтаксис с ключевым словом <code>delegate</code></td>
+                        <td>Используют оператор <code>=&gt;</code></td>
+                    </tr>
+                    <tr>
+                        <td>Более громоздкие</td>
+                        <td>Краткие и читаемые</td>
+                    </tr>
+                    <tr>
+                        <td>Возможны только с делегатами</td>
+                        <td>Работают с делегатами и <code>Func/Action</code></td>
+                    </tr>
+                    <tr>
+                        <td>Не поддерживают лямбда-замыкания</td>
+                        <td>Поддерживают захват переменных (closures)</td>
+                    </tr>
+                    <tr>
+                        <td>Можно опускать параметры</td>
+                        <td>Всегда требуют указания параметров</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="warning">
+            <p><strong>Важно:</strong> Лямбда-выражения вытеснили анонимные методы в современном C#, но знать оба механизма полезно.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Лямбда-замыкания (closures)</h2>
+        <p>Лямбда-выражения могут захватывать переменные из внешнего контекста. 
+           Это называется <em>замыканием</em>.</p>
+
+        <div class="code-container">
+            <div class="code-header">C#: Пример замыкания</div>
+            <pre><code class="language-csharp">Func<int, int> MakeAdder(int addValue)
+{
+    return x => x + addValue;
+}
+
+var add5 = MakeAdder(5);
+Console.WriteLine(add5(10)); // 15
+
+// Другой пример замыкания
+int multiplier = 3;
+Func<int, int> multiplyBy = x => x * multiplier;
+
+Console.WriteLine(multiplyBy(4)); // 12
+
+// Изменение захваченной переменной
+multiplier = 5;
+Console.WriteLine(multiplyBy(4)); // 20</code></pre>
+        </div>
+
+        <div class="note">
+            <p><strong>Примечание:</strong> Переменная <code>addValue</code> продолжает жить внутри лямбды, даже если метод <code>MakeAdder</code> завершил работу.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Применение на практике</h2>
+        <ul>
+            <li>Использование в <strong>LINQ</strong> для фильтрации и проекции данных</li>
+            <li>Создание <strong>обработчиков событий</strong> "на лету"</li>
+            <li>Передача функций как параметров (<em>функциональный стиль</em>)</li>
+            <li>Создание предикатов для поиска и фильтрации</li>
+        </ul>
+
+        <div class="code-container">
+            <div class="code-header">C#: Пример использования в LINQ</div>
+            <pre><code class="language-csharp">int[] numbers = { 1, 2, 3, 4, 5, 6 };
+
+// Фильтрация четных чисел
+var even = numbers.Where(n => n % 2 == 0);
+
+// Преобразование чисел
+var squares = numbers.Select(n => n * n);
+
+// Сортировка
+var sorted = numbers.OrderBy(n => n);
+
+// Поиск
+var firstEven = numbers.First(n => n % 2 == 0);
+
+foreach (var n in even)
+    Console.WriteLine(n); // 2, 4, 6</code></pre>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header">C#: Использование с событиями</div>
+            <pre><code class="language-csharp">button.Click += (sender, e) => 
+{
+    Console.WriteLine("Кнопка нажата!");
+    // Дополнительная логика
+};
+
+timer.Tick += (s, e) => Console.WriteLine("Тик!");</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Func и Action делегаты</h2>
+        <p>В C# есть встроенные обобщенные делегаты для работы с лямбда-выражениями:</p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Делегат</th>
+                        <th>Описание</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Action</code></td>
+                        <td>Метод без параметров и возвращаемого значения</td>
+                        <td><code>() => Console.WriteLine("Hello")</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Action&lt;T&gt;</code></td>
+                        <td>Метод с одним параметром</td>
+                        <td><code>x => Console.WriteLine(x)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Func&lt;TResult&gt;</code></td>
+                        <td>Метод с возвращаемым значением</td>
+                        <td><code>() => 42</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Func&lt;T, TResult&gt;</code></td>
+                        <td>Метод с параметром и возвращаемым значением</td>
+                        <td><code>x => x * 2</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Лучшие практики</h2>
+        <ul>
+            <li>Предпочитайте лямбда-выражения анонимным методам для краткости</li>
+            <li>Используйте <code>Func&lt;&gt;</code> и <code>Action&lt;&gt;</code> для универсальных делегатов</li>
+            <li>Не злоупотребляйте сложными лямбдами — лучше выносить логику в отдельные методы</li>
+            <li>Помните про захват переменных: это может привести к неожиданному поведению</li>
+            <li>Используйте понятные имена параметров в лямбда-выражениях</li>
+            <li>Избегайте побочных эффектов в лямбда-выражениях</li>
+        </ul>
+
+        <div class="tip">
+            <p><strong>Совет:</strong> Для сложных операций лучше создать именованный метод - это улучшит читаемость и тестируемость кода.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Массивы и циклы в C#</title>
+    <link rel="stylesheet" href="stylesForLesson.css">
+
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Массивы и циклы в C#</h1>
+        <p>Изучение массивов, циклов и их взаимосвязи в языке программирования C#</p>
+    </header>
+
+    <div class="container">
+        <h2>Массивы в C#</h2>
+        <p>Массивы представляют собой структуры данных для хранения наборов элементов одного типа. Они являются фундаментальной частью большинства языков программирования, включая C#.</p>
+        
+        <h3>Типы массивов</h3>
+        <p>В C# существуют различные типы массивов:</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип массива</th>
+                        <th>Описание</th>
+                        <th>Пример объявления</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Одномерный</td>
+                        <td>Простой массив с одним измерением</td>
+                        <td><code>int[] numbers = new int[5];</code></td>
+                    </tr>
+                    <tr>
+                        <td>Многомерный</td>
+                        <td>Массив с несколькими измерениями (например, 2D, 3D)</td>
+                        <td><code>int[,] matrix = new int[3, 3];</code></td>
+                    </tr>
+                    <tr>
+                        <td>Зубчатый (Jagged)</td>
+                        <td>Массив массивов, где каждый внутренний массив может иметь разную длину</td>
+                        <td><code>int[][] jagged = new int[3][];</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C# — Примеры объявления и инициализации массивов</div>
+<pre><code class="language-csharp">
+// Одномерный массив
+int[] numbers = new int[5]; // массив из 5 целых чисел
+string[] names = { "Анна", "Борис", "Сергей" }; // инициализированный массив
+
+// Многомерный массив (матрица 3x3)
+int[,] matrix = new int[3, 3];
+matrix[0, 0] = 1; // установка значения элемента
+
+// Зубчатый массив
+int[][] jaggedArray = new int[3][];
+jaggedArray[0] = new int[2] { 1, 2 };
+jaggedArray[1] = new int[3] { 3, 4, 5 };
+jaggedArray[2] = new int[1] { 6 };
+</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Индексы массивов в C# начинаются с 0. Первый элемент массива имеет индекс 0, второй — индекс 1 и так далее.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Циклы в C#</h2>
+        <p>Циклы позволяют выполнять блок кода многократно, пока выполняется определенное условие. В C# существует несколько типов циклов.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип цикла</th>
+                        <th>Описание</th>
+                        <th>Когда использовать</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>for</strong></td>
+                        <td>Цикл с счетчиком, выполняющийся определенное количество раз</td>
+                        <td>Когда известно точное количество итераций</td>
+                    </tr>
+                    <tr>
+                        <td><strong>foreach</strong></td>
+                        <td>Цикл для перебора элементов коллекции или массива</td>
+                        <td>Для перебора всех элементов коллекции без использования индексов</td>
+                    </tr>
+                    <tr>
+                        <td><strong>while</strong></td>
+                        <td>Цикл, выполняющийся пока условие истинно</td>
+                        <td>Когда количество итераций неизвестно заранее</td>
+                    </tr>
+                    <tr>
+                        <td><strong>do-while</strong></td>
+                        <td>Похож на while, но гарантирует одно выполнение тела цикла</td>
+                        <td>Когда нужно выполнить цикл один раз, даже если условие ложно</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C# — Примеры использования циклов</div>
+<pre><code class="language-csharp">
+// Цикл for
+for (int i = 0; i < 5; i++)
+{
+    Console.WriteLine($"Итерация: {i}");
+}
+
+// Цикл foreach
+string[] fruits = { "яблоко", "банан", "апельсин" };
+foreach (string fruit in fruits)
+{
+    Console.WriteLine(fruit);
+}
+
+// Цикл while
+int counter = 0;
+while (counter < 3)
+{
+    Console.WriteLine($"Счетчик: {counter}");
+    counter++;
+}
+
+// Цикл do-while
+int x = 0;
+do
+{
+    Console.WriteLine($"x = {x}");
+    x++;
+} while (x < 3);
+</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте цикл foreach для чтения данных из коллекций, когда не нужно изменять элементы или знать их индексы. Для изменения элементов или работы с индексами используйте цикл for.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Взаимосвязь массивов и циклов</h2>
+        <p>Массивы и циклы тесно связаны, так как циклы часто используются для обработки элементов массивов. Без циклов работа с массивами была бы крайне ограничена.</p>
+        
+        <h3>Обработка массивов с помощью циклов</h3>
+        <div class="code-container">
+            <div class="code-header">C# — Обработка массива с помощью цикла for</div>
+<pre><code class="language-csharp">
+// Инициализация массива
+int[] numbers = new int[10];
+
+// Заполнение массива значениями
+for (int i = 0; i < numbers.Length; i++)
+{
+    numbers[i] = i * 2; // каждый элемент равен удвоенному индексу
+}
+
+// Вывод значений массива
+for (int i = 0; i < numbers.Length; i++)
+{
+    Console.WriteLine($"numbers[{i}] = {numbers[i]}");
+}
+
+// Поиск суммы всех элементов
+int sum = 0;
+for (int i = 0; i < numbers.Length; i++)
+{
+    sum += numbers[i];
+}
+Console.WriteLine($"Сумма элементов: {sum}");
+</code></pre>
+        </div>
+        
+        <h3>Использование foreach для перебора массивов</h3>
+        <div class="code-container">
+            <div class="code-header">C# — Использование foreach для работы с массивом</div>
+<pre><code class="language-csharp">
+string[] countries = { "Россия", "США", "Германия", "Китай" };
+
+// Вывод всех элементов массива
+foreach (string country in countries)
+{
+    Console.WriteLine(country);
+}
+
+// Поиск элемента в массиве
+string search = "Германия";
+bool found = false;
+foreach (string country in countries)
+{
+    if (country == search)
+    {
+        found = true;
+        break; // прерывание цикла при нахождении элемента
+    }
+}
+Console.WriteLine($"Страна {search} {(found ? "найдена" : "не найдена")}");
+</code></pre>
+        </div>
+        
+        <h3>Многомерные массивы и вложенные циклы</h3>
+        <div class="code-container">
+            <div class="code-header">C# — Обработка многомерного массива</div>
+<pre><code class="language-csharp">
+// Создание и инициализация двумерного массива (матрицы)
+int[,] matrix = new int[3, 4];
+int value = 1;
+
+// Заполнение матрицы значениями
+for (int row = 0; row < matrix.GetLength(0); row++)
+{
+    for (int col = 0; col < matrix.GetLength(1); col++)
+    {
+        matrix[row, col] = value++;
+    }
+}
+
+// Вывод матрицы
+Console.WriteLine("Матрица:");
+for (int row = 0; row < matrix.GetLength(0); row++)
+{
+    for (int col = 0; col < matrix.GetLength(1); col++)
+    {
+        Console.Write($"{matrix[row, col],3}");
+    }
+    Console.WriteLine();
+}
+
+// Вычисление суммы всех элементов матрицы
+int total = 0;
+foreach (int element in matrix)
+{
+    total += element;
+}
+Console.WriteLine($"Сумма всех элементов: {total}");
+</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Метод <code>GetLength(dimension)</code> возвращает длину указанного измерения многомерного массива. Для двумерного массива <code>GetLength(0)</code> возвращает количество строк, а <code>GetLength(1)</code> — количество столбцов.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Практические примеры</h2>
+        
+        <h3>Поиск минимального и максимального значения в массиве</h3>
+        <div class="code-container">
+            <div class="code-header">C# — Поиск min и max значений</div>
+<pre><code class="language-csharp">
+int[] numbers = { 12, 45, 67, 23, 9, 56, 78, 34, 90, 11 };
+
+int min = numbers[0]; // предполагаем, что первый элемент — минимальный
+int max = numbers[0]; // предполагаем, что первый элемент — максимальный
+
+for (int i = 1; i < numbers.Length; i++)
+{
+    if (numbers[i] < min)
+    {
+        min = numbers[i]; // нашли новый минимум
+    }
+    
+    if (numbers[i] > max)
+    {
+        max = numbers[i]; // нашли новый максимум
+    }
+}
+
+Console.WriteLine($"Минимальное значение: {min}");
+Console.WriteLine($"Максимальное значение: {max}");
+Console.WriteLine($"Разность между max и min: {max - min}");
+</code></pre>
+        </div>
+        
+        <h3>Сортировка массива методом пузырька</h3>
+        <div class="code-container">
+            <div class="code-header">C# — Пузырьковая сортировка</div>
+<pre><code class="language-csharp">
+int[] arr = { 64, 34, 25, 12, 22, 11, 90 };
+
+Console.WriteLine("Исходный массив:");
+foreach (int num in arr)
+{
+    Console.Write(num + " ");
+}
+Console.WriteLine();
+
+// Алгоритм пузырьковой сортировки
+int n = arr.Length;
+for (int i = 0; i < n - 1; i++)
+{
+    for (int j = 0; j < n - i - 1; j++)
+    {
+        if (arr[j] > arr[j + 1])
+        {
+            int temp = arr[j];
+            arr[j] = arr[j + 1];
+            arr[j + 1] = temp;
+        }
+    }
+}
+
+Console.WriteLine("Отсортированный массив:");
+foreach (int num in arr)
+{
+    Console.Write(num + " ");
+}
+</code></pre>
+        </div>
+        
+        <h3>Работа с зубчатым массивом</h3>
+        <div class="code-container">
+            <div class="code-header">C# — Зубчатый массив</div>
+<pre><code class="language-csharp">
+// Создание зубчатого массива
+int[][] jagged = new int[3][];
+jagged[0] = new int[] { 1, 2, 3 };
+jagged[1] = new int[] { 4, 5 };
+jagged[2] = new int[] { 6, 7, 8, 9 };
+
+// Вывод элементов зубчатого массива
+for (int i = 0; i < jagged.Length; i++)
+{
+    Console.Write($"Строка {i + 1}: ");
+    for (int j = 0; j < jagged[i].Length; j++)
+    {
+        Console.Write(jagged[i][j] + " ");
+    }
+    Console.WriteLine();
+}
+
+// Вычисление суммы всех элементов зубчатого массива
+int totalSum = 0;
+foreach (int[] innerArray in jagged)
+{
+    foreach (int value in innerArray)
+    {
+        totalSum += value;
+    }
+}
+Console.WriteLine($"Общая сумма всех элементов: {totalSum}");
+</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Для работы с наборами данных в C# также полезно изучить коллекции (<code>List</code>, <code>Dictionary</code>, <code>HashSet</code>), которые предоставляют больше возможностей, чем простые массивы.</p>
+        </div>
+    </div>
+</body>
+</html>

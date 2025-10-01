@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Абстракция и интерфейсы в C#</title>
+    
+    <!-- Ваш CSS -->
+    <link rel="stylesheet" href="stylesForLesson.css">
+    
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Абстракция и интерфейсы в C#</h1>
+        <p>Принцип ООП для выделения общих характеристик и задания контрактов</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое абстракция?</h2>
+        <p>
+            Абстракция — это выделение существенных характеристик объекта и 
+            игнорирование второстепенных. В программировании абстракция позволяет 
+            описывать поведение объектов через общее представление, не вдаваясь в детали реализации.
+        </p>
+        <div class="note">
+            <p><strong>Пример из жизни:</strong> «Транспорт» — это абстракция. 
+            У него есть свойства «скорость», «перевозка пассажиров», 
+            но конкретная реализация различается для автобуса, поезда или самолёта.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Абстрактные классы</h2>
+        <p>
+            В C# абстракция реализуется через <strong>абстрактные классы</strong>.  
+            Абстрактный класс:
+        </p>
+        <ul>
+            <li>Не может быть создан напрямую (<code>new</code> запрещён).</li>
+            <li>Может содержать абстрактные методы (без реализации).</li>
+            <li>Может содержать обычные методы с реализацией.</li>
+            <li>Может содержать конструкторы, поля и свойства.</li>
+        </ul>
+
+        <div class="code-container">
+            <div class="code-header">C#: Абстрактный класс Shape</div>
+            <pre><code class="language-csharp">abstract class Shape
+{
+    public string Name { get; set; }
+    
+    public abstract void Draw();
+    
+    public virtual void DisplayInfo()
+    {
+        Console.WriteLine($"Это фигура: {Name}");
+    }
+}
+
+class Circle : Shape
+{
+    public Circle()
+    {
+        Name = "Круг";
+    }
+    
+    public override void Draw()
+    {
+        Console.WriteLine("Рисуем круг");
+    }
+}
+
+class Rectangle : Shape
+{
+    public Rectangle()
+    {
+        Name = "Прямоугольник";
+    }
+    
+    public override void Draw()
+    {
+        Console.WriteLine("Рисуем прямоугольник");
+    }
+}</code></pre>
+        </div>
+        <p>
+            <code>Shape</code> задаёт общий интерфейс, а <code>Circle</code> и <code>Rectangle</code> реализуют его по-разному.
+        </p>
+        
+        <div class="warning">
+            <p><strong>Важно:</strong> Абстрактные методы могут быть объявлены только в абстрактных классах и должны быть реализованы в производных классах.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Интерфейсы</h2>
+        <p>
+            Интерфейс — это контракт, который определяет набор методов и свойств, 
+            но не содержит реализации.
+        </p>
+        <p>
+            Класс может реализовать несколько интерфейсов, что решает проблему отсутствия множественного наследования в C#.
+        </p>
+
+        <div class="code-container">
+            <div class="code-header">C#: Интерфейс IDrawable</div>
+            <pre><code class="language-csharp">interface IDrawable
+{
+    void Draw();
+}
+
+interface IResizable
+{
+    void Resize(double factor);
+}
+
+class Line : IDrawable, IResizable
+{
+    public void Draw()
+    {
+        Console.WriteLine("Рисуем линию");
+    }
+    
+    public void Resize(double factor)
+    {
+        Console.WriteLine($"Изменяем размер линии в {factor} раз");
+    }
+}
+
+class Triangle : IDrawable
+{
+    public void Draw()
+    {
+        Console.WriteLine("Рисуем треугольник");
+    }
+}</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Начиная с C# 8.0, интерфейсы могут содержать реализации методов по умолчанию, но это следует использовать осторожно.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Различия между абстрактными классами и интерфейсами</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Абстрактный класс</th>
+                        <th>Интерфейс</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Может содержать реализацию методов</td>
+                        <td>Не содержит реализации (до C# 8.0)</td>
+                    </tr>
+                    <tr>
+                        <td>Может содержать поля</td>
+                        <td>Не может содержать полей</td>
+                    </tr>
+                    <tr>
+                        <td>Один базовый абстрактный класс</td>
+                        <td>Можно реализовать несколько интерфейсов</td>
+                    </tr>
+                    <tr>
+                        <td>Подходит для общих предков с частичной реализацией</td>
+                        <td>Подходит для задания контракта</td>
+                    </tr>
+                    <tr>
+                        <td>Может содержать конструкторы</td>
+                        <td>Не может содержать конструкторов</td>
+                    </tr>
+                    <tr>
+                        <td>Модификаторы доступа: public, protected, internal, private</td>
+                        <td>Все члены по умолчанию public</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Практический пример</h2>
+        <p>
+            Создадим систему уведомлений, где абстрактный класс задаёт общую логику, 
+            а интерфейс определяет контракт для отправки сообщений.
+        </p>
+        <div class="code-container">
+            <div class="code-header">C#: Пример Notification</div>
+            <pre><code class="language-csharp">interface ISendable
+{
+    void Send(string message);
+}
+
+abstract class Notification : ISendable
+{
+    public string Title { get; }
+    public DateTime CreatedAt { get; }
+
+    protected Notification(string title)
+    {
+        Title = title;
+        CreatedAt = DateTime.Now;
+    }
+
+    public abstract void Send(string message);
+    
+    public void LogActivity()
+    {
+        Console.WriteLine($"[{CreatedAt}] Уведомление '{Title}' создано");
+    }
+}
+
+class EmailNotification : Notification
+{
+    public EmailNotification() : base("Email") { }
+
+    public override void Send(string message)
+    {
+        Console.WriteLine($"[Email] {message}");
+    }
+}
+
+class SmsNotification : Notification
+{
+    public SmsNotification() : base("SMS") { }
+
+    public override void Send(string message)
+    {
+        Console.WriteLine($"[SMS] {message}");
+    }
+}
+
+class PushNotification : Notification
+{
+    public PushNotification() : base("Push") { }
+
+    public override void Send(string message)
+    {
+        Console.WriteLine($"[Push] {message}");
+    }
+}</code></pre>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Использование системы уведомлений</div>
+            <pre><code class="language-csharp">class NotificationService
+{
+    private List<Notification> notifications = new List<Notification>();
+    
+    public void AddNotification(Notification notification)
+    {
+        notifications.Add(notification);
+    }
+    
+    public void SendAll(string message)
+    {
+        foreach (var notification in notifications)
+        {
+            notification.Send(message);
+        }
+    }
+}
+
+// Использование
+var service = new NotificationService();
+service.AddNotification(new EmailNotification());
+service.AddNotification(new SmsNotification());
+service.AddNotification(new PushNotification());
+
+service.SendAll("Важное сообщение!");</code></pre>
+        </div>
+        
+        <p>
+            Такой подход позволяет легко добавлять новые виды уведомлений (Telegram, WhatsApp), 
+            не изменяя существующий код.
+        </p>
+    </div>
+
+    <div class="container">
+        <h2>Когда что использовать?</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Используйте абстрактный класс когда:</th>
+                        <th>Используйте интерфейс когда:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Нужно предоставить базовую реализацию</td>
+                        <td>Нужно определить контракт для несвязанных классов</td>
+                    </tr>
+                    <tr>
+                        <td>Классы-наследники имеют общее состояние</td>
+                        <td>Класс должен поддерживать множественное наследование</td>
+                    </tr>
+                    <tr>
+                        <td>Нужно контролировать наследование через модификаторы доступа</td>
+                        <td>Нужно обеспечить полиморфизм для разных иерархий классов</td>
+                    </tr>
+                    <tr>
+                        <td>Планируется расширение функциональности базового класса</td>
+                        <td>Нужно определить поведение, которое могут реализовать разные типы</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Вывод</h2>
+        <ul>
+            <li>Абстракция помогает скрывать детали и выделять только важные характеристики</li>
+            <li>Абстрактные классы позволяют задавать частичную реализацию и общее состояние</li>
+            <li>Интерфейсы определяют контракты и позволяют реализовать множественное наследование</li>
+            <li>Комбинация абстракции и интерфейсов делает код гибким и расширяемым</li>
+            <li>Выбор между абстрактным классом и интерфейсом зависит от конкретной задачи</li>
+        </ul>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Абстракция является одним из четырех основных принципов ООП наряду с инкапсуляцией, наследованием и полиморфизмом.</p>
+        </div>
+    </div>
+</body>
+</html>

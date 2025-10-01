@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINQ в C#</title>
+    <link rel="stylesheet" href="stylesForLesson.css">
+
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>LINQ в C#</h1>
+        <p>Язык интегрированных запросов для работы с данными</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое LINQ?</h2>
+        <p><strong>LINQ (Language Integrated Query)</strong> — технология, появившаяся в C# 3.0, 
+           которая позволяет писать запросы к данным прямо в коде C#. 
+           Она работает с массивами, коллекциями, XML, SQL-базами и другими источниками данных.</p>
+
+        <div class="note">
+            <p><strong>Примечание:</strong> LINQ объединяет возможности работы с разными источниками данных в единый синтаксис.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Два стиля записи</h2>
+        <p>LINQ-запросы можно писать в двух стилях:</p>
+        <ul>
+            <li><strong>Запросный синтаксис</strong> (похож на SQL)</li>
+            <li><strong>Методический синтаксис</strong> (использует методы-расширения LINQ)</li>
+        </ul>
+
+        <div class="code-container">
+            <div class="code-header">C# — Сравнение двух стилей</div>
+<pre><code class="language-csharp">
+int[] numbers = { 1, 2, 3, 4, 5, 6 };
+
+// Запросный синтаксис
+var querySyntax = from n in numbers
+                  where n % 2 == 0
+                  select n;
+
+// Методический синтаксис
+var methodSyntax = numbers.Where(n => n % 2 == 0);
+
+foreach (var n in querySyntax)
+    Console.WriteLine(n); // 2, 4, 6
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Основные методы LINQ</h2>
+        <p>Методы-расширения LINQ определены в классе <code>System.Linq.Enumerable</code>. 
+           Вот наиболее часто используемые:</p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Метод</th>
+                        <th>Назначение</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Where</strong></td>
+                        <td>Фильтрация</td>
+                        <td><code>nums.Where(n =&gt; n &gt; 5)</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Select</strong></td>
+                        <td>Проекция (выбор определённых данных)</td>
+                        <td><code>nums.Select(n =&gt; n * n)</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>OrderBy / OrderByDescending</strong></td>
+                        <td>Сортировка</td>
+                        <td><code>nums.OrderBy(n =&gt; n)</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>GroupBy</strong></td>
+                        <td>Группировка</td>
+                        <td><code>words.GroupBy(w =&gt; w.Length)</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Join</strong></td>
+                        <td>Соединение коллекций</td>
+                        <td><code>users.Join(orders, u =&gt; u.Id, o =&gt; o.UserId, ...)</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>First / FirstOrDefault</strong></td>
+                        <td>Первый элемент (с проверкой)</td>
+                        <td><code>nums.FirstOrDefault()</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Any / All</strong></td>
+                        <td>Проверка условий</td>
+                        <td><code>nums.Any(n =&gt; n &lt; 0)</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Применение LINQ к коллекциям</h2>
+        <p>LINQ удобно использовать для работы с объектами и коллекциями:</p>
+
+        <div class="code-container">
+            <div class="code-header">C# — Пример фильтрации и сортировки</div>
+<pre><code class="language-csharp">
+class Student
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+
+var students = new List&lt;Student&gt;
+{
+    new Student { Name = "Аня", Age = 18 },
+    new Student { Name = "Иван", Age = 22 },
+    new Student { Name = "Пётр", Age = 20 }
+};
+
+var result = from s in students
+             where s.Age &gt;= 20
+             orderby s.Name
+             select s;
+
+foreach (var st in result)
+    Console.WriteLine($"{st.Name} - {st.Age}");
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>LINQ to Objects, XML и SQL</h2>
+        <ul>
+            <li><strong>LINQ to Objects</strong> — работа с массивами и коллекциями в памяти.</li>
+            <li><strong>LINQ to XML</strong> — запросы к XML-документам.</li>
+            <li><strong>LINQ to SQL / Entity Framework</strong> — запросы к базам данных.</li>
+        </ul>
+
+        <div class="tip">
+            <p><strong>Совет:</strong> LINQ можно использовать и с асинхронными запросами (например, в EF Core: <code>ToListAsync()</code>).</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Группировка и агрегаты</h2>
+        <p>LINQ поддерживает операции агрегации (сумма, среднее, максимум, минимум).</p>
+
+        <div class="code-container">
+            <div class="code-header">C# — Пример агрегирования</div>
+<pre><code class="language-csharp">
+int[] numbers = { 1, 2, 3, 4, 5, 6 };
+
+int sum = numbers.Sum();        // 21
+double avg = numbers.Average(); // 3.5
+int max = numbers.Max();        // 6
+int min = numbers.Min();        // 1
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Лучшие практики</h2>
+        <ul>
+            <li>Используйте <code>методический синтаксис</code> — он универсальнее.</li>
+            <li>Для сложных запросов читайте коллекцию только один раз (используйте <code>ToList()</code>).</li>
+            <li>Не злоупотребляйте вложенными запросами — выносите части в переменные.</li>
+            <li>В LINQ to SQL помните, что не все методы C# транслируются в SQL.</li>
+        </ul>
+
+        <div class="warning">
+            <p><strong>Важно:</strong> Запросы LINQ выполняются <em>отложенно</em> (deferred execution). 
+            Фактическое выполнение происходит только при переборе коллекции (например, в <code>foreach</code>).</p>
+        </div>
+    </div>
+
+</body>
+</html>

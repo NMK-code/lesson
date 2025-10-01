@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Преобразования в WPF</title>
+    
+    <!-- Ваш CSS -->
+    <link rel="stylesheet" href="stylesForLesson.css">
+    
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-markup.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Преобразования в WPF</h1>
+        <p>Подробное руководство по Transform-классам в Windows Presentation Foundation</p>
+    </header>
+
+    <div class="container">
+        <h2>Обзор Transform-классов в WPF</h2>
+        <p>Классы преобразований в WPF позволяют изменять внешний вид элементов пользовательского интерфейса без изменения их базовых характеристик. Все преобразования наследуются от базового класса <code>Transform</code>.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Класс преобразования</th>
+                        <th>Назначение</th>
+                        <th>Ключевые свойства</th>
+                        <th>Применение</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Transform</strong></td>
+                        <td>Абстрактный базовый класс для всех преобразований</td>
+                        <td>—</td>
+                        <td>Определяет общую функциональность для всех преобразований</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MatrixTransform</strong></td>
+                        <td>Произвольное аффинное преобразование с использованием матрицы 3×3</td>
+                        <td>Matrix</td>
+                        <td>Создание пользовательских преобразований, не предоставляемых другими классами</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RotateTransform</strong></td>
+                        <td>Поворот элемента на заданный угол вокруг точки</td>
+                        <td>Angle, CenterX, CenterY</td>
+                        <td>Вращение элементов интерфейса</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ScaleTransform</strong></td>
+                        <td>Масштабирование элемента по осям X и Y</td>
+                        <td>ScaleX, ScaleY, CenterX, CenterY</td>
+                        <td>Увеличение/уменьшение элементов, создание эффектов глубины</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SkewTransform</strong></td>
+                        <td>Наклон (сдвиг) элемента по осям X и Y</td>
+                        <td>AngleX, AngleY, CenterX, CenterY</td>
+                        <td>Создание перспективы, наклонных элементов</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TranslateTransform</strong></td>
+                        <td>Перемещение элемента по осям X и Y</td>
+                        <td>X, Y</td>
+                        <td>Сдвиг элементов, анимация перемещения</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TransformGroup</strong></td>
+                        <td>Группа преобразований, применяемых последовательно</td>
+                        <td>Children (коллекция Transform)</td>
+                        <td>Комбинирование нескольких преобразований</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TransformCollection</strong></td>
+                        <td>Коллекция объектов Transform</td>
+                        <td>—</td>
+                        <td>Используется TransformGroup для хранения дочерних преобразований</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Преобразования не влияют на фактические размеры или положение элемента в layout-системе WPF, а только на его визуальное представление.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Подробное описание каждого преобразования</h2>
+        
+        <h3>1. MatrixTransform</h3>
+        <p>Создает произвольное аффинное преобразование с использованием матрицы 3×3. Это наиболее гибкое, но и наиболее сложное в использовании преобразование.</p>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Пример использования MatrixTransform</div>
+            <pre><code class="language-xml">&lt;Rectangle Width="50" Height="50" Fill="Blue"&gt;
+    &lt;Rectangle.RenderTransform&gt;
+        &lt;MatrixTransform Matrix="1, 0.5, 0, 1, 0, 0"/&gt;
+    &lt;/Rectangle.RenderTransform&gt;
+&lt;/Rectangle&gt;</code></pre>
+        </div>
+        
+        <h3>2. RotateTransform</h3>
+        <p>Поворачивает элемент на заданный угол вокруг указанной точки. Если точка вращения не указана, используется верхний левый угол элемента (0,0).</p>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Пример использования RotateTransform</div>
+            <pre><code class="language-xml">&lt;Button Content="Повернутая кнопка"&gt;
+    &lt;Button.RenderTransform&gt;
+        &lt;RotateTransform Angle="45" CenterX="25" CenterY="25"/&gt;
+    &lt;/Button.RenderTransform&gt;
+&lt;/Button&gt;</code></pre>
+        </div>
+        
+        <h3>3. ScaleTransform</h3>
+        <p>Масштабирует элемент по осям X и Y. Значения меньше 1 уменьшают элемент, больше 1 — увеличивают.</p>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Пример использования ScaleTransform</div>
+            <pre><code class="language-xml">&lt;Ellipse Width="50" Height="50" Fill="Green"&gt;
+    &lt;Ellipse.RenderTransform&gt;
+        &lt;ScaleTransform ScaleX="1.5" ScaleY="0.5"/&gt;
+    &lt;/Ellipse.RenderTransform&gt;
+&lt;/Ellipse&gt;</code></pre>
+        </div>
+        
+        <h3>4. SkewTransform</h3>
+        <p>Наклоняет элемент на заданные углы по осям X и Y. Создает эффект перспективы или объема.</p>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Пример использования SkewTransform</div>
+            <pre><code class="language-xml">&lt;Rectangle Width="100" Height="50" Fill="Orange"&gt;
+    &lt;Rectangle.RenderTransform&gt;
+        &lt;SkewTransform AngleX="20" AngleY="0"/&gt;
+    &lt;/Rectangle.RenderTransform&gt;
+&lt;/Rectangle&gt;</code></pre>
+        </div>
+        
+        <h3>5. TranslateTransform</h3>
+        <p>Перемещает элемент на заданное расстояние по осям X и Y. Часто используется для анимации движения.</p>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Пример использования TranslateTransform</div>
+            <pre><code class="language-xml">&lt;Border Width="100" Height="50" Background="Red"&gt;
+    &lt;Border.RenderTransform&gt;
+        &lt;TranslateTransform X="20" Y="30"/&gt;
+    &lt;/Border.RenderTransform&gt;
+&lt;/Border&gt;</code></pre>
+        </div>
+        
+        <h3>6. TransformGroup</h3>
+        <p>Объединяет несколько преобразований, которые применяются последовательно к элементу.</p>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Пример использования TransformGroup</div>
+            <pre><code class="language-xml">&lt;Canvas Width="200" Height="200"&gt;
+    &lt;Rectangle Width="50" Height="50" Fill="Purple"&gt;
+        &lt;Rectangle.RenderTransform&gt;
+            &lt;TransformGroup&gt;
+                &lt;RotateTransform Angle="45"/&gt;
+                &lt;ScaleTransform ScaleX="1.5" ScaleY="1.5"/&gt;
+                &lt;TranslateTransform X="50" Y="30"/&gt;
+            &lt;/TransformGroup&gt;
+        &lt;/Rectangle.RenderTransform&gt;
+    &lt;/Rectangle&gt;
+&lt;/Canvas&gt;</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Порядок преобразований в TransformGroup важен — они применяются в том порядке, в котором указаны.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Визуальные примеры преобразований</h2>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип преобразования</th>
+                        <th>Визуальное представление</th>
+                        <th>Описание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Оригинал</strong></td>
+                        <td><div style="width: 80px; height: 40px; background: #4b2e83; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px;">Элемент</div></td>
+                        <td>Исходный элемент без преобразований</td>
+                    </tr>
+                    <tr>
+                        <td><strong>RotateTransform</strong></td>
+                        <td><div style="width: 80px; height: 40px; background: #ff6a00; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px; transform: rotate(15deg); margin: 10px auto;">Вращение</div></td>
+                        <td>Поворот на 15 градусов</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ScaleTransform</strong></td>
+                        <td><div style="width: 80px; height: 40px; background: #3498db; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px; transform: scale(1.3, 0.8); margin: 10px auto;">Масштаб</div></td>
+                        <td>Увеличение по X (1.3), уменьшение по Y (0.8)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SkewTransform</strong></td>
+                        <td><div style="width: 80px; height: 40px; background: #96c93d; color: white; display: flex; align-items: center; justify-content: center; border-radius: 4px; transform: skew(20deg, 0); margin: 10px auto;">Наклон</div></td>
+                        <td>Наклон по оси X на 20 градусов</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> В реальном WPF-приложении для преобразований используются соответствующие классы, а не CSS-свойства, как в этих демонстрационных примерах.</p>
+        </div>
+        
+        <h2>Размещение преобразований в WPF</h2>
+        <p>В WPF преобразования можно применять к нескольким свойствам:</p>
+        
+        <ul>
+            <li><strong>RenderTransform</strong> - применяется после этапа компоновки, не влияет на позиционирование элемента</li>
+            <li><strong>LayoutTransform</strong> - применяется до этапа компоновки, влияет на позиционирование элемента</li>
+            <li><strong>Transform</strong> в свойствах кистей и других визуальных элементов</li>
+        </ul>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Различные способы применения преобразований</div>
+            <pre><code class="language-xml">&lt;!-- RenderTransform --&gt;
+&lt;Button RenderTransform="
+    &lt;RotateTransform Angle="30"/&gt;
+"&gt;Кнопка&lt;/Button&gt;
+
+&lt;!-- LayoutTransform --&gt;
+&lt;Button&gt;
+    &lt;Button.LayoutTransform&gt;
+        &lt;RotateTransform Angle="30"/&gt;
+    &lt;/Button.LayoutTransform&gt;
+    Кнопка
+&lt;/Button&gt;
+
+&lt;!-- Transform в кисти --&gt;
+&lt;Rectangle Fill="Blue" Width="100" Height="100"&gt;
+    &lt;Rectangle.Fill&gt;
+        &lt;SolidColorBrush&gt;
+            &lt;SolidColorBrush.Transform&gt;
+                &lt;RotateTransform Angle="45"/&gt;
+            &lt;/SolidColorBrush.Transform&gt;
+        &lt;/SolidColorBrush&gt;
+    &lt;/Rectangle.Fill&gt;
+&lt;/Rectangle&gt;</code></pre>
+        </div>
+        
+        <div class="warning">
+            <p><strong>Важно:</strong> LayoutTransform работает медленнее, чем RenderTransform, так как требует пересчета компоновки после преобразования.</p>
+        </div>
+
+        <h3>Сравнение RenderTransform и LayoutTransform</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Характеристика</th>
+                        <th>RenderTransform</th>
+                        <th>LayoutTransform</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Время применения</strong></td>
+                        <td>После компоновки</td>
+                        <td>До компоновки</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Влияние на layout</strong></td>
+                        <td>Не влияет</td>
+                        <td>Влияет на позиционирование</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Производительность</strong></td>
+                        <td>Высокая</td>
+                        <td>Низкая (из-за перекомпоновки)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Использование</strong></td>
+                        <td>Анимации, визуальные эффекты</td>
+                        <td>Когда нужно изменить layout</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

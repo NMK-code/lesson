@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Асинхронность: async/await и Task</title>
+    
+    <!-- Ваш CSS -->
+    <link rel="stylesheet" href="stylesForLesson.css">
+    
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Асинхронность: async/await и Task в C#</h1>
+        <p>Механизмы многозадачности и параллельного программирования</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое асинхронность?</h2>
+        <p>Асинхронное программирование позволяет выполнять длительные операции 
+           (например, ввод-вывод, сетевые запросы, работу с файлами) без блокировки основного потока программы.</p>
+
+        <p>До появления ключевых слов <code>async</code> и <code>await</code> программисты использовали 
+           <code>Thread</code>, <code>ThreadPool</code>, <code>BackgroundWorker</code> и 
+           <code>Begin/End</code>-модели. Теперь основной инструмент — это <code>Task</code>.</p>
+
+        <div class="note">
+            <p><strong>Примечание:</strong> Асинхронность не ускоряет вычисления, 
+               но позволяет эффективнее использовать ресурсы и улучшает отзывчивость приложений.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Класс Task</h2>
+        <p><code>Task</code> представляет собой асинхронную операцию. 
+           Это аналог "обещания" (Promise) в других языках.</p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип</th>
+                        <th>Описание</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>Task</code></td>
+                        <td>Асинхронная операция без возвращаемого значения</td>
+                        <td><code>Task.Delay(1000)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>Task&lt;T&gt;</code></td>
+                        <td>Асинхронная операция с возвращаемым результатом</td>
+                        <td><code>Task&lt;int&gt;.Run(() => 42)</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>ValueTask&lt;T&gt;</code></td>
+                        <td>Оптимизированный вариант для часто готовых результатов</td>
+                        <td><code>ValueTask&lt;int&gt;</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Ключевые слова async и await</h2>
+        <p><strong>async</strong> используется для объявления асинхронного метода, 
+           а <strong>await</strong> — для приостановки его выполнения до завершения <code>Task</code>.</p>
+
+        <div class="code-container">
+            <div class="code-header">C#: Простой пример async/await</div>
+            <pre><code class="language-csharp">async Task DownloadDataAsync()
+{
+    Console.WriteLine("Начало загрузки...");
+    await Task.Delay(2000); // имитация загрузки
+    Console.WriteLine("Загрузка завершена!");
+}
+
+// Вызов асинхронного метода
+await DownloadDataAsync();</code></pre>
+        </div>
+
+        <div class="tip">
+            <p><strong>Совет:</strong> Методы с <code>async</code> обычно возвращают <code>Task</code> или <code>Task&lt;T&gt;</code>. 
+               Если метод ничего не возвращает, используйте <code>Task</code>, а не <code>void</code>.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Асинхронные методы с возвращаемым значением</h2>
+        <div class="code-container">
+            <div class="code-header">C#: Пример Task&lt;T&gt;</div>
+            <pre><code class="language-csharp">async Task&lt;int&gt; CalculateAsync(int a, int b)
+{
+    await Task.Delay(500); // имитация работы
+    return a + b;
+}
+
+// Использование с возвращаемым значением
+int result = await CalculateAsync(3, 4);
+Console.WriteLine(result); // 7
+
+// Асинхронный метод с несколькими await
+async Task&lt;string&gt; ProcessDataAsync()
+{
+    var data = await FetchDataAsync();
+    var processed = await ProcessAsync(data);
+    return await SaveAsync(processed);
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Выполнение нескольких задач</h2>
+        <p>Можно запускать несколько задач параллельно и ожидать их завершения:</p>
+
+        <div class="code-container">
+            <div class="code-header">C#: Task.WhenAll</div>
+            <pre><code class="language-csharp">async Task RunTasksAsync()
+{
+    var t1 = Task.Delay(1000);
+    var t2 = Task.Delay(2000);
+    var t3 = Task.Delay(1500);
+
+    await Task.WhenAll(t1, t2, t3);
+    Console.WriteLine("Все задачи завершены!");
+}
+
+// Task.WhenAll с возвращаемыми значениями
+async Task ProcessMultipleFilesAsync()
+{
+    var tasks = new List&lt;Task&lt;string&gt;&gt;
+    {
+        ReadFileAsync("file1.txt"),
+        ReadFileAsync("file2.txt"),
+        ReadFileAsync("file3.txt")
+    };
+    
+    string[] results = await Task.WhenAll(tasks);
+    foreach (var result in results)
+    {
+        Console.WriteLine(result);
+    }
+}</code></pre>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header">C#: Task.WhenAny</div>
+            <pre><code class="language-csharp">async Task WaitForFirstTaskAsync()
+{
+    var task1 = DownloadFromSource1Async();
+    var task2 = DownloadFromSource2Async();
+    var task3 = DownloadFromSource3Async();
+    
+    Task&lt;string&gt; firstFinished = await Task.WhenAny(task1, task2, task3);
+    string result = await firstFinished;
+    Console.WriteLine($"Первым завершился: {result}");
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Обработка ошибок в асинхронности</h2>
+        <p>Исключения в асинхронных методах обрабатываются через <code>try/catch</code>, как в синхронных.</p>
+
+        <div class="code-container">
+            <div class="code-header">C#: Пример обработки ошибок</div>
+            <pre><code class="language-csharp">async Task LoadFileAsync(string path)
+{
+    try
+    {
+        string text = await File.ReadAllTextAsync(path);
+        Console.WriteLine(text);
+    }
+    catch (FileNotFoundException ex)
+    {
+        Console.WriteLine($"Файл не найден: {ex.Message}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Ошибка загрузки: {ex.Message}");
+    }
+}
+
+// Обработка ошибок в Task.WhenAll
+async Task ProcessWithErrorHandlingAsync()
+{
+    var task1 = ProcessAsync();
+    var task2 = ProcessAsync();
+    
+    try
+    {
+        await Task.WhenAll(task1, task2);
+    }
+    catch (AggregateException ex)
+    {
+        foreach (var innerEx in ex.InnerExceptions)
+        {
+            Console.WriteLine($"Ошибка: {innerEx.Message}");
+        }
+    }
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Отмена асинхронных операций</h2>
+        <p>Используйте <code>CancellationToken</code> для отмены длительных операций:</p>
+
+        <div class="code-container">
+            <div class="code-header">C#: Отмена асинхронных задач</div>
+            <pre><code class="language-csharp">async Task LongRunningOperationAsync(CancellationToken cancellationToken = default)
+{
+    for (int i = 0; i < 100; i++)
+    {
+        // Проверяем отмену
+        cancellationToken.ThrowIfCancellationRequested();
+        
+        await Task.Delay(100, cancellationToken);
+        Console.WriteLine($"Шаг {i}");
+    }
+}
+
+// Использование
+var cts = new CancellationTokenSource();
+try
+{
+    // Отменяем через 2 секунды
+    cts.CancelAfter(2000);
+    await LongRunningOperationAsync(cts.Token);
+}
+catch (OperationCanceledException)
+{
+    Console.WriteLine("Операция отменена");
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Сравнение асинхронного и синхронного кода</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Синхронный код</th>
+                        <th>Асинхронный код</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Блокирует поток при выполнении задачи</td>
+                        <td>Не блокирует поток, выполнение продолжается</td>
+                    </tr>
+                    <tr>
+                        <td>Подходит для коротких операций</td>
+                        <td>Подходит для долгих операций (I/O, запросы)</td>
+                    </tr>
+                    <tr>
+                        <td>Может "замораживать" UI</td>
+                        <td>Сохраняет отзывчивость интерфейса</td>
+                    </tr>
+                    <tr>
+                        <td>Проще для понимания</td>
+                        <td>Требует понимания потоков выполнения</td>
+                    </tr>
+                    <tr>
+                        <td>Использует обычные исключения</td>
+                        <td>Исключения оборачиваются в AggregateException</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Паттерны использования</h2>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Асинхронный инициализатор</div>
+            <pre><code class="language-csharp">public class DataService
+{
+    private string _cachedData;
+    
+    public async Task InitializeAsync()
+    {
+        _cachedData = await LoadDataAsync();
+    }
+    
+    public string GetData() => _cachedData;
+}</code></pre>
+        </div>
+
+        <div class="code-container">
+            <div class="code-header">C#: Асинхронный цикл</div>
+            <pre><code class="language-csharp">async Task ProcessItemsAsync(IEnumerable&lt;string&gt; items)
+{
+    foreach (var item in items)
+    {
+        await ProcessItemAsync(item);
+    }
+}
+
+// Параллельная обработка
+async Task ProcessItemsInParallelAsync(IEnumerable&lt;string&gt; items)
+{
+    var tasks = items.Select(item => ProcessItemAsync(item));
+    await Task.WhenAll(tasks);
+}</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Лучшие практики</h2>
+        <ul>
+            <li>Используйте <code>async/await</code> вместо ручного управления потоками</li>
+            <li>Возвращайте <code>Task</code>, а не <code>void</code> (исключение — обработчики событий)</li>
+            <li>Используйте <code>Task.WhenAll</code> для параллельных операций</li>
+            <li>Не блокируйте асинхронные вызовы методом <code>.Result</code> или <code>.Wait()</code></li>
+            <li>Обрабатывайте ошибки через <code>try/catch</code> внутри асинхронных методов</li>
+            <li>Используйте суффикс "Async" в именах асинхронных методов</li>
+            <li>Настраивайте время ожидания для сетевых операций</li>
+            <li>Используйте <code>ConfigureAwait(false)</code> в библиотеках</li>
+        </ul>
+
+        <div class="warning">
+            <p><strong>Важно:</strong> Неправильное использование <code>.Result</code> и <code>.Wait()</code> 
+               может привести к <em>deadlock</em> (зависанию программы).</p>
+        </div>
+
+        <div class="tip">
+            <p><strong>Совет:</strong> Для CPU-bound операций используйте <code>Task.Run</code>, для I/O-bound операций — нативные асинхронные методы.</p>
+        </div>
+    </div>
+</body>
+</html>

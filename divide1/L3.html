@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VisualTree и LogicalTree в WPF</title>
+
+  <!-- Стили для лекции -->
+  <link rel="stylesheet" href="stylesForLesson.css">
+
+  <!-- Prism.js для подсветки -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-xaml.min.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>VisualTree и LogicalTree в WPF</h1>
+  <p>Изучим разницу между визуальным и логическим деревом элементов в WPF и их значение для разработки интерфейсов.</p>
+</header>
+
+<div class="container">
+  <h2>Цель лекции</h2>
+  <p>Понять, что такое LogicalTree и VisualTree, их роли в WPF, способы взаимодействия с элементами и различия между ними. Научиться использовать эти деревья для поиска элементов и работы с событиями.</p>
+
+  <h2>Основной материал</h2>
+
+  <h3>LogicalTree</h3>
+  <p>LogicalTree (логическое дерево) представляет собой структуру, описывающую логические отношения между элементами интерфейса. Оно отражает, какие элементы входят в состав других элементов с точки зрения логики приложения.</p>
+
+  <ul>
+    <li>Определяет иерархию элементов управления</li>
+    <li>Используется для поиска ресурсов и управления событиями, которые «поднимаются» вверх по дереву</li>
+    <li>Чаще всего логическое дерево совпадает с тем, как разработчик видит структуру интерфейса в XAML</li>
+  </ul>
+
+  <div class="code-container">
+    <div class="code-header">Пример: LogicalTree</div>
+    <pre class="language-markup">&lt;Window x:Class="WpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="LogicalTree Demo" Height="250" Width="400"&gt;
+    &lt;StackPanel&gt;
+        &lt;TextBlock Text="Введите имя:" /&gt;
+        &lt;TextBox Name="textBoxName" Width="200" /&gt;
+        &lt;Button Content="Сохранить" Click="Save_Click" /&gt;
+    &lt;/StackPanel&gt;
+&lt;/Window&gt;</pre>
+  </div>
+
+  <p>В этом примере:</p>
+  <ul>
+    <li>StackPanel — родитель для TextBlock, TextBox и Button</li>
+    <li>TextBox и Button являются логическими потомками StackPanel</li>
+    <li>LogicalTree позволяет искать элементы через <code>LogicalTreeHelper.FindLogicalNode()</code></li>
+  </ul>
+
+  <div class="code-container">
+    <div class="code-header">Пример поиска элемента в логическом дереве (C#)</div>
+    <pre class="language-csharp">TextBox tb = LogicalTreeHelper.FindLogicalNode(this, "textBoxName") as TextBox;
+if (tb != null)
+{
+    tb.Text = "Привет, WPF!";
+}</pre>
+  </div>
+
+  <h3>VisualTree</h3>
+  <p>VisualTree (визуальное дерево) описывает все визуальные элементы, которые реально отображаются на экране. Оно глубже и детальнее, чем логическое дерево, и включает вспомогательные элементы, создаваемые WPF для рендеринга интерфейса.</p>
+
+  <ul>
+    <li>Включает все визуальные элементы (например, кнопки, текстовые поля, панели, декораторы)</li>
+    <li>Используется для поиска конкретных визуальных компонентов и их стилей</li>
+    <li>Не всегда совпадает с логическим деревом, так как включает внутренние элементы, создаваемые WPF</li>
+  </ul>
+
+  <div class="code-container">
+    <div class="code-header">Пример поиска элемента в визуальном дереве (C#)</div>
+    <pre class="language-csharp">public static T FindVisualChild&lt;T&gt;(DependencyObject parent) where T : DependencyObject
+{
+    for (int i = 0; i &lt; VisualTreeHelper.GetChildrenCount(parent); i++)
+    {
+        DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+        if (child != null &amp;&amp; child is T tChild)
+            return tChild;
+        T childOfChild = FindVisualChild&lt;T&gt;(child);
+        if (childOfChild != null)
+            return childOfChild;
+    }
+    return null;
+}
+
+// Использование
+Button btn = FindVisualChild&lt;Button&gt;(this);
+if (btn != null)
+{
+    btn.Content = "Новая надпись";
+}</pre>
+  </div>
+
+  <h3>Сравнение LogicalTree и VisualTree</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Характеристика</th>
+        <th>LogicalTree</th>
+        <th>VisualTree</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Что описывает</td>
+        <td>Логические отношения элементов</td>
+        <td>Все визуальные компоненты, включая вспомогательные элементы</td>
+      </tr>
+      <tr>
+        <td>Используется для</td>
+        <td>Поиск элементов, обработка событий, поиск ресурсов</td>
+        <td>Манипуляция визуальными элементами, стили, анимации</td>
+      </tr>
+      <tr>
+        <td>Пример метода поиска</td>
+        <td>LogicalTreeHelper.FindLogicalNode()</td>
+        <td>VisualTreeHelper.GetChild()</td>
+      </tr>
+      <tr>
+        <td>Глубина дерева</td>
+        <td>Выше, соответствует логике интерфейса</td>
+        <td>Глубже, включает вспомогательные элементы WPF</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <strong>Примечание:</strong> Иногда один и тот же элемент может присутствовать и в LogicalTree, и в VisualTree, но их потомки могут сильно отличаться.
+  </div>
+
+  <h3>Применение в практике</h3>
+  <ul>
+    <li>LogicalTree удобен для поиска элементов по имени и обработки событий</li>
+    <li>VisualTree нужен, когда нужно изменить визуальные компоненты, которые не определены напрямую в XAML (например, ScrollBar внутри ListBox)</li>
+    <li>Комбинированное использование позволяет точно управлять интерфейсом и событиями</li>
+  </ul>
+
+  <div class="tip">
+    <strong>Совет:</strong> Для сложных интерфейсов используйте LogicalTree для поиска логических элементов и VisualTree для глубокого доступа к внутренним визуальным компонентам.
+  </div>
+
+  <h3>Пример: использование двух деревьев вместе</h3>
+  <pre class="language-csharp">// Находим StackPanel в логическом дереве
+StackPanel panel = LogicalTreeHelper.FindLogicalNode(this, "myPanel") as StackPanel;
+
+// Находим первую кнопку внутри StackPanel в визуальном дереве
+if (panel != null)
+{
+    Button btn = FindVisualChild&lt;Button&gt;(panel);
+    if (btn != null)
+        btn.Content = "Новая кнопка";
+}</pre>
+
+</div>
+
+</body>
+</html>

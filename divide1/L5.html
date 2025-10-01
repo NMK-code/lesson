@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Элементы управления в WPF</title>
+
+  <!-- Стили для лекции -->
+  <link rel="stylesheet" href="stylesForLesson.css">
+
+  <!-- Prism.js для подсветки -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-xaml.min.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>Элементы управления в WPF</h1>
+  <p>Изучим основные элементы управления WPF: кнопки, текстовые поля, списки и другие элементы интерфейса.</p>
+</header>
+
+<div class="container">
+  <h2>Цель лекции</h2>
+  <p>Научиться использовать основные элементы управления WPF, понять их свойства, события и особенности применения в приложениях.</p>
+
+  <h2>Основной материал</h2>
+
+  <h3>1. Кнопка (Button)</h3>
+  <p>Элемент <span class="highlight">Button</span> позволяет пользователю выполнять действие при клике.</p>
+
+  <div class="code-container">
+    <div class="code-header">Пример XAML</div>
+    <pre class="language-markup">&lt;Button Content="Нажми меня" Width="150" Height="40" Click="Button_Click"/&gt;</pre>
+  </div>
+
+  <div class="code-container">
+    <div class="code-header">Пример C# (Code-behind)</div>
+    <pre class="language-csharp">private void Button_Click(object sender, RoutedEventArgs e)
+{
+    MessageBox.Show("Кнопка нажата!");
+}</pre>
+  </div>
+
+  <h3>2. Текстовое поле (TextBox)</h3>
+  <p>TextBox используется для ввода текста пользователем. Позволяет обрабатывать ввод и изменять свойства текста.</p>
+
+  <div class="code-container">
+    <div class="code-header">Пример XAML</div>
+    <pre class="language-markup">&lt;TextBox Name="textBoxName" Width="200" Height="30" Text="Введите текст" /&gt;</pre>
+  </div>
+
+  <div class="code-container">
+    <div class="code-header">Пример C# (Code-behind)</div>
+    <pre class="language-csharp">string userInput = textBoxName.Text;
+MessageBox.Show($"Вы ввели: {userInput}");</pre>
+  </div>
+
+  <h3>3. Метки (Label)</h3>
+  <p>Label предназначен для отображения текста или информации на форме. Отличается от TextBlock возможностью связывания с элементами управления.</p>
+
+  <div class="code-container">
+    <div class="code-header">Пример XAML</div>
+    <pre class="language-markup">&lt;Label Content="Введите имя:" /&gt;</pre>
+  </div>
+
+  <h3>4. Списки (ListBox и ComboBox)</h3>
+  <p>ListBox и ComboBox позволяют отображать список элементов и выбирать один или несколько из них.</p>
+
+  <div class="code-container">
+    <div class="code-header">Пример ListBox XAML</div>
+    <pre class="language-markup">&lt;ListBox Width="200" Height="100"&gt;
+    &lt;ListBoxItem&gt;Элемент 1&lt;/ListBoxItem&gt;
+    &lt;ListBoxItem&gt;Элемент 2&lt;/ListBoxItem&gt;
+    &lt;ListBoxItem&gt;Элемент 3&lt;/ListBoxItem&gt;
+&lt;/ListBox&gt;</pre>
+  </div>
+
+  <div class="code-container">
+    <div class="code-header">Пример ComboBox XAML</div>
+    <pre class="language-markup">&lt;ComboBox Width="200"&gt;
+    &lt;ComboBoxItem&gt;Выбор 1&lt;/ComboBoxItem&gt;
+    &lt;ComboBoxItem&gt;Выбор 2&lt;/ComboBoxItem&gt;
+    &lt;ComboBoxItem&gt;Выбор 3&lt;/ComboBoxItem&gt;
+&lt;/ComboBox&gt;</pre>
+  </div>
+
+  <h3>5. Чекбокс (CheckBox) и радиокнопки (RadioButton)</h3>
+  <p>Элементы <span class="highlight">CheckBox</span> и <span class="highlight">RadioButton</span> используются для выбора одного или нескольких вариантов.</p>
+
+  <div class="code-container">
+    <div class="code-header">Пример XAML</div>
+    <pre class="language-markup">&lt;CheckBox Content="Я согласен" IsChecked="False" /&gt;
+
+&lt;StackPanel&gt;
+    &lt;RadioButton Content="Вариант A" GroupName="Options" /&gt;
+    &lt;RadioButton Content="Вариант B" GroupName="Options" /&gt;
+&lt;/StackPanel&gt;</pre>
+  </div>
+
+  <h3>6. Панели и контейнеры</h3>
+  <p>Для размещения элементов управления используются панели: Grid, StackPanel, DockPanel, WrapPanel и другие. Панели управляют расположением элементов и их размером.</p>
+
+  <div class="code-container">
+    <div class="code-header">Пример Grid XAML</div>
+    <pre class="language-markup">&lt;Grid&gt;
+    &lt;Grid.RowDefinitions&gt;
+        &lt;RowDefinition Height="Auto"/&gt;
+        &lt;RowDefinition Height="*"/&gt;
+    &lt;/Grid.RowDefinitions&gt;
+
+    &lt;Button Content="Верх" Grid.Row="0"/&gt;
+    &lt;TextBox Grid.Row="1" Text="Нижняя часть" /&gt;
+&lt;/Grid&gt;</pre>
+  </div>
+
+  <h3>7. События элементов управления</h3>
+  <p>Элементы управления поддерживают множество событий, таких как:</p>
+  <ul>
+    <li><code>Click</code> — нажатие кнопки</li>
+    <li><code>Checked / Unchecked</code> — изменение состояния CheckBox</li>
+    <li><code>SelectionChanged</code> — изменение выбранного элемента в ListBox или ComboBox</li>
+    <li><code>TextChanged</code> — изменение текста в TextBox</li>
+  </ul>
+
+  <div class="code-container">
+    <div class="code-header">Пример обработки события</div>
+    <pre class="language-csharp">private void CheckBox_Checked(object sender, RoutedEventArgs e)
+{
+    MessageBox.Show("CheckBox выбран!");
+}
+
+private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+{
+    ComboBox combo = sender as ComboBox;
+    MessageBox.Show($"Вы выбрали: {combo.SelectedItem}");
+}</pre>
+  </div>
+
+  <h3>8. Советы по использованию элементов управления</h3>
+  <ul>
+    <li>Используйте <code>Name</code> для доступа к элементам из C#</li>
+    <li>Для группировки RadioButton используйте атрибут <code>GroupName</code></li>
+    <li>Используйте панели для гибкого расположения элементов</li>
+    <li>Применяйте стили и ресурсы для единообразного интерфейса</li>
+  </ul>
+
+  <div class="tip">
+    <strong>Совет:</strong> Для сложных интерфейсов комбинируйте разные панели, чтобы управлять расположением и масштабированием элементов.
+  </div>
+
+  <h3>9. Таблица основных элементов управления WPF</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Элемент</th>
+        <th>Назначение</th>
+        <th>Пример использования</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Button</td>
+        <td>Выполнение действия при клике</td>
+        <td>Нажать кнопку для сохранения данных</td>
+      </tr>
+      <tr>
+        <td>TextBox</td>
+        <td>Ввод текста пользователем</td>
+        <td>Поле для имени пользователя</td>
+      </tr>
+      <tr>
+        <td>Label</td>
+        <td>Отображение текста или информации</td>
+        <td>Метка рядом с TextBox</td>
+      </tr>
+      <tr>
+        <td>ListBox</td>
+        <td>Список элементов с возможностью выбора</td>
+        <td>Выбор нескольких вариантов</td>
+      </tr>
+      <tr>
+        <td>ComboBox</td>
+        <td>Выпадающий список для выбора одного элемента</td>
+        <td>Выбор страны из списка</td>
+      </tr>
+      <tr>
+        <td>CheckBox</td>
+        <td>Выбор одного или нескольких вариантов</td>
+        <td>Согласие с правилами</td>
+      </tr>
+      <tr>
+        <td>RadioButton</td>
+        <td>Выбор только одного варианта из группы</td>
+        <td>Выбор пола пользователя</td>
+      </tr>
+      <tr>
+        <td>Panels (Grid, StackPanel)</td>
+        <td>Организация расположения элементов</td>
+        <td>Размещение кнопок и полей в интерфейсе</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+</body>
+</html>

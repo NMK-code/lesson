@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Исключения и обработка ошибок в C#</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Исключения и обработка ошибок в C#</h1>
+        <p>Механизмы try-catch-finally и работа с классом Exception</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое исключения?</h2>
+        <p>Исключение — это ошибка, возникающая во время выполнения программы. 
+           В C# исключения представляют собой объекты, производные от класса <code>System.Exception</code>. 
+           Они позволяют корректно обрабатывать непредвиденные ситуации, не прерывая выполнение программы.</p>
+
+        <div class="note">
+            <p><strong>Примечание:</strong> Исключения отличаются от ошибок компиляции, 
+            так как проявляются только во время выполнения программы.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Базовая структура обработки ошибок</h2>
+        <p>Для обработки исключений используется конструкция <code>try-catch-finally</code>:</p>
+
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример обработки деления на ноль</span>
+            </div>
+            <pre><code class="language-csharp">
+try
+{
+    int x = 10;
+    int y = 0;
+    int result = x / y; // Ошибка: деление на ноль
+}
+catch (DivideByZeroException ex)
+{
+    Console.WriteLine("Ошибка: " + ex.Message);
+}
+finally
+{
+    Console.WriteLine("Блок finally выполнится всегда.");
+}
+            </code></pre>
+        </div>
+
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте несколько <code>catch</code>-блоков для обработки разных типов исключений.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Иерархия исключений</h2>
+        <p>Все исключения в C# наследуются от класса <code>System.Exception</code>. 
+           Вот некоторые часто используемые типы:</p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Исключение</th>
+                        <th>Когда возникает</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>DivideByZeroException</strong></td>
+                        <td>Попытка деления на ноль</td>
+                        <td><code>int x = 5 / 0;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>NullReferenceException</strong></td>
+                        <td>Обращение к объекту со значением <code>null</code></td>
+                        <td><code>string s = null; s.Length;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>IndexOutOfRangeException</strong></td>
+                        <td>Выход за пределы массива</td>
+                        <td><code>int[] arr = {1,2}; Console.Write(arr[5]);</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>InvalidOperationException</strong></td>
+                        <td>Некорректное состояние объекта</td>
+                        <td><code>var e = list.GetEnumerator(); e.MoveNext(); e.Current;</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Создание собственных исключений</h2>
+        <p>Можно создавать пользовательские классы исключений, наследуя их от <code>Exception</code>:</p>
+
+        <div class="code-container">
+            <div class="code-header">
+                <span class="language">C#</span>
+                <span class="caption">Пример пользовательского исключения</span>
+            </div>
+            <pre><code class="language-csharp">
+public class InvalidAgeException : Exception
+{
+    public InvalidAgeException(string message) : base(message) { }
+}
+
+class Program
+{
+    static void CheckAge(int age)
+    {
+        if (age &lt; 0)
+            throw new InvalidAgeException("Возраст не может быть отрицательным!");
+    }
+}
+            </code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Лучшие практики</h2>
+        <ul>
+            <li>Не используйте исключения для обычной логики программы.</li>
+            <li>Обрабатывайте только ожидаемые ошибки, а неожиданные — логируйте.</li>
+            <li>Добавляйте информативные сообщения к своим пользовательским исключениям.</li>
+        </ul>
+
+        <div class="warning">
+            <p><strong>Важно:</strong> Избыточная обработка исключений может замедлить выполнение программы. 
+            Используйте их только при необходимости.</p>
+        </div>
+    </div>
+
+</body>
+</html>

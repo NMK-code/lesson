@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цвет и типографика в WPF</title>
+    
+    <!-- Ваш CSS -->
+    <link rel="stylesheet" href="stylesForLesson.css">
+    
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-markup.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Цвет и типографика в WPF</h1>
+        <p>Использование стилей и ресурсов для создания единообразного визуального оформления</p>
+    </header>
+
+    <div class="container">
+        <h2>Ресурсы в WPF</h2>
+        <p>Ресурсы в WPF позволяют определять и повторно использовать объекты, такие как кисти, стили, шаблоны и анимации, по всему приложению.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип ресурса</th>
+                        <th>Назначение</th>
+                        <th>Примеры</th>
+                        <th>Область видимости</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Локальные ресурсы</strong></td>
+                        <td>Ресурсы, определенные в элементе или окне</td>
+                        <td>Кисти, стили для конкретного окна</td>
+                        <td>Только в пределах элемента и его дочерних элементов</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ресурсы приложения</strong></td>
+                        <td>Глобальные ресурсы для всего приложения</td>
+                        <td>Цветовые схемы, общие стили</td>
+                        <td>Во всем приложении</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Тематические ресурсы</strong></td>
+                        <td>Ресурсы, определенные в темах</td>
+                        <td>Системные цвета, стили по умолчанию</td>
+                        <td>Зависит от темы ОС</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Динамические ресурсы</strong></td>
+                        <td>Ресурсы, которые могут изменяться во время выполнения</td>
+                        <td>Изменяемые цветовые схемы</td>
+                        <td>Во время выполнения</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Статические ресурсы</strong></td>
+                        <td>Ресурсы, которые определяются один раз при загрузке</td>
+                        <td>Фиксированные значения, константы</td>
+                        <td>Во время загрузки</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Пример определения и использования ресурсов</div>
+            <pre><code class="language-xml">&lt;!-- Определение ресурсов --&gt;
+&lt;Window.Resources&gt;
+    &lt;SolidColorBrush x:Key="PrimaryBrush" Color="#FF6A11CB"/&gt;
+    &lt;SolidColorBrush x:Key="SecondaryBrush" Color="#FF2575FC"/&gt;
+    &lt;SolidColorBrush x:Key="AccentBrush" Color="#FF3498DB"/&gt;
+&lt;/Window.Resources&gt;
+
+&lt;!-- Использование ресурсов --&gt;
+&lt;Button 
+    Background="{StaticResource PrimaryBrush}"
+    Foreground="White"
+    Content="Кнопка с ресурсом"/&gt;
+
+&lt;Border 
+    Background="{DynamicResource SecondaryBrush}"
+    Padding="10"&gt;
+    &lt;TextBlock Text="Текст с динамическим ресурсом"/&gt;
+&lt;/Border&gt;</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Используйте StaticResource для значений, которые не будут меняться во время выполнения, и DynamicResource для значений, которые могут изменяться.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Цветовые схемы и палитры</h2>
+        <p>Создание согласованной цветовой схемы - ключевой аспект профессионального дизайна приложения.</p>
+        
+        <h3>Системные цвета</h3>
+        <p>WPF предоставляет доступ к системным цветам, которые автоматически адаптируются под тему ОС:</p>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Пример использования системных цветов</div>
+            <pre><code class="language-xml">&lt;Button 
+    Background="{x:Static SystemColors.ControlBrush}"
+    Foreground="{x:Static SystemColors.ControlTextBrush}"
+    Content="Кнопка с системными цветами"/&gt;
+
+&lt;Border 
+    Background="{x:Static SystemColors.WindowBrush}"
+    BorderBrush="{x:Static SystemColors.ActiveBorderBrush}"
+    BorderThickness="1"&gt;
+    &lt;TextBlock 
+        Foreground="{x:Static SystemColors.WindowTextBrush}"
+        Text="Текст с системными цветами"/&gt;
+&lt;/Border&gt;</code></pre>
+        </div>
+        
+        <h3>Пользовательская цветовая палитра</h3>
+        <p>Создание собственной цветовой палитры помогает поддерживать единообразие дизайна:</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Название</th>
+                        <th>Цвет</th>
+                        <th>HEX</th>
+                        <th>Назначение</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Primary</strong></td>
+                        <td><div style="width: 20px; height: 20px; background: #6a11cb; border: 1px solid #ddd;"></div></td>
+                        <td>#6A11CB</td>
+                        <td>Основной цвет бренда</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Secondary</strong></td>
+                        <td><div style="width: 20px; height: 20px; background: #2575fc; border: 1px solid #ddd;"></div></td>
+                        <td>#2575FC</td>
+                        <td>Вторичный цвет</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Accent</strong></td>
+                        <td><div style="width: 20px; height: 20px; background: #3498db; border: 1px solid #ddd;"></div></td>
+                        <td>#3498DB</td>
+                        <td>Акцентный цвет</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dark</strong></td>
+                        <td><div style="width: 20px; height: 20px; background: #2c3e50; border: 1px solid #ddd;"></div></td>
+                        <td>#2C3E50</td>
+                        <td>Темный текст</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Light</strong></td>
+                        <td><div style="width: 20px; height: 20px; background: #f5f7fa; border: 1px solid #ddd;"></div></td>
+                        <td>#F5F7FA</td>
+                        <td>Светлый фон</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Error</strong></td>
+                        <td><div style="width: 20px; height: 20px; background: #e74c3c; border: 1px solid #ddd;"></div></td>
+                        <td>#E74C3C</td>
+                        <td>Цвет ошибок</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Определение цветовой палитры в ресурсах</div>
+            <pre><code class="language-xml">&lt;Application.Resources&gt;
+    &lt;!-- Цвета --&gt;
+    &lt;Color x:Key="PrimaryColor"&gt;#FF6A11CB&lt;/Color&gt;
+    &lt;Color x:Key="SecondaryColor"&gt;#FF2575FC&lt;/Color&gt;
+    &lt;Color x:Key="AccentColor"&gt;#FF3498DB&lt;/Color&gt;
+    
+    &lt;!-- Кисти --&gt;
+    &lt;SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/&gt;
+    &lt;SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource SecondaryColor}"/&gt;
+    &lt;SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}"/&gt;
+    
+    &lt;!-- Градиентные кисти --&gt;
+    &lt;LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0,0" EndPoint="1,1"&gt;
+        &lt;GradientStop Color="#FF6A11CB" Offset="0"/&gt;
+        &lt;GradientStop Color="#FF2575FC" Offset="1"/&gt;
+    &lt;/LinearGradientBrush&gt;
+&lt;/Application.Resources&gt;</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Создавайте семантически названные ресурсы (PrimaryBrush, SecondaryBrush), а не ресурсы, названные по цвету (BlueBrush, RedBrush). Это позволит легко изменять цветовую схему приложения без изменения логики.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Типографика в WPF</h2>
+        <p>Единообразная типографика - важный аспект профессионального пользовательского интерфейса.</p>
+        
+        <h3>Определение стилей текста</h3>
+        <p>Создание стилей для различных типов текстового контента:</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Стиль</th>
+                        <th>Размер</th>
+                        <th>Начертание</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Header1</strong></td>
+                        <td>24px</td>
+                        <td>Bold</td>
+                        <td style="font-size: 24px; font-weight: bold;">Заголовок 1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Header2</strong></td>
+                        <td>20px</td>
+                        <td>Bold</td>
+                        <td style="font-size: 20px; font-weight: bold;">Заголовок 2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Header3</strong></td>
+                        <td>18px</td>
+                        <td>Bold</td>
+                        <td style="font-size: 18px; font-weight: bold;">Заголовок 3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BodyText</strong></td>
+                        <td>16px</td>
+                        <td>Normal</td>
+                        <td style="font-size: 16px;">Обычный текст</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Caption</strong></td>
+                        <td>14px</td>
+                        <td>Normal</td>
+                        <td style="font-size: 14px;">Мелкий текст</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Определение стилей текста в ресурсах</div>
+            <pre><code class="language-xml">&lt;Application.Resources&gt;
+    &lt;!-- Стили типографики --&gt;
+    &lt;Style x:Key="Header1" TargetType="TextBlock"&gt;
+        &lt;Setter Property="FontSize" Value="24"/&gt;
+        &lt;Setter Property="FontWeight" Value="Bold"/&gt;
+        &lt;Setter Property="Margin" Value="0,0,0,10"/&gt;
+    &lt;/Style&gt;
+    
+    &lt;Style x:Key="Header2" TargetType="TextBlock"&gt;
+        &lt;Setter Property="FontSize" Value="20"/&gt;
+        &lt;Setter Property="FontWeight" Value="Bold"/&gt;
+        &lt;Setter Property="Margin" Value="0,15,0,8"/&gt;
+    &lt;/Style&gt;
+    
+    &lt;Style x:Key="BodyText" TargetType="TextBlock"&gt;
+        &lt;Setter Property="FontSize" Value="14"/&gt;
+        &lt;Setter Property="TextWrapping" Value="Wrap"/&gt;
+        &lt;Setter Property="Margin" Value="0,0,0,5"/&gt;
+    &lt;/Style&gt;
+    
+    &lt;Style x:Key="CaptionText" TargetType="TextBlock"&gt;
+        &lt;Setter Property="FontSize" Value="12"/&gt;
+        &lt;Setter Property="Foreground" Value="Gray"/&gt;
+        &lt;Setter Property="FontStyle" Value="Italic"/&gt;
+    &lt;/Style&gt;
+&lt;/Application.Resources&gt;</code></pre>
+        </div>
+        
+        <h3>Использование стилей текста</h3>
+        <div class="code-container">
+            <div class="code-header">XAML: Пример использования текстовых стилей</div>
+            <pre><code class="language-xml">&lt;StackPanel&gt;
+    &lt;TextBlock Style="{StaticResource Header1}" Text="Заголовок первого уровня"/&gt;
+    &lt;TextBlock Style="{StaticResource BodyText}" 
+               Text="Это основной текст, который wraps по ширине контейнера. Он использует стиль BodyText, определенный в ресурсах приложения."/&gt;
+    
+    &lt;TextBlock Style="{StaticResource Header2}" Text="Заголовок второго уровня"/&gt;
+    &lt;TextBlock Style="{StaticResource BodyText}" 
+               Text="Еще один абзац текста, демонстрирующий использование стилей для обеспечения единообразия внешнего вида приложения."/&gt;
+    
+    &lt;TextBlock Style="{StaticResource CaptionText}" 
+               Text="Подпись или дополнительная информация"/&gt;
+&lt;/StackPanel&gt;</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Определение стилей типографики в ресурсах приложения обеспечивает единообразие внешнего вида текста во всем приложении и упрощает его изменение.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Стили элементов управления</h2>
+        <p>Стили позволяют определять внешний вид элементов управления и повторно использовать эти определения.</p>
+        
+        <h3>Базовые стили кнопок</h3>
+        <div class="code-container">
+            <div class="code-header">XAML: Пример определения стилей кнопок</div>
+            <pre><code class="language-xml">&lt;Application.Resources&gt;
+    &lt;!-- Базовый стиль кнопки --&gt;
+    &lt;Style x:Key="BaseButtonStyle" TargetType="Button"&gt;
+        &lt;Setter Property="Padding" Value="12,6"/&gt;
+        &lt;Setter Property="Margin" Value="5"/&gt;
+        &lt;Setter Property="Foreground" Value="White"/&gt;
+        &lt;Setter Property="BorderThickness" Value="1"/&gt;
+        &lt;Setter Property="FontWeight" Value="SemiBold"/&gt;
+        &lt;Setter Property="Cursor" Value="Hand"/&gt;
+    &lt;/Style&gt;
+    
+    &lt;!-- Основная кнопка --&gt;
+    &lt;Style x:Key="PrimaryButtonStyle" 
+           TargetType="Button" 
+           BasedOn="{StaticResource BaseButtonStyle}"&gt;
+        &lt;Setter Property="Background" Value="{StaticResource PrimaryBrush}"/&gt;
+        &lt;Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/&gt;
+    &lt;/Style&gt;
+    
+    &lt;!-- Вторичная кнопка --&gt;
+    &lt;Style x:Key="SecondaryButtonStyle" 
+           TargetType="Button" 
+           BasedOn="{StaticResource BaseButtonStyle}"&gt;
+        &lt;Setter Property="Background" Value="Transparent"/&gt;
+        &lt;Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/&gt;
+        &lt;Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/&gt;
+    &lt;/Style&gt;
+    
+    &lt;!-- Стиль по умолчанию для всех кнопок --&gt;
+    &lt;Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}"/&gt;
+&lt;/Application.Resources&gt;</code></pre>
+        </div>
+        
+        <h3>Триггеры в стилях</h3>
+        <p>Триггеры позволяют изменять внешний вид элементов в ответ на различные события и состояния:</p>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Пример использования триггеров в стилях</div>
+            <pre><code class="language-xml">&lt;Style x:Key="ModernButtonStyle" TargetType="Button" 
+       BasedOn="{StaticResource BaseButtonStyle}"&gt;
+    &lt;Setter Property="Background" Value="{StaticResource PrimaryBrush}"/&gt;
+    &lt;Setter Property="BorderBrush" Value="Transparent"/&gt;
+    &lt;Setter Property="Template"&gt;
+        &lt;Setter.Value&gt;
+            &lt;ControlTemplate TargetType="Button"&gt;
+                &lt;Border x:Name="border" 
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="4"&gt;
+                    &lt;ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Margin="{TemplateBinding Padding}"/&gt;
+                &lt;/Border&gt;
+                &lt;ControlTemplate.Triggers&gt;
+                    &lt;Trigger Property="IsMouseOver" Value="True"&gt;
+                        &lt;Setter TargetName="border" Property="Background" 
+                               Value="{StaticResource SecondaryBrush}"/&gt;
+                    &lt;/Trigger&gt;
+                    &lt;Trigger Property="IsPressed" Value="True"&gt;
+                        &lt;Setter TargetName="border" Property="Background" 
+                               Value="{StaticResource AccentBrush}"/&gt;
+                    &lt;/Trigger&gt;
+                    &lt;Trigger Property="IsEnabled" Value="False"&gt;
+                        &lt;Setter TargetName="border" Property="Opacity" Value="0.6"/&gt;
+                    &lt;/Trigger&gt;
+                &lt;/ControlTemplate.Triggers&gt;
+            &lt;/ControlTemplate&gt;
+        &lt;/Setter.Value&gt;
+    &lt;/Setter&gt;
+&lt;/Style&gt;</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте свойство BasedOn для наследования стилей. Это позволяет создавать базовый стиль и затем расширять его для конкретных случаев, уменьшая дублирование кода.</p>
+        </div>
+        
+        <h3>Темы и скины</h3>
+        <p>WPF поддерживает создание сменных тем через механизм ResourceDictionary:</p>
+        
+        <div class="code-container">
+            <div class="code-header">XAML: Пример переключения тем</div>
+            <pre><code class="language-xml">&lt;!-- LightTheme.xaml --&gt;
+&lt;ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"&gt;
+    &lt;Color x:Key="BackgroundColor"&gt;#FFFFFFFF&lt;/Color&gt;
+    &lt;Color x:Key="ForegroundColor"&gt;#FF333333&lt;/Color&gt;
+    &lt;SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/&gt;
+    &lt;SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}"/&gt;
+&lt;/ResourceDictionary&gt;
+
+&lt;!-- DarkTheme.xaml --&gt;
+&lt;ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"&gt;
+    &lt;Color x:Key="BackgroundColor"&gt;#FF333333&lt;/Color&gt;
+    &lt;Color x:Key="ForegroundColor"&gt;#FFFFFFFF&lt;/Color&gt;
+    &lt;SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}"/&gt;
+    &lt;SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}"/&gt;
+&lt;/ResourceDictionary&gt;
+
+&lt;!-- Код для переключения тем --&gt;
+&lt;Button Content="Светлая тема" 
+        Click="LightTheme_Click"/&gt;
+&lt;Button Content="Темная тема" 
+        Click="DarkTheme_Click"/&gt;</code></pre>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Обработчики переключения тем</div>
+            <pre><code class="language-csharp">private void LightTheme_Click(object sender, RoutedEventArgs e)
+{
+    // Загружаем светлую тему
+    Application.Current.Resources.MergedDictionaries.Clear();
+    Application.Current.Resources.MergedDictionaries.Add(
+        new ResourceDictionary() { Source = new Uri("LightTheme.xaml", UriKind.Relative) });
+}
+
+private void DarkTheme_Click(object sender, RoutedEventArgs e)
+{
+    // Загружаем темную тему
+    Application.Current.Resources.MergedDictionaries.Clear();
+    Application.Current.Resources.MergedDictionaries.Add(
+        new ResourceDictionary() { Source = new Uri("DarkTheme.xaml", UriKind.Relative) });
+}</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Для динамического переключения тем используйте DynamicResource вместо StaticResource, чтобы изменения применялись без перезагрузки приложения.</p>
+        </div>
+    </div>
+
+</body>
+</html>

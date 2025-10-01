@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Методы и функции в C#</title>
+    <link rel="stylesheet" href="stylesForLesson.css">
+
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Методы, параметры и возвращение значений в C#</h1>
+        <p>Изучение основ работы с методами, параметрами и возвращаемыми значениями</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое методы в C#</h2>
+        <p>Методы — это блоки кода, которые содержат ряд инструкций. Они позволяют организовать код в логические единицы, которые можно многократно использовать.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Компонент метода</th>
+                        <th>Описание</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Модификатор доступа</td>
+                        <td>Определяет видимость метода</td>
+                        <td>public, private, protected</td>
+                    </tr>
+                    <tr>
+                        <td>Тип возвращаемого значения</td>
+                        <td>Тип данных, который возвращает метод</td>
+                        <td>int, string, void</td>
+                    </tr>
+                    <tr>
+                        <td>Имя метода</td>
+                        <td>Уникальный идентификатор метода</td>
+                        <td>CalculateSum, PrintMessage</td>
+                    </tr>
+                    <tr>
+                        <td>Параметры</td>
+                        <td>Данные, передаваемые в метод</td>
+                        <td>(int a, int b)</td>
+                    </tr>
+                    <tr>
+                        <td>Тело метода</td>
+                        <td>Блок кода, выполняющий нужные операции</td>
+                        <td>{ return a + b; }</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C# — Пример простого метода</div>
+<pre><code class="language-csharp">
+// Метод без параметров и возвращаемого значения
+public void PrintHello()
+{
+    Console.WriteLine("Hello, World!");
+}
+
+// Метод с параметрами и возвращаемым значением
+public int CalculateSum(int a, int b)
+{
+    return a + b;
+}
+
+// Вызов методов
+PrintHello();
+int result = CalculateSum(5, 3);
+Console.WriteLine($"Сумма: {result}");
+</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> В C# все методы должны быть объявлены внутри класса. В отличие от некоторых других языков, в C# нет глобальных функций.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Параметры методов</h2>
+        <p>Параметры позволяют передавать данные в методы для обработки. В C# существует несколько способов передачи параметров.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип параметра</th>
+                        <th>Описание</th>
+                        <th>Синтаксис</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>По значению</td>
+                        <td>Значение копируется в параметр, исходная переменная не изменяется</td>
+                        <td>void Method(int param)</td>
+                    </tr>
+                    <tr>
+                        <td>По ссылке (ref)</td>
+                        <td>Передается ссылка на переменную, метод может изменить исходное значение</td>
+                        <td>void Method(ref int param)</td>
+                    </tr>
+                    <tr>
+                        <td>Выходные параметры (out)</td>
+                        <td>Переменная инициализируется в методе</td>
+                        <td>void Method(out int param)</td>
+                    </tr>
+                    <tr>
+                        <td>Массив параметров (params)</td>
+                        <td>Позволяет передавать переменное количество аргументов</td>
+                        <td>void Method(params int[] values)</td>
+                    </tr>
+                    <tr>
+                        <td>Необязательные параметры</td>
+                        <td>Параметры со значениями по умолчанию</td>
+                        <td>void Method(int a, int b = 10)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C# — Примеры параметров</div>
+<pre><code class="language-csharp">
+// По значению
+void SquareValue(int number)
+{
+    number = number * number;
+    Console.WriteLine($"Внутри метода: {number}");
+}
+
+// По ссылке (ref)
+void SquareRef(ref int number)
+{
+    number = number * number;
+    Console.WriteLine($"Внутри метода: {number}");
+}
+
+// Выходные параметры (out)
+bool TryDivide(int dividend, int divisor, out int result)
+{
+    if (divisor == 0)
+    {
+        result = 0;
+        return false;
+    }
+    result = dividend / divisor;
+    return true;
+}
+
+// Параметры (params)
+int Sum(params int[] numbers)
+{
+    int total = 0;
+    foreach (int num in numbers)
+    {
+        total += num;
+    }
+    return total;
+}
+
+// Необязательные параметры
+void PrintInfo(string name, int age = 18, string country = "Russia")
+{
+    Console.WriteLine($"Имя: {name}, Возраст: {age}, Страна: {country}");
+}
+
+// Использование
+int x = 5;
+SquareValue(x);      // x = 5
+SquareRef(ref x);    // x изменится на 25
+
+if (TryDivide(10, 2, out int result))
+{
+    Console.WriteLine($"Результат: {result}");
+}
+
+int total = Sum(1, 2, 3, 4, 5);
+PrintInfo("Анна");
+PrintInfo("Борис", 25, "USA");
+</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте <code>out</code>, когда метод должен вернуть несколько значений. Для сложных случаев — кортежи или классы.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Возвращение значений</h2>
+        <p>Оператор <code>return</code> используется для возврата значения из метода и завершения его выполнения.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип возврата</th>
+                        <th>Описание</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Возврат значения</td>
+                        <td>Метод возвращает значение указанного типа</td>
+                        <td>return 42;</td>
+                    </tr>
+                    <tr>
+                        <td>Без значения</td>
+                        <td>Для методов с void</td>
+                        <td>return;</td>
+                    </tr>
+                    <tr>
+                        <td>Выражение</td>
+                        <td>Возвращается результат вычисления</td>
+                        <td>return a + b;</td>
+                    </tr>
+                    <tr>
+                        <td>Условный</td>
+                        <td>Возврат зависит от условия</td>
+                        <td>if (x > 0) return true;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C# — Примеры return</div>
+<pre><code class="language-csharp">
+int GetAnswer()
+{
+    return 42;
+}
+
+double CalculateCircleArea(double radius)
+{
+    return Math.PI * radius * radius;
+}
+
+string GetGrade(int score)
+{
+    if (score >= 90) return "A";
+    if (score >= 80) return "B";
+    if (score >= 70) return "C";
+    if (score >= 60) return "D";
+    return "F";
+}
+
+void ProcessData(string data)
+{
+    if (string.IsNullOrEmpty(data))
+    {
+        Console.WriteLine("Данные пустые");
+        return; // завершение
+    }
+    Console.WriteLine($"Обработка: {data}");
+}
+
+(int, int) GetMinMax(int[] numbers)
+{
+    if (numbers.Length == 0) return (0, 0);
+    int min = numbers[0], max = numbers[0];
+    foreach (int num in numbers)
+    {
+        if (num < min) min = num;
+        if (num > max) max = num;
+    }
+    return (min, max);
+}
+</code></pre>
+        </div>
+        
+        <div class="warning">
+            <p><strong>Важно:</strong> В методах с типом возврата компилятор требует, чтобы все пути содержали оператор <code>return</code> с правильным значением.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Практические примеры</h2>
+        
+        <h3>Рекурсивный метод</h3>
+        <div class="code-container">
+            <div class="code-header">C# — Рекурсия (факториал)</div>
+<pre><code class="language-csharp">
+long Factorial(int n)
+{
+    if (n <= 1)
+        return 1;
+    return n * Factorial(n - 1);
+}
+
+// Использование
+long result = Factorial(5);
+Console.WriteLine($"Факториал 5: {result}");
+</code></pre>
+        </div>
+        
+        <h3>Перегрузка методов</h3>
+        <div class="code-container">
+            <div class="code-header">C# — Перегрузка методов</div>
+<pre><code class="language-csharp">
+public class Calculator
+{
+    public int Add(int a, int b) => a + b;
+    public int Add(int a, int b, int c) => a + b + c;
+    public double Add(double a, double b) => a + b;
+    public int Add(params int[] numbers)
+    {
+        int sum = 0;
+        foreach (int num in numbers) sum += num;
+        return sum;
+    }
+}
+
+// Использование
+Calculator calc = new Calculator();
+Console.WriteLine(calc.Add(2, 3));        // 5
+Console.WriteLine(calc.Add(2, 3, 5));     // 10
+Console.WriteLine(calc.Add(2.5, 3.7));    // 6.2
+Console.WriteLine(calc.Add(1, 2, 3, 4));  // 10
+</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Перегрузка удобна, когда метод выполняет однотипную задачу, но с разными наборами параметров.</p>
+        </div>
+    </div>
+</body>
+</html>

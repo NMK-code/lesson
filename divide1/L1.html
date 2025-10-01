@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Введение в WPF</title>
+
+  <!-- Стили для лекции -->
+  <link rel="stylesheet" href="stylesForLesson.css">
+
+  <!-- Prism.js для подсветки -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-xaml.min.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>Введение в WPF</h1>
+  <p>Познакомимся с основами Windows Presentation Foundation, его назначением и возможностями</p>
+</header>
+
+<div class="container">
+  <h2>Цель лекции</h2>
+  <p>Понять, что такое WPF, зачем он нужен, его основные возможности и отличие от Windows Forms.</p>
+
+  <h2>Основной материал</h2>
+
+  <h3>Что такое WPF?</h3>
+  <p>Windows Presentation Foundation (WPF) — это технология Microsoft для создания современных настольных приложений с богатым пользовательским интерфейсом. WPF позволяет создавать графически насыщенные приложения с поддержкой 2D/3D графики, анимаций и медиаконтента.</p>
+
+  <h3>Преимущества WPF</h3>
+  <ul>
+    <li>Разделение логики и интерфейса через XAML и Code-behind</li>
+    <li>Поддержка масштабируемой графики и DPI</li>
+    <li>Богатый набор элементов управления и стилей</li>
+    <li>Возможность создания сложных визуальных эффектов и анимаций</li>
+    <li>Интеграция с другими технологиями .NET</li>
+  </ul>
+
+  <h3>Структура WPF-приложения</h3>
+  <p>Типичное WPF-приложение состоит из следующих компонентов:</p>
+  <ul>
+    <li><strong>App.xaml</strong> — главный файл приложения, содержит глобальные ресурсы и настройки.</li>
+    <li><strong>MainWindow.xaml</strong> — основной интерфейс приложения, написанный на XAML.</li>
+    <li><strong>Code-behind</strong> — C# код, обрабатывающий события и логику взаимодействия.</li>
+  </ul>
+
+  <div class="code-container">
+    <div class="code-header">Пример XAML (MainWindow.xaml)</div>
+    <pre class="language-markup">&lt;Window x:Class="WpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Пример WPF" Height="250" Width="400"&gt;
+    &lt;Grid&gt;
+        &lt;Button Content="Нажми меня" Width="120" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" /&gt;
+    &lt;/Grid&gt;
+&lt;/Window&gt;</pre>
+  </div>
+
+  <div class="note">
+    <strong>Примечание:</strong> XAML — это декларативный язык разметки, который описывает интерфейс приложения и его элементы.
+  </div>
+
+  <h3>Сравнение WPF и Windows Forms</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Особенность</th>
+        <th>Windows Forms</th>
+        <th>WPF</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Графика</td>
+        <td>Ограниченная 2D графика</td>
+        <td>2D и 3D, анимации, стилизация</td>
+      </tr>
+      <tr>
+        <td>Разделение логики и UI</td>
+        <td>Смешение кода и интерфейса</td>
+        <td>Полное разделение через XAML и Code-behind</td>
+      </tr>
+      <tr>
+        <td>Масштабируемость</td>
+        <td>Сложно поддерживать разные DPI</td>
+        <td>Поддержка масштабируемой графики и векторных элементов</td>
+      </tr>
+      <tr>
+        <td>Стили и темы</td>
+        <td>Ограниченные возможности</td>
+        <td>Полная кастомизация через Styles, Templates, Triggers</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="tip">
+    <strong>Совет:</strong> Для современных приложений рекомендуется использовать WPF вместо Windows Forms, если нужна гибкая и графически насыщенная оболочка.
+  </div>
+
+</div>
+
+</body>
+</html>

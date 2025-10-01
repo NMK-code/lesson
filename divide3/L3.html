@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Триггеры в WPF</title>
+
+  <!-- Подключаем твой стиль -->
+  <link rel="stylesheet" href="stylesForLesson.css" />
+
+  <!-- Prism.js для подсветки кода -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-markup.min.js"></script>
+</head>
+<body>
+
+<header>
+  <h1>Состояния и интерактивность в WPF</h1>
+  <p>Использование триггеров для создания отзывчивых и интерактивных интерфейсов</p>
+</header>
+
+<div class="container">
+  <h2>Типы триггеров в WPF</h2>
+  <p>Триггеры позволяют автоматически изменять свойства элементов или запускать действия при выполнении условий. Это один из главных инструментов для интерактивных интерфейсов.</p>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Тип триггера</th>
+          <th>Назначение</th>
+          <th>Условие срабатывания</th>
+          <th>Пример</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>Property Trigger</b></td>
+          <td>Изменение свойств при изменении других свойств</td>
+          <td>Значение свойства элемента</td>
+          <td>Изменение внешнего вида кнопки при наведении</td>
+        </tr>
+        <tr>
+          <td><b>Data Trigger</b></td>
+          <td>Изменение свойств на основе данных привязки</td>
+          <td>Значение привязанного свойства</td>
+          <td>Изменение цвета текста при отрицательном значении</td>
+        </tr>
+        <tr>
+          <td><b>Event Trigger</b></td>
+          <td>Запуск действий при событии</td>
+          <td>Возникновение события</td>
+          <td>Запуск анимации при клике</td>
+        </tr>
+        <tr>
+          <td><b>MultiTrigger</b></td>
+          <td>Изменение свойств при нескольких условиях</td>
+          <td>Несколько свойств выполняют условия</td>
+          <td>Вид кнопки при наведении и активности</td>
+        </tr>
+        <tr>
+          <td><b>MultiDataTrigger</b></td>
+          <td>Условия по нескольким привязкам</td>
+          <td>Несколько свойств данных удовлетворяют условиям</td>
+          <td>Сложные бизнес-правила</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    📌 <b>Примечание:</b> триггеры позволяют реализовать гибкое поведение прямо в XAML без C#-кода.
+  </div>
+</div>
+
+<div class="container">
+  <h2>Property Trigger</h2>
+  <p>Срабатывают при изменении свойства элемента.</p>
+
+  <div class="code-container">
+    <div class="code-header">XAML — пример для кнопки</div>
+    <pre><code class="language-markup">&lt;Style TargetType="Button"&gt;
+    &lt;Setter Property="Background" Value="LightBlue" /&gt;
+    &lt;Setter Property="Foreground" Value="Black" /&gt;
+    &lt;Style.Triggers&gt;
+        &lt;Trigger Property="IsMouseOver" Value="True"&gt;
+            &lt;Setter Property="Background" Value="Blue" /&gt;
+            &lt;Setter Property="Foreground" Value="White" /&gt;
+            &lt;Setter Property="FontWeight" Value="Bold" /&gt;
+        &lt;/Trigger&gt;
+        &lt;Trigger Property="IsPressed" Value="True"&gt;
+            &lt;Setter Property="Background" Value="DarkBlue" /&gt;
+            &lt;Setter Property="Foreground" Value="White" /&gt;
+        &lt;/Trigger&gt;
+    &lt;/Style.Triggers&gt;
+&lt;/Style&gt;</code></pre>
+  </div>
+</div>
+
+<div class="container">
+  <h2>Data Trigger</h2>
+  <p>Срабатывают на основе привязанных данных.</p>
+
+  <div class="code-container">
+    <div class="code-header">XAML — изменение цвета по статусу</div>
+    <pre><code class="language-markup">&lt;Style TargetType="TextBlock"&gt;
+    &lt;Style.Triggers&gt;
+        &lt;DataTrigger Binding="{Binding Status}" Value="Error"&gt;
+            &lt;Setter Property="Foreground" Value="Red" /&gt;
+            &lt;Setter Property="FontWeight" Value="Bold" /&gt;
+        &lt;/DataTrigger&gt;
+        &lt;DataTrigger Binding="{Binding Status}" Value="Warning"&gt;
+            &lt;Setter Property="Foreground" Value="Orange" /&gt;
+        &lt;/DataTrigger&gt;
+        &lt;DataTrigger Binding="{Binding Status}" Value="Success"&gt;
+            &lt;Setter Property="Foreground" Value="Green" /&gt;
+        &lt;/DataTrigger&gt;
+    &lt;/Style.Triggers&gt;
+&lt;/Style&gt;</code></pre>
+  </div>
+
+  <div class="code-container">
+    <div class="code-header">C# — конвертер для DataTrigger</div>
+    <pre><code class="language-csharp">public class NegativeValueConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, 
+                          object parameter, CultureInfo culture)
+    {
+        if (value is double d) return d &lt; 0;
+        if (value is int i) return i &lt; 0;
+        return false;
+    }
+
+    public object ConvertBack(object value, Type targetType, 
+                              object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}</code></pre>
+  </div>
+</div>
+
+<div class="container">
+  <h2>Event Trigger</h2>
+  <p>Используются для запуска анимаций и действий при событиях.</p>
+
+  <div class="code-container">
+    <div class="code-header">XAML — пример анимации при клике</div>
+    <pre><code class="language-markup">&lt;Button Content="Нажми меня" Width="100" Height="30"&gt;
+    &lt;Button.Triggers&gt;
+        &lt;EventTrigger RoutedEvent="Button.Click"&gt;
+            &lt;BeginStoryboard&gt;
+                &lt;Storyboard&gt;
+                    &lt;DoubleAnimation Storyboard.TargetProperty="(Button.Width)"
+                                     To="150" Duration="0:0:0.3" AutoReverse="True"/&gt;
+                &lt;/Storyboard&gt;
+            &lt;/BeginStoryboard&gt;
+        &lt;/EventTrigger&gt;
+    &lt;/Button.Triggers&gt;
+&lt;/Button&gt;</code></pre>
+  </div>
+
+  <div class="tip">
+    💡 Используйте EventTrigger для плавных переходов и анимаций.
+  </div>
+</div>
+
+<div class="container">
+  <h2>MultiTrigger и MultiDataTrigger</h2>
+  <p>Позволяют задавать несколько условий одновременно.</p>
+
+  <div class="code-container">
+    <div class="code-header">XAML — MultiTrigger для кнопки</div>
+    <pre><code class="language-markup">&lt;Style TargetType="Button"&gt;
+    &lt;Style.Triggers&gt;
+        &lt;MultiTrigger&gt;
+            &lt;MultiTrigger.Conditions&gt;
+                &lt;Condition Property="IsMouseOver" Value="True" /&gt;
+                &lt;Condition Property="IsEnabled" Value="True" /&gt;
+            &lt;/MultiTrigger.Conditions&gt;
+            &lt;Setter Property="Background" Value="LightGreen" /&gt;
+            &lt;Setter Property="Cursor" Value="Hand" /&gt;
+        &lt;/MultiTrigger&gt;
+    &lt;/Style.Triggers&gt;
+&lt;/Style&gt;</code></pre>
+  </div>
+
+  <div class="warning">
+    ⚠️ <b>Важно:</b> не усложняйте условия чрезмерно — это затруднит поддержку кода.
+  </div>
+</div>
+
+</body>
+</html>

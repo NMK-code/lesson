@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Страница не найдена</title>
+  <style>
+    /* ====== Reset ====== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f4f6fb;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ====== 404 Container ====== */
+    .not-found {
+      text-align: center;
+      animation: fadeIn 1.2s ease;
+    }
+
+    .not-found h1 {
+      font-size: 8rem;
+      font-weight: bold;
+      color: #4b2e83;
+      position: relative;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .not-found h1::after {
+      content: "✦";
+      position: absolute;
+      right: -40px;
+      top: 20px;
+      font-size: 2rem;
+      color: #6c4bb4;
+      animation: spin 4s linear infinite;
+    }
+
+    .not-found h2 {
+      font-size: 2rem;
+      margin-top: 10px;
+      color: #6c4bb4;
+      animation: fadeInUp 1.5s ease;
+    }
+
+    .not-found p {
+      margin: 20px 0;
+      font-size: 1.1rem;
+      color: #555;
+      animation: fadeInUp 2s ease;
+    }
+
+    .not-found a {
+      display: inline-block;
+      background: linear-gradient(135deg, #4b2e83, #6c4bb4);
+      color: #fff;
+      padding: 12px 25px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: fadeInUp 2.3s ease;
+    }
+
+    .not-found a:hover {
+      transform: scale(1.08);
+      box-shadow: 0 8px 20px rgba(75,46,131,0.4);
+    }
+
+    /* ====== Animations ====== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="not-found">
+    <h1>404</h1>
+    <h2>Страница не найдена</h2>
+    <p>Похоже, вы заблудились 👀</p>
+    <a href="index.html">Вернуться на главную</a>
+  </div>
+</body>
+</html>

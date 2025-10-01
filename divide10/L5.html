@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generics и коллекции в C#</title>
+    <link rel="stylesheet" href="stylesForLesson.css">
+
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Generics и коллекции в C#</h1>
+        <p>Обобщённое программирование и современные структуры данных</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое Generics?</h2>
+        <p><strong>Generics (обобщения)</strong> — это возможность создавать классы, интерфейсы, методы и делегаты,
+           которые работают с разными типами данных, сохраняя при этом строгую типизацию.</p>
+
+        <p>До появления Generics приходилось использовать тип <code>object</code>, что приводило к лишним
+           преобразованиям типов и ошибкам. Generics решают эту проблему.</p>
+
+        <div class="code-container">
+            <div class="code-header">C# — Пример обобщённого класса</div>
+<pre><code class="language-csharp">
+class Box&lt;T&gt;
+{
+    public T Value { get; set; }
+    public Box(T value) =&gt; Value = value;
+}
+
+var intBox = new Box&lt;int&gt;(10);
+var strBox = new Box&lt;string&gt;("Hello");
+</code></pre>
+        </div>
+
+        <div class="note">
+            <p><strong>Примечание:</strong> Generics позволяют писать универсальный и безопасный код без дублирования.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Ограничения Generics</h2>
+        <p>Можно накладывать <em>ограничения</em> на параметры типа с помощью ключевого слова <code>where</code>:</p>
+
+        <ul>
+            <li><code>where T : struct</code> — только значимые типы</li>
+            <li><code>where T : class</code> — только ссылочные типы</li>
+            <li><code>where T : new()</code> — наличие конструктора без параметров</li>
+            <li><code>where T : BaseClass</code> — наследование от класса</li>
+            <li><code>where T : IInterface</code> — реализация интерфейса</li>
+        </ul>
+
+        <div class="code-container">
+            <div class="code-header">C# — Пример с ограничениями</div>
+<pre><code class="language-csharp">
+class Repository&lt;T&gt; where T : IEntity, new()
+{
+    public List&lt;T&gt; Items { get; } = new List&lt;T&gt;();
+    public void Add(T item) =&gt; Items.Add(item);
+}
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Коллекции в C#</h2>
+        <p>В .NET есть два семейства коллекций:</p>
+        <ul>
+            <li><strong>Негeneric</strong> (устаревшие, в <code>System.Collections</code>)</li>
+            <li><strong>Generic</strong> (рекомендуемые, в <code>System.Collections.Generic</code>)</li>
+        </ul>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Коллекция</th>
+                        <th>Описание</th>
+                        <th>Когда использовать</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>List&lt;T&gt;</strong></td>
+                        <td>Динамический массив</td>
+                        <td>Когда нужен изменяемый список</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dictionary&lt;TKey,TValue&gt;</strong></td>
+                        <td>Хранение пар «ключ–значение»</td>
+                        <td>Быстрый поиск по ключу</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Queue&lt;T&gt;</strong></td>
+                        <td>Очередь (FIFO)</td>
+                        <td>Организация задач в порядке поступления</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stack&lt;T&gt;</strong></td>
+                        <td>Стек (LIFO)</td>
+                        <td>История действий, рекурсия</td>
+                    </tr>
+                    <tr>
+                        <td><strong>HashSet&lt;T&gt;</strong></td>
+                        <td>Множество без повторов</td>
+                        <td>Хранение уникальных элементов</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SortedList&lt;TKey,TValue&gt;</strong></td>
+                        <td>Словарь с отсортированными ключами</td>
+                        <td>Когда нужен быстрый поиск и сортировка</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Примеры использования коллекций</h2>
+
+        <h3>List&lt;T&gt;</h3>
+<pre><code class="language-csharp">
+var list = new List&lt;int&gt; {1, 2, 3};
+list.Add(4);
+Console.WriteLine(list[2]); // 3
+</code></pre>
+
+        <h3>Dictionary&lt;TKey,TValue&gt;</h3>
+<pre><code class="language-csharp">
+var dict = new Dictionary&lt;string, int&gt;();
+dict["apple"] = 5;
+dict["banana"] = 3;
+
+Console.WriteLine(dict["apple"]); // 5
+</code></pre>
+
+        <h3>Queue&lt;T&gt; и Stack&lt;T&gt;</h3>
+<pre><code class="language-csharp">
+var queue = new Queue&lt;string&gt;();
+queue.Enqueue("первый");
+queue.Enqueue("второй");
+Console.WriteLine(queue.Dequeue()); // "первый"
+
+var stack = new Stack&lt;string&gt;();
+stack.Push("A");
+stack.Push("B");
+Console.WriteLine(stack.Pop()); // "B"
+</code></pre>
+    </div>
+
+    <div class="container">
+        <h2>Итерация с foreach</h2>
+        <p>Все коллекции поддерживают интерфейс <code>IEnumerable&lt;T&gt;</code>, поэтому их можно перебирать циклом <code>foreach</code>.</p>
+
+        <div class="code-container">
+            <div class="code-header">C# — Пример перебора коллекции</div>
+<pre><code class="language-csharp">
+var names = new List&lt;string&gt; { "Аня", "Борис", "Света" };
+
+foreach (var name in names)
+    Console.WriteLine(name);
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Лучшие практики</h2>
+        <ul>
+            <li>Предпочитайте <strong>Generic-коллекции</strong> негeneric-аналогам.</li>
+            <li>Используйте <code>List&lt;T&gt;</code> вместо массивов, если коллекция должна изменяться.</li>
+            <li>Для поиска по ключу используйте <code>Dictionary&lt;TKey,TValue&gt;</code>.</li>
+            <li>Если нужны уникальные элементы — берите <code>HashSet&lt;T&gt;</code>.</li>
+            <li>Не используйте <code>ArrayList</code> и <code>Hashtable</code> в новом коде — они устарели.</li>
+        </ul>
+
+        <div class="warning">
+            <p><strong>Важно:</strong> Коллекции не являются потокобезопасными. 
+               Для многопоточных приложений используйте <code>ConcurrentDictionary&lt;TKey,TValue&gt;</code> и другие классы из <code>System.Collections.Concurrent</code>.</p>
+        </div>
+    </div>
+
+</body>
+</html>

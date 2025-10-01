@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Делегаты и события в C#</title>
+    <link rel="stylesheet" href="stylesForLesson.css">
+
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Делегаты и события в C#</h1>
+        <p>Механизмы обратных вызовов и реактивного программирования</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое делегаты?</h2>
+        <p>
+            Делегат — это тип, который хранит ссылку на метод и позволяет вызывать его косвенно. 
+            Делегаты используются для реализации обратных вызовов и событийного программирования.
+        </p>
+
+        <div class="code-container">
+            <div class="code-header">C# — Пример делегата</div>
+<pre><code class="language-csharp">
+public delegate void MyDelegate(string message);
+
+class Program
+{
+    static void ShowMessage(string msg) => Console.WriteLine(msg);
+
+    static void Main()
+    {
+        MyDelegate del = ShowMessage;
+        del("Привет, делегаты!");
+    }
+}
+</code></pre>
+        </div>
+
+        <div class="note">
+            <p><strong>Примечание:</strong> Делегаты безопасны по типам — метод, который они вызывают, должен соответствовать их сигнатуре.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Что такое события?</h2>
+        <p>
+            Событие — это механизм, основанный на делегатах, позволяющий объекту уведомлять другие объекты о наступлении определённого действия.
+        </p>
+
+        <div class="code-container">
+            <div class="code-header">C# — Пример события</div>
+<pre><code class="language-csharp">
+class Button
+{
+    public delegate void ClickHandler(string message);
+    public event ClickHandler OnClick;
+
+    public void Click()
+    {
+        OnClick?.Invoke("Кнопка нажата!");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Button button = new Button();
+        button.OnClick += (msg) => Console.WriteLine(msg);
+
+        button.Click(); // Выведет: "Кнопка нажата!"
+    }
+}
+</code></pre>
+        </div>
+
+        <div class="tip">
+            <p><strong>Совет:</strong> Для событий лучше использовать встроенный делегат <code>EventHandler</code> или <code>EventHandler&lt;T&gt;</code>.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Использование EventHandler</h2>
+        <p>
+            Это стандартный делегат для событий, позволяющий передавать данные о событии.
+        </p>
+
+        <div class="code-container">
+            <div class="code-header">C# — Пример с EventHandler</div>
+<pre><code class="language-csharp">
+class ButtonEventArgs : EventArgs
+{
+    public string Message { get; }
+    public ButtonEventArgs(string msg) => Message = msg;
+}
+
+class Button
+{
+    public event EventHandler&lt;ButtonEventArgs&gt; OnClick;
+
+    public void Click()
+    {
+        OnClick?.Invoke(this, new ButtonEventArgs("Кнопка нажата!"));
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Button button = new Button();
+        button.OnClick += (sender, e) => Console.WriteLine(e.Message);
+
+        button.Click();
+    }
+}
+</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Сравнение делегатов и событий</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Делегаты</th>
+                        <th>События</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Хранят ссылку на метод</td>
+                        <td>Используют делегаты внутри</td>
+                    </tr>
+                    <tr>
+                        <td>Могут вызываться напрямую</td>
+                        <td>Могут вызываться только внутри класса-владельца</td>
+                    </tr>
+                    <tr>
+                        <td>Используются для обратных вызовов</td>
+                        <td>Используются для уведомления подписчиков</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Лучшие практики</h2>
+        <ul>
+            <li>Используйте события для уведомления о действиях.</li>
+            <li>Для событий используйте <code>EventHandler</code> и <code>EventArgs</code>.</li>
+            <li>Снимайте обработчики событий при ненадобности, чтобы избежать утечек памяти.</li>
+        </ul>
+
+        <div class="warning">
+            <p><strong>Важно:</strong> Если не отписываться от событий, объекты могут оставаться в памяти дольше, чем нужно.</p>
+        </div>
+    </div>
+
+</body>
+</html>

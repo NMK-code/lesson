@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Полиморфизм в C#</title>
+    
+    <!-- Ваш CSS -->
+    <link rel="stylesheet" href="stylesForLesson.css">
+    
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Полиморфизм в C#</h1>
+        <p>Принцип ООП для изменения поведения объектов в зависимости от их типа</p>
+    </header>
+
+    <div class="container">
+        <h2>Что такое полиморфизм?</h2>
+        <p>
+            Полиморфизм — это возможность объектов с одинаковым интерфейсом 
+            вести себя по-разному в зависимости от их конкретного типа.
+        </p>
+        <p>
+            Существует два вида полиморфизма:
+        </p>
+        <ul>
+            <li><strong>Компиляционный (перегрузка)</strong> — определяется на этапе компиляции (например, перегрузка методов).</li>
+            <li><strong>Времени выполнения (наследование и override)</strong> — определяется во время работы программы (виртуальные методы, интерфейсы).</li>
+        </ul>
+        <div class="note">
+            <p><strong>Пример из жизни:</strong> Кнопка «Печать» может печатать на принтер, сохранять в PDF или отправлять в облако. 
+            Действие одно — результат зависит от конкретной реализации.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Перегрузка методов (Compile-time полиморфизм)</h2>
+        <p>
+            В C# можно создавать несколько методов с одинаковым именем, 
+            если их параметры отличаются по типу или количеству.
+        </p>
+        <div class="code-container">
+            <div class="code-header">C#: Перегрузка методов</div>
+            <pre><code class="language-csharp">class Calculator
+{
+    public int Add(int a, int b) => a + b;
+    public double Add(double a, double b) => a + b;
+    public int Add(int a, int b, int c) => a + b + c;
+}</code></pre>
+        </div>
+        <p>Компилятор сам определяет, какой метод вызвать, исходя из аргументов.</p>
+    </div>
+
+    <div class="container">
+        <h2>Виртуальные методы и override (Run-time полиморфизм)</h2>
+        <p>
+            Если метод помечен как <code>virtual</code>, его можно переопределить 
+            в производных классах с помощью <code>override</code>.
+        </p>
+        <div class="code-container">
+            <div class="code-header">C#: Пример run-time полиморфизма</div>
+            <pre><code class="language-csharp">class Animal
+{
+    public virtual void Speak()
+    {
+        Console.WriteLine("Животное издаёт звук");
+    }
+}
+
+class Dog : Animal
+{
+    public override void Speak()
+    {
+        Console.WriteLine("Собака лает");
+    }
+}
+
+class Cat : Animal
+{
+    public override void Speak()
+    {
+        Console.WriteLine("Кошка мяукает");
+    }
+}</code></pre>
+        </div>
+        <p>
+            Если переменная имеет тип <code>Animal</code>, но хранит <code>Dog</code> или <code>Cat</code>, 
+            то вызов <code>Speak()</code> приведёт к разному результату.
+        </p>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Использование полиморфизма</div>
+            <pre><code class="language-csharp">Animal myAnimal = new Dog();
+myAnimal.Speak(); // Выведет: "Собака лает"
+
+myAnimal = new Cat();
+myAnimal.Speak(); // Выведет: "Кошка мяукает"</code></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Абстрактные классы</h2>
+        <p>
+            Если метод не имеет реализации и должен быть переопределён в наследниках, 
+            используется ключевое слово <code>abstract</code>.
+        </p>
+        <div class="code-container">
+            <div class="code-header">C#: Пример с абстрактным классом</div>
+            <pre><code class="language-csharp">abstract class Shape
+{
+    public abstract void Draw();
+}
+
+class Circle : Shape
+{
+    public override void Draw()
+    {
+        Console.WriteLine("Рисуем круг");
+    }
+}
+
+class Rectangle : Shape
+{
+    public override void Draw()
+    {
+        Console.WriteLine("Рисуем прямоугольник");
+    }
+}</code></pre>
+        </div>
+        <p>
+            Абстрактные классы задают общий интерфейс, но требуют реализации в наследниках.
+        </p>
+        
+        <div class="warning">
+            <p><strong>Важно:</strong> Нельзя создать экземпляр абстрактного класса. Он может содержать как абстрактные, так и обычные методы с реализацией.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Полиморфизм через интерфейсы</h2>
+        <p>
+            Интерфейсы — ещё один способ реализации полиморфизма: 
+            разные классы могут реализовать один интерфейс по-своему.
+        </p>
+        <div class="code-container">
+            <div class="code-header">C#: Пример с интерфейсом</div>
+            <pre><code class="language-csharp">interface IDrawable
+{
+    void Draw();
+}
+
+class Line : IDrawable
+{
+    public void Draw()
+    {
+        Console.WriteLine("Рисуем линию");
+    }
+}
+
+class Triangle : IDrawable
+{
+    public void Draw()
+    {
+        Console.WriteLine("Рисуем треугольник");
+    }
+}</code></pre>
+        </div>
+        <p>
+            Оба класса реализуют <code>IDrawable</code>, но делают это по-разному.
+        </p>
+    </div>
+
+    <div class="container">
+        <h2>Практический пример</h2>
+        <p>
+            Создадим систему оплаты, где разные способы оплаты реализуют один интерфейс.
+        </p>
+        <div class="code-container">
+            <div class="code-header">C#: Полиморфизм в оплате</div>
+            <pre><code class="language-csharp">interface IPayment
+{
+    void Pay(decimal amount);
+}
+
+class CardPayment : IPayment
+{
+    public void Pay(decimal amount)
+    {
+        Console.WriteLine($"Оплата {amount}₽ картой");
+    }
+}
+
+class CashPayment : IPayment
+{
+    public void Pay(decimal amount)
+    {
+        Console.WriteLine($"Оплата {amount}₽ наличными");
+    }
+}
+
+class PayPalPayment : IPayment
+{
+    public void Pay(decimal amount)
+    {
+        Console.WriteLine($"Оплата {amount}₽ через PayPal");
+    }
+}</code></pre>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Использование системы оплаты</div>
+            <pre><code class="language-csharp">class PaymentProcessor
+{
+    public void ProcessPayment(IPayment payment, decimal amount)
+    {
+        payment.Pay(amount);
+    }
+}
+
+// Использование
+var processor = new PaymentProcessor();
+processor.ProcessPayment(new CardPayment(), 1000);
+processor.ProcessPayment(new PayPalPayment(), 500);</code></pre>
+        </div>
+        
+        <p>
+            Мы можем хранить коллекцию <code>IPayment</code> и обрабатывать все виды оплат одинаково, 
+            не зная конкретный тип.
+        </p>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Используйте интерфейсы, когда нужно обеспечить полиморфное поведение для классов, не связанных наследованием.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Сравнение virtual/abstract/interface</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Подход</th>
+                        <th>Когда использовать</th>
+                        <th>Особенности</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>virtual/override</strong></td>
+                        <td>Когда базовый класс предоставляет реализацию по умолчанию</td>
+                        <td>Наследники могут переопределить поведение</td>
+                    </tr>
+                    <tr>
+                        <td><strong>abstract</strong></td>
+                        <td>Когда базовый класс не может предоставить осмысленную реализацию</td>
+                        <td>Требует обязательной реализации в наследниках</td>
+                    </tr>
+                    <tr>
+                        <td><strong>interface</strong></td>
+                        <td>Когда нужно определить контракт для несвязанных классов</td>
+                        <td>Поддержка множественного наследования</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Вывод</h2>
+        <ul>
+            <li>Полиморфизм позволяет писать гибкий и расширяемый код.</li>
+            <li>Компиляционный полиморфизм реализуется перегрузкой методов.</li>
+            <li>Полиморфизм времени выполнения — через наследование, virtual/override и интерфейсы.</li>
+            <li>Абстрактные классы и интерфейсы задают единый контракт для всех реализаций.</li>
+            <li>Выбор между virtual, abstract и interface зависит от конкретной задачи.</li>
+        </ul>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Полиморфизм — один из четырех основных принципов ООП наряду с инкапсуляцией, наследованием и абстракцией.</p>
+        </div>
+    </div>
+</body>
+</html>

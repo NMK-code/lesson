@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Типы данных в C#</title>
+    <link rel="stylesheet" href="stylesForLesson.css">
+
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Типы данных в C#</h1>
+        <p>Изучение простых и структурированных типов данных для эффективного программирования</p>
+    </header>
+
+    <div class="container">
+        <h2>Простые типы данных (Value Types)</h2>
+        <p>Простые типы данных хранят непосредственно свои значения в стеке. Они эффективны для хранения небольших данных.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип данных</th>
+                        <th>Размер</th>
+                        <th>Диапазон значений</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>int</strong></td>
+                        <td>4 байта</td>
+                        <td>-2,147,483,648 до 2,147,483,647</td>
+                        <td><code>int age = 25;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>long</strong></td>
+                        <td>8 байт</td>
+                        <td>-9,223,372,036,854,775,808 до 9,223,372,036,854,775,807</td>
+                        <td><code>long population = 7800000000L;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>float</strong></td>
+                        <td>4 байта</td>
+                        <td>±1.5 × 10⁻⁴⁵ до ±3.4 × 10³⁸</td>
+                        <td><code>float price = 9.99f;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>double</strong></td>
+                        <td>8 байт</td>
+                        <td>±5.0 × 10⁻³²⁴ до ±1.7 × 10³⁰⁸</td>
+                        <td><code>double pi = 3.1415926535;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>decimal</strong></td>
+                        <td>16 байт</td>
+                        <td>±1.0 × 10⁻²⁸ до ±7.9 × 10²⁸</td>
+                        <td><code>decimal money = 199.99m;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>bool</strong></td>
+                        <td>1 байт</td>
+                        <td>true или false</td>
+                        <td><code>bool isActive = true;</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>char</strong></td>
+                        <td>2 байта</td>
+                        <td>Символы Unicode</td>
+                        <td><code>char grade = 'A';</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>byte</strong></td>
+                        <td>1 байт</td>
+                        <td>0 до 255</td>
+                        <td><code>byte red = 255;</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C# — Пример использования простых типов</div>
+<pre><code class="language-csharp">
+// Объявление и инициализация переменных
+int age = 25;
+double height = 1.75;
+char initial = 'J';
+bool isStudent = true;
+
+// Арифметические операции
+int x = 10;
+int y = 3;
+int sum = x + y;        // 13
+int difference = x - y; // 7
+int product = x * y;    // 30
+int quotient = x / y;   // 3 (целочисленное деление)
+int remainder = x % y;  // 1 (остаток от деления)
+
+// Преобразование типов
+double preciseDivision = (double)x / y; // 3.333...
+</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Простые типы эффективны по памяти, но при передаче в методы создается копия значения.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Структурированные типы данных (Reference Types)</h2>
+        <p>Структурированные типы хранят ссылку на данные в куче. Они подходят для хранения сложных структур данных.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Тип данных</th>
+                        <th>Описание</th>
+                        <th>Пример</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>string</strong></td>
+                        <td>Неизменяемая последовательность символов Unicode</td>
+                        <td><code>string name = "John";</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>array</strong></td>
+                        <td>Коллекция элементов одного типа</td>
+                        <td><code>int[] numbers = {1, 2, 3};</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>class</strong></td>
+                        <td>Пользовательский ссылочный тип</td>
+                        <td><code>class Person { public string Name; }</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>interface</strong></td>
+                        <td>Контракт, определяющий функциональность</td>
+                        <td><code>interface IDrawable { void Draw(); }</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>delegate</strong></td>
+                        <td>Тип, представляющий ссылку на метод</td>
+                        <td><code>delegate void MessageHandler(string msg);</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C# — Пример использования структурированных типов</div>
+<pre><code class="language-csharp">
+// Работа со строками
+string firstName = "John";
+string lastName = "Doe";
+string fullName = firstName + " " + lastName; // Конкатенация
+string greeting = $"Hello, {fullName}!";      // Интерполяция
+
+// Работа с массивами
+int[] numbers = new int[5] {1, 2, 3, 4, 5};
+int firstNumber = numbers[0]; // 1
+numbers[1] = 10; // Изменение элемента
+
+// Многомерные массивы
+int[,] matrix = new int[2, 3] { {1, 2, 3}, {4, 5, 6} };
+int element = matrix[1, 2]; // 6
+
+// Создание и использование класса
+public class Person
+{
+    public string Name;
+    public int Age;
+    
+    public Person(string name, int age)
+    {
+        this.Name = name;
+        this.Age = age;
+    }
+}
+
+// Использование класса
+Person person = new Person("Alice", 30);
+</code></pre>
+        </div>
+        
+        <div class="warning">
+            <p><strong>Важно:</strong> В отличие от простых типов, присваивание ссылочных типов создает копию ссылки, а не данных. Изменения через одну переменную влияют на все переменные, ссылающиеся на те же данные.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Различия между простыми и структурированными типами</h2>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Характеристика</th>
+                        <th>Простые типы (Value)</th>
+                        <th>Структурированные типы (Reference)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Хранение</strong></td>
+                        <td>В стеке (Stack)</td>
+                        <td>В куче (Heap), ссылка в стеке</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Присваивание</strong></td>
+                        <td>Копирование значения</td>
+                        <td>Копирование ссылки</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Сравнение</strong></td>
+                        <td>По значению</td>
+                        <td>По ссылке (по умолчанию)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Значение по умолчанию</strong></td>
+                        <td>0, false, '\0'</td>
+                        <td>null</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Производительность</strong></td>
+                        <td>Быстрее для небольших данных</td>
+                        <td>Медленнее, но гибче</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Наследование</strong></td>
+                        <td>Не поддерживают</td>
+                        <td>Поддерживают</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C# — Демонстрация различий в поведении</div>
+<pre><code class="language-csharp">
+// Пример с простым типом (копирование значения)
+int a = 10;
+int b = a; // Создается копия значения
+b = 20;
+Console.WriteLine(a); // 10 (не изменилось)
+
+// Пример со ссылочным типом (копирование ссылки)
+int[] arr1 = new int[] {1, 2, 3};
+int[] arr2 = arr1; // Копируется ссылка, а не данные
+arr2[0] = 100;
+Console.WriteLine(arr1[0]); // 100 (изменилось)
+</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Для сравнения объектов ссылочных типов по значению используйте метод <code>equals()</code>, который можно переопределить в ваших классах.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Практические примеры и упражнения</h2>
+        
+        <h3>Пример 1: Калькулятор площадей</h3>
+        <div class="code-container">
+            <div class="code-header">C# — Использование различных типов данных</div>
+<pre><code class="language-csharp">
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // Простые типы для расчетов
+        double radius = 5.0;
+        double circleArea = CalculateCircleArea(radius);
+        Console.WriteLine($"Площадь круга с радиусом {radius} = {circleArea:F2}");
+        
+        // Структурированные типы для хранения данных
+        Rectangle rect = new Rectangle(10, 5);
+        Console.WriteLine($"Площадь прямоугольника {rect.Width}x{rect.Height} = {rect.CalculateArea()}");
+    }
+    
+    // Метод с простыми типами
+    static double CalculateCircleArea(double radius)
+    {
+        return Math.PI * radius * radius;
+    }
+}
+
+// Класс как пример структурированного типа
+class Rectangle
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    
+    public Rectangle(double width, double height)
+    {
+        Width = width;
+        Height = height;
+    }
+    
+    public double CalculateArea()
+    {
+        return Width * Height;
+    }
+}
+</code></pre>
+        </div>
+        
+        <h3>Упражнение для закрепления</h3>
+        <p>Создайте программу, которая:</p>
+        <ol>
+            <li>Использует простые типы для хранения информации о студенте (имя, возраст, средний балл)</li>
+            <li>Создает массив студентов (используя класс как структурированный тип)</li>
+            <li>Реализует методы для вычисления среднего балла всей группы</li>
+            <li>Выводит информацию о студентах с использованием интерполяции строк</li>
+        </ol>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Это упражнение поможет закрепить понимание различий между простыми и структурированными типами, а также практику работы с ними.</p>
+        </div>
+    </div>
+</body>
+</html>

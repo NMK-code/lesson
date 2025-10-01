@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Операции и преобразования в C#</title>
+    
+    <!-- Ваш CSS -->
+    <link rel="stylesheet" href="stylesForLesson.css">
+    
+    <!-- Prism.js для подсветки кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Операции и преобразования в C#</h1>
+        <p>Арифметические, поразрядные операции, операции присваивания, преобразования типов и условные выражения</p>
+    </header>
+
+    <div class="container">
+        <h2>Арифметические операции языка C#</h2>
+        <p>Арифметические операции выполняют математические вычисления над числовыми операндами.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Операция</th>
+                        <th>Оператор</th>
+                        <th>Пример</th>
+                        <th>Результат</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Сложение</td>
+                        <td>+</td>
+                        <td>a + b</td>
+                        <td>Сумма a и b</td>
+                    </tr>
+                    <tr>
+                        <td>Вычитание</td>
+                        <td>-</td>
+                        <td>a - b</td>
+                        <td>Разность a и b</td>
+                    </tr>
+                    <tr>
+                        <td>Умножение</td>
+                        <td>*</td>
+                        <td>a * b</td>
+                        <td>Произведение a и b</td>
+                    </tr>
+                    <tr>
+                        <td>Деление</td>
+                        <td>/</td>
+                        <td>a / b</td>
+                        <td>Частное от деления a на b</td>
+                    </tr>
+                    <tr>
+                        <td>Остаток от деления</td>
+                        <td>%</td>
+                        <td>a % b</td>
+                        <td>Остаток от деления a на b</td>
+                    </tr>
+                    <tr>
+                        <td>Инкремент</td>
+                        <td>++</td>
+                        <td>a++ или ++a</td>
+                        <td>Увеличение значения на 1</td>
+                    </tr>
+                    <tr>
+                        <td>Декремент</td>
+                        <td>--</td>
+                        <td>a-- или --a</td>
+                        <td>Уменьшение значения на 1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Примеры арифметических операций</div>
+            <pre><code class="language-csharp">int a = 10;
+int b = 3;
+
+int sum = a + b;        // 13
+int difference = a - b; // 7
+int product = a * b;    // 30
+int quotient = a / b;   // 3 (целочисленное деление)
+int remainder = a % b;  // 1
+
+double x = 10.0;
+double y = 3.0;
+double result = x / y;   // 3.333...
+
+// Инкремент и декремент
+int counter = 5;
+counter++;               // counter становится 6
+counter--;               // counter снова становится 5</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Результат деления целых чисел всегда является целым числом. Для получения дробного результата нужно использовать числа с плавающей точкой.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Поразрядные операции в C#</h2>
+        <p>Поразрядные операции выполняются над отдельными битами целочисленных операндов.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Операция</th>
+                        <th>Оператор</th>
+                        <th>Пример</th>
+                        <th>Результат (для a=5, b=3)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Побитовое И</td>
+                        <td>&amp;</td>
+                        <td>a &amp; b</td>
+                        <td>1 (0101 & 0011 = 0001)</td>
+                    </tr>
+                    <tr>
+                        <td>Побитовое ИЛИ</td>
+                        <td>|</td>
+                        <td>a | b</td>
+                        <td>7 (0101 | 0011 = 0111)</td>
+                    </tr>
+                    <tr>
+                        <td>Исключающее ИЛИ</td>
+                        <td>^</td>
+                        <td>a ^ b</td>
+                        <td>6 (0101 ^ 0011 = 0110)</td>
+                    </tr>
+                    <tr>
+                        <td>Побитовое НЕ</td>
+                        <td>~</td>
+                        <td>~a</td>
+                        <td>-6 (инвертированные биты 0101)</td>
+                    </tr>
+                    <tr>
+                        <td>Сдвиг влево</td>
+                        <td>&lt;&lt;</td>
+                        <td>a &lt;&lt; 1</td>
+                        <td>10 (0101 &lt;&lt; 1 = 1010)</td>
+                    </tr>
+                    <tr>
+                        <td>Сдвиг вправо</td>
+                        <td>&gt;&gt;</td>
+                        <td>a &gt;&gt; 1</td>
+                        <td>2 (0101 &gt;&gt; 1 = 0010)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Примеры поразрядных операций</div>
+            <pre><code class="language-csharp">int a = 5;    // 0101 в двоичной системе
+int b = 3;    // 0011 в двоичной системе
+
+// Побитовые операции
+int and = a & b;      // 1 (0001)
+int or = a | b;       // 7 (0111)
+int xor = a ^ b;      // 6 (0110)
+int not = ~a;         // -6 (инверсия всех битов)
+
+// Операции сдвига
+int leftShift = a << 1;  // 10 (1010)
+int rightShift = a >> 1; // 2 (0010)
+
+// Практическое применение: проверка флагов
+const int FLAG_A = 1; // 0001
+const int FLAG_B = 2; // 0010
+const int FLAG_C = 4; // 0100
+
+int settings = FLAG_A | FLAG_C;  // 0101 (установлены флаги A и C)
+bool hasFlagA = (settings & FLAG_A) != 0;  // true
+bool hasFlagB = (settings & FLAG_B) != 0;  // false</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Поразрядные операции часто используются для работы с флагами, упаковки нескольких значений в одно число и оптимизации вычислений.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Операции присваивания в C#</h2>
+        <p>Операции присваивания используются для установки значений переменных. C# поддерживает составные операции присваивания, которые объединяют арифметические или поразрядные операции с присваиванием.</p>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Операция</th>
+                        <th>Оператор</th>
+                        <th>Пример</th>
+                        <th>Эквивалент</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Присваивание</td>
+                        <td>=</td>
+                        <td>a = b</td>
+                        <td>a = b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание со сложением</td>
+                        <td>+=</td>
+                        <td>a += b</td>
+                        <td>a = a + b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с вычитанием</td>
+                        <td>-=</td>
+                        <td>a -= b</td>
+                        <td>a = a - b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с умножением</td>
+                        <td>*=</td>
+                        <td>a *= b</td>
+                        <td>a = a * b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с делением</td>
+                        <td>/=</td>
+                        <td>a /= b</td>
+                        <td>a = a / b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с остатком</td>
+                        <td>%=</td>
+                        <td>a %= b</td>
+                        <td>a = a % b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с И</td>
+                        <td>&amp;=</td>
+                        <td>a &amp;= b</td>
+                        <td>a = a &amp; b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с ИЛИ</td>
+                        <td>|=</td>
+                        <td>a |= b</td>
+                        <td>a = a | b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание с исключающим ИЛИ</td>
+                        <td>^=</td>
+                        <td>a ^= b</td>
+                        <td>a = a ^ b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание со сдвигом влево</td>
+                        <td>&lt;&lt;=</td>
+                        <td>a &lt;&lt;= b</td>
+                        <td>a = a &lt;&lt; b</td>
+                    </tr>
+                    <tr>
+                        <td>Присваивание со сдвигом вправо</td>
+                        <td>&gt;&gt;=</td>
+                        <td>a &gt;&gt;= b</td>
+                        <td>a = a &gt;&gt; b</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Примеры операций присваивания</div>
+            <pre><code class="language-csharp">// Базовое присваивание
+int x = 10;
+string text = "Hello";
+
+// Составные операции присваивания
+int a = 5;
+a += 3;   // эквивалентно a = a + 3; теперь a = 8
+a -= 2;   // эквивалентно a = a - 2; теперь a = 6
+a *= 4;   // эквивалентно a = a * 4; теперь a = 24
+a /= 3;   // эквивалентно a = a / 3; теперь a = 8
+a %= 5;   // эквивалентно a = a % 5; теперь a = 3
+
+// Составные операции с поразрядными операциями
+int flags = 1;  // 0001
+flags |= 2;      // эквивалентно flags = flags | 2; теперь flags = 3 (0011)
+flags &= 1;      // эквивалентно flags = flags & 1; теперь flags = 1 (0001)
+
+// Составные операции со сдвигом
+int value = 8;  // 1000 в двоичной
+value <<= 1;     // эквивалентно value = value << 1; теперь value = 16 (10000)
+value >>= 2;     // эквивалентно value = value >> 2; теперь value = 4 (00100)</code></pre>
+        </div>
+        
+        <div class="note">
+            <p><strong>Примечание:</strong> Составные операции присваивания не только сокращают код, но и могут улучшить производительность, поскольку переменная вычисляется только один раз.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Преобразования базовых типов данных в C#</h2>
+        <p>В C# существует два основных типа преобразований: неявные (автоматические) и явные (приведение типов).</p>
+        
+        <h3>Неявные преобразования</h3>
+        <p>Выполняются автоматически компилятором, когда преобразование безопасно и не приводит к потере данных:</p>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Примеры неявных преобразований</div>
+            <pre><code class="language-csharp">int intValue = 100;
+long longValue = intValue;  // неявное преобразование int в long
+
+float floatValue = 3.14f;
+double doubleValue = floatValue;  // неявное преобразование float в double
+
+char charValue = 'A';
+int intFromChar = charValue;  // неявное преобразование char в int (получим код символа 'A')
+
+int smallInt = 100;
+decimal decimalValue = smallInt;  // неявное преобразование int в decimal</code></pre>
+        </div>
+        
+        <h3>Явные преобразования (приведение типов)</h3>
+        <p>Требуют указания целевого типа в скобках и используются, когда преобразование может привести к потере данных:</p>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Примеры явных преобразований</div>
+            <pre><code class="language-csharp">double doubleValue = 9.78;
+int intValue = (int)doubleValue;  // явное преобразование: intValue = 9 (дробная часть отбрасывается)
+
+long longValue = 9223372036854775807;
+int intFromLong = (int)longValue;  // возможна потеря данных, если longValue слишком велико
+
+int code = 65;
+char charFromCode = (char)code;  // явное преобразование int в char (символ 'A')
+
+decimal decimalValue = 19.99m;
+int intFromDecimal = (int)decimalValue;  // intFromDecimal = 19</code></pre>
+        </div>
+        
+        <h3>Методы преобразования</h3>
+        <p>Класс Convert предоставляет методы для преобразования между различными типами:</p>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Использование класса Convert</div>
+            <pre><code class="language-csharp">string numberString = "123";
+int convertedInt = Convert.ToInt32(numberString);  // преобразование строки в int
+
+double doubleNumber = 45.67;
+string stringFromDouble = Convert.ToString(doubleNumber);  // преобразование double в строку
+
+bool boolValue = true;
+int intFromBool = Convert.ToInt32(boolValue);  // преобразование bool в int (true = 1, false = 0)
+
+// Преобразование с различными системами счисления
+string binaryString = "1010";
+int fromBinary = Convert.ToInt32(binaryString, 2);  // преобразование из двоичной системы: результат 10
+
+string hexString = "1A";
+int fromHex = Convert.ToInt32(hexString, 16);  // преобразование из шестнадцатеричной системы: результат 26</code></pre>
+        </div>
+        
+        <div class="warning">
+            <p><strong>Важно:</strong> При явном преобразовании возможна потеря данных (например, при преобразовании double в int теряется дробная часть) или возникновение исключения OverflowException, если значение не помещается в целевой тип.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Условные выражения в C#</h2>
+        <p>Условные выражения позволяют выполнять различные действия в зависимости от условий. В C# основными условными конструкциями являются if-else, switch и тернарный оператор.</p>
+        
+        <h3>Конструкция if-else</h3>
+        <p>Позволяет выполнять код в зависимости от условия:</p>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Примеры использования if-else</div>
+            <pre><code class="language-csharp">int number = 10;
+
+// Простая форма if
+if (number > 0)
+{
+    Console.WriteLine("Число положительное");
+}
+
+// Форма if-else
+if (number % 2 == 0)
+{
+    Console.WriteLine("Число четное");
+}
+else
+{
+    Console.WriteLine("Число нечетное");
+}
+
+// Цепочка условий else if
+if (number > 0)
+{
+    Console.WriteLine("Положительное число");
+}
+else if (number < 0)
+{
+    Console.WriteLine("Отрицательное число");
+}
+else
+{
+    Console.WriteLine("Ноль");
+}
+
+// Вложенные условия
+int age = 25;
+bool hasLicense = true;
+
+if (age >= 18)
+{
+    if (hasLicense)
+    {
+        Console.WriteLine("Можно водить машину");
+    }
+    else
+    {
+        Console.WriteLine("Нужны права для вождения");
+    }
+}
+else
+{
+    Console.WriteLine("Слишком молод для вождения");
+}</code></pre>
+        </div>
+        
+        <h3>Тернарный оператор</h3>
+        <p>Краткая форма записи простых условных выражений:</p>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Примеры использования тернарного оператора</div>
+            <pre><code class="language-csharp">int number = 7;
+
+// Простой тернарный оператор
+string result = (number % 2 == 0) ? "четное" : "нечетное";
+Console.WriteLine($"Число {number} - {result}");
+
+// Тернарный оператор для присваивания
+int max = (a > b) ? a : b;
+
+// Вложенные тернарные операторы (не рекомендуется для сложных условий)
+int score = 85;
+string grade = (score >= 90) ? "A" : 
+              (score >= 80) ? "B" : 
+              (score >= 70) ? "C" : 
+              (score >= 60) ? "D" : "F";
+
+Console.WriteLine($"Оценка: {grade}");</code></pre>
+        </div>
+        
+        <h3>Конструкция switch</h3>
+        <p>Позволяет выбирать действие из множества вариантов:</p>
+        
+        <div class="code-container">
+            <div class="code-header">C#: Примеры использования switch</div>
+            <pre><code class="language-csharp">int dayOfWeek = 3;
+string dayName;
+
+// Классический switch
+switch (dayOfWeek)
+{
+    case 1:
+        dayName = "Понедельник";
+        break;
+    case 2:
+        dayName = "Вторник";
+        break;
+    case 3:
+        dayName = "Среда";
+        break;
+    case 4:
+        dayName = "Четверг";
+        break;
+    case 5:
+        dayName = "Пятница";
+        break;
+    case 6:
+    case 7:
+        dayName = "Выходной";
+        break;
+    default:
+        dayName = "Неизвестный день";
+        break;
+}
+
+// Switch выражение (C# 8.0 и выше)
+dayName = dayOfWeek switch
+{
+    1 => "Понедельник",
+    2 => "Вторник",
+    3 => "Среда",
+    4 => "Четверг",
+    5 => "Пятница",
+    6 or 7 => "Выходной",
+    _ => "Неизвестный день"
+};
+
+// Switch с pattern matching (C# 7.0 и выше)
+object obj = "Hello";
+string typeInfo = obj switch
+{
+    int i => $"Целое число: {i}",
+    string s => $"Строка: {s}",
+    double d => $"Дробное число: {d}",
+    _ => "Неизвестный тип"
+};</code></pre>
+        </div>
+        
+        <div class="tip">
+            <p><strong>Совет:</strong> Для простых условий используйте тернарный оператор, для множественного выбора - switch, а для сложных условий с несколькими переменными - if-else.</p>
+        </div>
+    </div>
+</body>
+</html>
