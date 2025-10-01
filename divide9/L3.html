@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Свойства</title>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="stylesForLesson.css">
+
+  <!-- Prism.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Свойства</h1>
+    <p>Научимся работать с геттерами и сеттерами для управления данными объектов.</p>
+  </header>
+
+  <div class="container">
+    <h2>Цель лекции</h2>
+    <p>
+      Освоить использование свойств (<code>get</code> и <code>set</code>) для управления доступом к данным объектов,  
+      понять разницу между полями и свойствами, а также использовать автоматические свойства.
+    </p>
+
+    <h2>Введение</h2>
+    <p>
+      Прямой доступ к полям класса может быть опасен, так как никто не ограничивает неправильные значения.  
+      Свойства позволяют контролировать чтение и запись данных, обеспечивая безопасность и гибкость.
+    </p>
+
+    <blockquote>
+      <b>Свойство</b> — это специальный метод для управления полем класса.  
+      Оно похоже на поле, но позволяет выполнять дополнительную логику при чтении и записи.
+    </blockquote>
+
+    <h2>Пример свойств с проверкой данных</h2>
+    <div class="code-container">
+      <div class="code-header">Пример: защищенное поле</div>
+      <pre><code class="language-csharp">
+public class Person
+{
+    private int age;
+
+    public int Age
+    {
+        get { return age; } // чтение
+        set
+        {
+            if (value >= 0)
+                age = value;
+            else
+                Console.WriteLine("Возраст не может быть отрицательным!");
+        }
+    }
+}
+
+Person p = new Person();
+p.Age = 25;
+Console.WriteLine(p.Age);
+
+p.Age = -10; // ошибка
+      </code></pre>
+    </div>
+
+    <div class="note">
+      <p><b>Важно:</b> Свойства позволяют проверять и контролировать данные при их установке или чтении.</p>
+    </div>
+
+    <h2>Свойства против полей</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Поля</th>
+            <th>Свойства</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Простое хранение данных</td>
+            <td>Контролируемое хранение с логикой</td>
+          </tr>
+          <tr>
+            <td>Доступ напрямую</td>
+            <td>Доступ через <code>get</code> и <code>set</code></td>
+          </tr>
+          <tr>
+            <td>Нет проверки значений</td>
+            <td>Можно проверять и обрабатывать данные</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Автоматические свойства</h2>
+    <p>
+      Когда не требуется дополнительная логика, можно использовать автоматические свойства:
+    </p>
+
+    <div class="code-container">
+      <div class="code-header">Пример автоматических свойств</div>
+      <pre><code class="language-csharp">
+public class Student
+{
+    public string Name { get; set; }
+    public int Grade { get; set; }
+}
+
+Student s = new Student();
+s.Name = "Мария";
+s.Grade = 10;
+Console.WriteLine($"{s.Name}, {s.Grade} класс");
+      </code></pre>
+    </div>
+
+    <h2>Свойства только для чтения и записи</h2>
+    <p>
+      Свойства могут быть только для чтения (<code>get</code>) или только для записи (<code>set</code>):
+    </p>
+
+    <div class="code-container">
+      <div class="code-header">Только для чтения</div>
+      <pre><code class="language-csharp">
+public class Circle
+{
+    private double radius;
+
+    public Circle(double r) { radius = r; }
+
+    public double Radius { get { return radius; } } // только чтение
+    public double Area => Math.PI * radius * radius; // вычисляемое свойство
+}
+      </code></pre>
+    </div>
+
+    <div class="code-container">
+      <div class="code-header">Только для записи</div>
+      <pre><code class="language-csharp">
+public class Secret
+{
+    private string password;
+
+    public string Password { set { password = value; } } // только запись
+}
+      </code></pre>
+    </div>
+
+    <h2>Практическое задание</h2>
+    <p>
+      Создайте класс <code>BankAccount</code> с приватным полем <code>balance</code>.  
+      Реализуйте свойство <code>Balance</code>, которое:
+    </p>
+    <ul>
+      <li>при чтении возвращает текущий баланс;</li>
+      <li>при записи не позволяет установить отрицательное значение.</li>
+    </ul>
+    <p>
+      Добавьте методы <code>Deposit()</code> и <code>Withdraw()</code> для пополнения и снятия средств.
+    </p>
+
+    <div class="tip">
+      <p><b>Совет:</b> Свойства обеспечивают защиту данных и делают код безопасным и читаемым.</p>
+    </div>
+
+    <h2>Вывод</h2>
+    <p>
+      ✔ Свойства позволяют контролировать доступ к полям.  
+      ✔ Автоматические свойства упрощают код.  
+      ✔ Возможны только для чтения, только для записи и вычисляемые свойства.  
+      ✔ Использование свойств делает код безопасным и гибким.
+    </p>
+  </div>
+</body>
+</html>

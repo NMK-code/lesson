@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Конструкторы и деструкторы</title>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="stylesForLesson.css">
+
+  <!-- Prism.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Конструкторы и деструкторы</h1>
+    <p>Разберем методы инициализации и очистки объектов в C#.</p>
+  </header>
+
+  <div class="container">
+    <h2>Цель лекции</h2>
+    <p>
+      Научиться создавать конструкторы для инициализации объектов, понять их назначение,  
+      а также познакомиться с деструкторами и особенностями их работы в C#.
+    </p>
+
+    <h2>Введение</h2>
+    <p>
+      При создании объектов часто нужно сразу задавать значения полей.  
+      Конструкторы помогают автоматически инициализировать объект при его создании.  
+      Деструкторы, в свою очередь, выполняются при уничтожении объекта, чтобы освободить ресурсы.
+    </p>
+
+    <h2>Конструктор</h2>
+    <p>
+      Конструктор — это специальный метод класса, который вызывается автоматически при создании объекта.
+    </p>
+    <ul>
+      <li>Имеет то же имя, что и класс.</li>
+      <li>Не имеет возвращаемого значения.</li>
+      <li>Используется для задания начальных значений полей.</li>
+    </ul>
+
+    <div class="code-container">
+      <div class="code-header">Пример конструктора</div>
+      <pre><code class="language-csharp">
+public class Person
+{
+    public string Name;
+    public int Age;
+
+    // Конструктор с параметрами
+    public Person(string name, int age)
+    {
+        Name = name;
+        Age = age;
+    }
+
+    public void SayHello()
+    {
+        Console.WriteLine($"Привет! Меня зовут {Name}, мне {Age} лет.");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Person person1 = new Person("Алиса", 25);
+        person1.SayHello();
+
+        Person person2 = new Person("Борис", 30);
+        person2.SayHello();
+    }
+}
+      </code></pre>
+    </div>
+
+    <div class="note">
+      <p><b>Важно:</b> Конструктор вызывается автоматически при создании объекта, что позволяет задать начальные значения сразу.</p>
+    </div>
+
+    <h2>Конструктор по умолчанию</h2>
+    <p>
+      Если конструктор не указан явно, C# создает <b>конструктор по умолчанию</b> без параметров.
+    </p>
+
+    <div class="code-container">
+      <div class="code-header">Пример конструктора по умолчанию</div>
+      <pre><code class="language-csharp">
+public class Car
+{
+    public string Brand;
+    public int Year;
+}
+
+Car car = new Car(); // Конструктор по умолчанию
+car.Brand = "Toyota";
+car.Year = 2020;
+Console.WriteLine($"{car.Brand}, {car.Year}");
+      </code></pre>
+    </div>
+
+    <h2>Перегрузка конструкторов</h2>
+    <p>
+      В одном классе может быть несколько конструкторов с разными параметрами.
+    </p>
+
+    <div class="code-container">
+      <div class="code-header">Пример перегрузки</div>
+      <pre><code class="language-csharp">
+public class Student
+{
+    public string Name;
+    public int Grade;
+
+    public Student() // без параметров
+    {
+        Name = "Неизвестно";
+        Grade = 0;
+    }
+
+    public Student(string name, int grade) // с параметрами
+    {
+        Name = name;
+        Grade = grade;
+    }
+
+    public void ShowInfo()
+    {
+        Console.WriteLine($"Имя: {Name}, Класс: {Grade}");
+    }
+}
+
+Student s1 = new Student();
+Student s2 = new Student("Мария", 10);
+
+s1.ShowInfo();
+s2.ShowInfo();
+      </code></pre>
+    </div>
+
+    <h2>Деструктор</h2>
+    <p>
+      Деструктор — метод, который вызывается при удалении объекта из памяти.  
+      В C# используется редко, так как за очистку памяти отвечает сборщик мусора (Garbage Collector).  
+      Деструкторы полезны для освобождения ресурсов (например, закрытие файлов или сетевых соединений).
+    </p>
+
+    <ul>
+      <li>Имеет то же имя, что и класс, но с символом <code>~</code>.</li>
+      <li>Не принимает параметров.</li>
+      <li>Не возвращает значения.</li>
+      <li>Вызывается автоматически системой.</li>
+    </ul>
+
+    <div class="code-container">
+      <div class="code-header">Пример деструктора</div>
+      <pre><code class="language-csharp">
+public class Example
+{
+    public Example()
+    {
+        Console.WriteLine("Объект создан.");
+    }
+
+    ~Example()
+    {
+        Console.WriteLine("Объект уничтожен.");
+    }
+}
+
+Example ex = new Example();
+      </code></pre>
+    </div>
+
+    <h2>Практическое задание</h2>
+    <p>
+      Создайте класс <code>Book</code> с полями <code>Title</code> и <code>Author</code>.  
+      Реализуйте два конструктора: по умолчанию и с параметрами для задания названия и автора.  
+      Добавьте метод <code>ShowInfo()</code> и создайте несколько объектов, используя оба конструктора.
+    </p>
+
+    <div class="tip">
+      <p><b>Совет:</b> Используйте перегрузку конструкторов для гибкой инициализации объектов.</p>
+    </div>
+
+    <h2>Вывод</h2>
+    <p>
+      ✔ Конструкторы позволяют задавать начальные значения объектов.  
+      ✔ Перегрузка конструкторов делает код гибким.  
+      ✔ Деструкторы используются редко, но полезны для освобождения ресурсов.  
+    </p>
+  </div>
+</body>
+</html>

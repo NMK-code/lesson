@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Классы и объекты</title>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="stylesForLesson.css">
+
+  <!-- Prism.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Классы и объекты</h1>
+    <p>Изучим, как создавать и использовать классы и объекты в C#.</p>
+  </header>
+
+  <div class="container">
+    <h2>Цель лекции</h2>
+    <p>
+      Понять, что такое классы и объекты, научиться создавать их в языке C#,  
+      а также освоить базовые шаги работы с экземплярами классов.
+    </p>
+
+    <h2>Введение</h2>
+    <p>
+      Объектно-ориентированное программирование (ООП) — это подход, в котором программа строится вокруг <b>объектов</b>.  
+      Каждый объект объединяет данные (<i>состояние</i>) и методы (<i>поведение</i>).
+    </p>
+
+    <blockquote>
+      <b>Класс</b> — это шаблон или чертёж для создания объектов.  
+      <b>Объект</b> — это конкретный экземпляр класса, обладающий своим состоянием и поведением.
+    </blockquote>
+
+    <div class="definition">
+      <p><b>Пример из жизни:</b></p>
+      <ul>
+        <li>Класс: <i>«Человек»</i> — содержит общие характеристики (имя, возраст, рост).</li>
+        <li>Объект: <i>«Иван, 25 лет, рост 180 см»</i> — конкретный человек, созданный на основе класса.</li>
+      </ul>
+    </div>
+
+    <h2>Объявление класса</h2>
+    <p>В C# класс объявляется с помощью ключевого слова <code>class</code>:</p>
+
+    <div class="code-container">
+      <div class="code-header">Пример: простой класс</div>
+      <pre><code class="language-csharp">
+public class Person
+{
+    public string Name;
+    public int Age;
+
+    public void SayHello()
+    {
+        Console.WriteLine($"Привет! Меня зовут {Name}, мне {Age} лет.");
+    }
+}
+      </code></pre>
+    </div>
+
+    <p>
+      Здесь класс <code>Person</code> имеет два поля (<code>Name</code> и <code>Age</code>) и один метод <code>SayHello()</code>.  
+      Этот класс — как «чертёж», по которому будут создаваться люди.
+    </p>
+
+    <h2>Создание объекта</h2>
+    <p>
+      Чтобы создать объект из класса, используется ключевое слово <code>new</code>.  
+      После этого можно обращаться к его полям и методам:
+    </p>
+
+    <div class="code-container">
+      <div class="code-header">Пример: создание объекта</div>
+      <pre><code class="language-csharp">
+class Program
+{
+    static void Main()
+    {
+        Person person1 = new Person(); // создание объекта
+        person1.Name = "Иван";
+        person1.Age = 25;
+
+        person1.SayHello(); // вызов метода
+    }
+}
+      </code></pre>
+    </div>
+
+    <div class="note">
+      <p><b>Важно:</b> можно создать много объектов одного класса, и каждый будет иметь своё состояние.</p>
+    </div>
+
+    <h2>Несколько объектов</h2>
+    <div class="code-container">
+      <div class="code-header">Пример: два объекта</div>
+      <pre><code class="language-csharp">
+Person p1 = new Person();
+p1.Name = "Мария";
+p1.Age = 20;
+
+Person p2 = new Person();
+p2.Name = "Алексей";
+p2.Age = 30;
+
+p1.SayHello();
+p2.SayHello();
+      </code></pre>
+    </div>
+
+    <h2>Сравнение: класс и объект</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Класс</th>
+            <th>Объект</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Это описание</td>
+            <td>Это конкретный экземпляр</td>
+          </tr>
+          <tr>
+            <td>Содержит поля и методы</td>
+            <td>Хранит значения полей и может вызывать методы</td>
+          </tr>
+          <tr>
+            <td>Не занимает память напрямую</td>
+            <td>Занимает память в момент создания через <code>new</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Практическое задание</h2>
+    <p>
+      Создайте класс <code>Car</code> с полями <code>Brand</code> и <code>Year</code>,  
+      а также методом <code>ShowInfo()</code>, который выводит информацию о машине.  
+      Создайте несколько объектов и вызовите метод для каждого.
+    </p>
+
+    <div class="tip">
+      <p><b>Подсказка:</b> используйте оператор <code>new</code> для создания объектов и точку <code>.</code> для доступа к полям и методам.</p>
+    </div>
+
+    <h2>Вывод</h2>
+    <p>
+      ✔ Класс — это шаблон для объектов.  
+      ✔ Объект — это экземпляр класса.  
+      ✔ У каждого объекта своё состояние (поля) и поведение (методы).  
+      ✔ Мы можем создавать сколько угодно объектов из одного класса.
+    </p>
+  </div>
+</body>
+</html>
