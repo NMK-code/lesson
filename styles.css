@@ -32,14 +32,6 @@ body {
   margin-bottom: 15px;
 }
 
-.sidebar input {
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  outline: none;
-}
-
 .sidebar ul {
   list-style: none;
   flex: 1;
@@ -91,6 +83,24 @@ header h1 {
 header p {
   font-size: 1.1em;
   opacity: 0.9;
+}
+
+/* ====== Header search (универсальный) ====== */
+.header-search {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.header-search input {
+  width: 480px;
+  max-width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
 }
 
 /* ====== Sections ====== */
@@ -176,5 +186,14 @@ h2 {
   .main {
     margin: 0;
     padding: 15px;
+  }
+
+  /* header padding меньше на мобильных, поиск растягиваем */
+  header {
+    padding: 28px 18px;
+  }
+
+  .header-search input {
+    width: 100%;
   }
 }
