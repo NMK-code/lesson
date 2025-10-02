@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Работа с файлами: File, FileInfo, Directory</title>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="stylesForLesson.css">
+
+  <!-- Prism.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Работа с файлами: File, FileInfo, Directory</h1>
+    <p>Научимся читать, записывать и управлять файлами и папками.</p>
+  </header>
+
+  <div class="container">
+    <h2>Цель</h2>
+    <p>
+      Научиться использовать классы <code>File</code>, <code>FileInfo</code> и <code>Directory</code>  
+      для выполнения основных операций с файлами и каталогами: создание, чтение, запись и удаление.
+    </p>
+
+    <h2>Классы для работы с файлами</h2>
+    <p>
+      В .NET есть два основных подхода для работы с файлами:
+    </p>
+    <ul>
+      <li><b>Статический класс File</b> — предоставляет быстрый доступ к операциям с файлами (чтение, запись, копирование, удаление).</li>
+      <li><b>Класс FileInfo</b> — работает с экземплярами объектов и предоставляет больше гибкости (например, получение свойств файла).</li>
+      <li><b>Класс Directory</b> — используется для работы с каталогами (создание, удаление, перечисление файлов и папок).</li>
+    </ul>
+
+    <h2>Примеры работы с классом File</h2>
+    <div class="code-container">
+      <div class="code-header">Создание и чтение файла</div>
+      <pre><code class="language-csharp">
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        string path = "example.txt";
+
+        // Запись текста в файл
+        File.WriteAllText(path, "Привет, C#!");
+
+        // Чтение содержимого файла
+        string content = File.ReadAllText(path);
+        Console.WriteLine("Содержимое файла: " + content);
+
+        // Добавление текста
+        File.AppendAllText(path, "\nНовая строка");
+        Console.WriteLine("Файл обновлен!");
+    }
+}
+      </code></pre>
+    </div>
+
+    <h2>Примеры работы с FileInfo</h2>
+    <div class="code-container">
+      <div class="code-header">Получение информации о файле</div>
+      <pre><code class="language-csharp">
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        FileInfo file = new FileInfo("example.txt");
+
+        if (file.Exists)
+        {
+            Console.WriteLine($"Имя файла: {file.Name}");
+            Console.WriteLine($"Путь: {file.FullName}");
+            Console.WriteLine($"Размер: {file.Length} байт");
+            Console.WriteLine($"Создан: {file.CreationTime}");
+            Console.WriteLine($"Изменён: {file.LastWriteTime}");
+        }
+    }
+}
+      </code></pre>
+    </div>
+
+    <h2>Примеры работы с Directory</h2>
+    <div class="code-container">
+      <div class="code-header">Создание и управление папками</div>
+      <pre><code class="language-csharp">
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        string folder = "TestFolder";
+
+        // Создание каталога
+        Directory.CreateDirectory(folder);
+
+        // Проверка существования
+        if (Directory.Exists(folder))
+        {
+            Console.WriteLine("Папка создана!");
+        }
+
+        // Получение списка файлов
+        string[] files = Directory.GetFiles(folder);
+        Console.WriteLine("Файлы в папке:");
+        foreach (string file in files)
+        {
+            Console.WriteLine(file);
+        }
+
+        // Удаление папки
+        Directory.Delete(folder, true); // true — удаляет вместе с содержимым
+        Console.WriteLine("Папка удалена!");
+    }
+}
+      </code></pre>
+    </div>
+
+    <h2>Сравнительная таблица</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Класс / Метод</th>
+            <th>Назначение</th>
+            <th>Пример</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>File.WriteAllText</code></td>
+            <td>Создание/перезапись файла текстом</td>
+            <td><code>File.WriteAllText("file.txt", "Hello")</code></td>
+          </tr>
+          <tr>
+            <td><code>File.ReadAllText</code></td>
+            <td>Чтение содержимого файла</td>
+            <td><code>string text = File.ReadAllText("file.txt")</code></td>
+          </tr>
+          <tr>
+            <td><code>File.AppendAllText</code></td>
+            <td>Добавление текста в файл</td>
+            <td><code>File.AppendAllText("file.txt", "New line")</code></td>
+          </tr>
+          <tr>
+            <td><code>FileInfo.Length</code></td>
+            <td>Размер файла в байтах</td>
+            <td><code>file.Length</code></td>
+          </tr>
+          <tr>
+            <td><code>Directory.CreateDirectory</code></td>
+            <td>Создание каталога</td>
+            <td><code>Directory.CreateDirectory("Folder")</code></td>
+          </tr>
+          <tr>
+            <td><code>Directory.GetFiles</code></td>
+            <td>Получение списка файлов</td>
+            <td><code>Directory.GetFiles("Folder")</code></td>
+          </tr>
+          <tr>
+            <td><code>Directory.Delete</code></td>
+            <td>Удаление каталога</td>
+            <td><code>Directory.Delete("Folder", true)</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Практическое задание</h2>
+    <ol>
+      <li>Создайте текстовый файл и запишите в него несколько строк.</li>
+      <li>Прочитайте файл и выведите содержимое в консоль.</li>
+      <li>Используя <code>FileInfo</code>, получите размер и дату создания файла.</li>
+      <li>Создайте папку <code>MyData</code> и переместите туда файл.</li>
+      <li>Выведите список файлов в папке <code>MyData</code>.</li>
+    </ol>
+
+    <div class="tip">
+      <p><b>Совет:</b> При работе с файлами всегда проверяйте, существует ли файл или папка, чтобы избежать ошибок.</p>
+    </div>
+
+    <h2>Вывод</h2>
+    <p>
+      ✔ <code>File</code> — быстрый способ работы с файлами через статические методы. <br>
+      ✔ <code>FileInfo</code> — объектно-ориентированный доступ с расширенными возможностями. <br>
+      ✔ <code>Directory</code> — управление папками: создание, удаление и перечисление. <br>
+      ✔ Эти классы позволяют автоматизировать работу с файловой системой.
+    </p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Бинарные файлы</title>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="stylesForLesson.css">
+
+  <!-- Prism.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Бинарные файлы</h1>
+    <p>Познакомимся с BinaryReader и BinaryWriter для работы с бинарными данными.</p>
+  </header>
+
+  <div class="container">
+    <h2>Цель</h2>
+    <p>
+      Научиться читать и записывать бинарные данные с помощью классов <code>BinaryReader</code> и <code>BinaryWriter</code>.
+    </p>
+
+    <h2>Что такое бинарный файл?</h2>
+    <p>
+      <b>Бинарный файл</b> — это файл, содержащий данные в машинном формате (байты), 
+      а не в виде человекочитаемого текста. Такой файл может хранить:
+    </p>
+    <ul>
+      <li>Числа (целые, дробные);</li>
+      <li>Символы и строки;</li>
+      <li>Структуры и объекты;</li>
+      <li>Изображения, звуки и другие мультимедийные данные.</li>
+    </ul>
+
+    <blockquote>
+      Работа с бинарными файлами позволяет хранить данные более компактно и эффективно по сравнению с текстовыми файлами.
+    </blockquote>
+
+    <h2>Класс BinaryWriter</h2>
+    <p>
+      <code>BinaryWriter</code> используется для записи примитивных типов данных (<code>int</code>, <code>double</code>, <code>char</code>, <code>string</code>) в поток в бинарном формате.
+    </p>
+    <div class="code-container">
+      <div class="code-header">Пример записи данных</div>
+      <pre><code class="language-csharp">
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        using (BinaryWriter writer = new BinaryWriter(File.Open("data.bin", FileMode.Create)))
+        {
+            writer.Write(42);                // int
+            writer.Write(3.14);              // double
+            writer.Write(true);              // bool
+            writer.Write("Привет, мир!");    // string
+        }
+
+        Console.WriteLine("Бинарный файл записан!");
+    }
+}
+      </code></pre>
+    </div>
+
+    <h2>Класс BinaryReader</h2>
+    <p>
+      <code>BinaryReader</code> используется для чтения примитивных типов данных в том же порядке, 
+      в котором они были записаны.
+    </p>
+    <div class="code-container">
+      <div class="code-header">Пример чтения данных</div>
+      <pre><code class="language-csharp">
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        using (BinaryReader reader = new BinaryReader(File.Open("data.bin", FileMode.Open)))
+        {
+            int number = reader.ReadInt32();
+            double pi = reader.ReadDouble();
+            bool flag = reader.ReadBoolean();
+            string text = reader.ReadString();
+
+            Console.WriteLine($"Число: {number}");
+            Console.WriteLine($"Дробь: {pi}");
+            Console.WriteLine($"Флаг: {flag}");
+            Console.WriteLine($"Строка: {text}");
+        }
+    }
+}
+      </code></pre>
+    </div>
+
+    <h2>Сравнительная таблица</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Класс</th>
+            <th>Назначение</th>
+            <th>Основные методы</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>BinaryWriter</code></td>
+            <td>Запись примитивных типов данных в бинарном виде</td>
+            <td>
+              <code>Write(int)</code>, <code>Write(double)</code>, <code>Write(bool)</code>, <code>Write(string)</code>
+            </td>
+          </tr>
+          <tr>
+            <td><code>BinaryReader</code></td>
+            <td>Чтение примитивных типов данных из бинарного файла</td>
+            <td>
+              <code>ReadInt32()</code>, <code>ReadDouble()</code>, <code>ReadBoolean()</code>, <code>ReadString()</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Важно помнить</h2>
+    <div class="warning">
+      <p>При чтении бинарного файла <b>нужно соблюдать порядок</b>, в котором данные были записаны. Иначе вы получите ошибку или некорректные данные.</p>
+    </div>
+
+    <h2>Практическое задание</h2>
+    <ol>
+      <li>Создайте бинарный файл, записав в него: возраст (int), рост (double), пол (bool), имя (string).</li>
+      <li>Прочитайте данные обратно и выведите их на экран.</li>
+      <li>Попробуйте поменять порядок чтения и убедитесь, что данные будут искажены.</li>
+    </ol>
+
+    <h2>Вывод</h2>
+    <p>
+      ✔ <code>BinaryWriter</code> используется для записи данных в бинарном виде. <br>
+      ✔ <code>BinaryReader</code> позволяет читать бинарные данные. <br>
+      ✔ Порядок записи и чтения должен строго совпадать. <br>
+      ✔ Бинарные файлы экономят место и позволяют хранить сложные данные эффективно.
+    </p>
+  </div>
+</body>
+</html>

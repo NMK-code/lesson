@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Основы работы с данными в C#</title>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="stylesForLesson.css">
+
+  <!-- Prism.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Основы работы с данными в C#</h1>
+    <p>Поговорим о видах хранения данных, потоках и сериализации.</p>
+  </header>
+
+  <div class="container">
+    <h2>Цель лекции</h2>
+    <p>
+      Научиться работать с различными способами хранения данных в C#,  
+      освоить понятие потоков ввода-вывода, а также познакомиться с механизмами сериализации.
+    </p>
+
+    <h2>Введение</h2>
+    <p>
+      Любая программа работает с данными. Эти данные могут храниться:
+    </p>
+    <ul>
+      <li>В оперативной памяти (переменные, объекты);</li>
+      <li>На диске (файлы, базы данных);</li>
+      <li>В удалённых хранилищах (сервера, облака).</li>
+    </ul>
+    <p>
+      В C# для работы с данными применяются такие механизмы, как <b>потоки</b> (Streams) и <b>сериализация</b>.
+    </p>
+
+    <h2>Хранение данных</h2>
+    <p>
+      В .NET существует несколько уровней работы с данными:
+    </p>
+    <ul>
+      <li><b>Переменные и объекты</b> — временное хранение в оперативной памяти.</li>
+      <li><b>Файлы</b> — долговременное хранение на диске.</li>
+      <li><b>Базы данных</b> — структурированное хранение с возможностью запросов.</li>
+    </ul>
+
+    <h2>Потоки (Streams)</h2>
+    <p>
+      Поток — это абстракция, представляющая собой последовательность данных.  
+      Потоки бывают:
+    </p>
+    <ul>
+      <li><b>Файловые потоки</b> — для работы с файлами (<code>FileStream</code>).</li>
+      <li><b>Потоки памяти</b> — для работы с данными в памяти (<code>MemoryStream</code>).</li>
+      <li><b>Сетевые потоки</b> — для обмена данными по сети.</li>
+    </ul>
+
+    <div class="code-container">
+      <div class="code-header">Пример работы с FileStream</div>
+      <pre><code class="language-csharp">
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        string path = "data.txt";
+
+        // Запись данных в файл
+        using (FileStream fs = new FileStream(path, FileMode.Create))
+        using (StreamWriter writer = new StreamWriter(fs))
+        {
+            writer.WriteLine("Привет, мир!");
+        }
+
+        // Чтение данных из файла
+        using (FileStream fs = new FileStream(path, FileMode.Open))
+        using (StreamReader reader = new StreamReader(fs))
+        {
+            string text = reader.ReadToEnd();
+            Console.WriteLine("Из файла прочитано: " + text);
+        }
+    }
+}
+      </code></pre>
+    </div>
+
+    <h2>Сериализация</h2>
+    <p>
+      <b>Сериализация</b> — это процесс преобразования объекта в поток байтов для сохранения в файл, базу данных или передачи по сети.  
+      <b>Десериализация</b> — обратный процесс восстановления объекта.
+    </p>
+    <p>
+      В C# поддерживаются разные виды сериализации:
+    </p>
+    <ul>
+      <li><b>Бинарная</b> — объект сохраняется в двоичном виде.</li>
+      <li><b>XML-сериализация</b> — объект сохраняется в виде XML.</li>
+      <li><b>JSON-сериализация</b> — объект сохраняется в формате JSON (часто используется для API).</li>
+    </ul>
+
+    <h3>Пример: JSON-сериализация</h3>
+    <div class="code-container">
+      <div class="code-header">Сохранение объекта в JSON</div>
+      <pre><code class="language-csharp">
+using System;
+using System.Text.Json;
+using System.IO;
+
+public class Person
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Person p = new Person { Name = "Иван", Age = 30 };
+
+        string json = JsonSerializer.Serialize(p);
+        File.WriteAllText("person.json", json);
+
+        Console.WriteLine("Объект сериализован: " + json);
+
+        // Десериализация
+        string readJson = File.ReadAllText("person.json");
+        Person restored = JsonSerializer.Deserialize<Person>(readJson);
+
+        Console.WriteLine($"Восстановленный объект: {restored.Name}, {restored.Age}");
+    }
+}
+      </code></pre>
+    </div>
+
+    <h2>Таблица: основные классы и методы</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Класс / Метод</th>
+            <th>Назначение</th>
+            <th>Пример использования</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>FileStream</code></td>
+            <td>Работа с файлами (чтение/запись в поток)</td>
+            <td><code>new FileStream("data.txt", FileMode.Open)</code></td>
+          </tr>
+          <tr>
+            <td><code>StreamReader</code></td>
+            <td>Чтение текста из потока</td>
+            <td><code>reader.ReadToEnd()</code></td>
+          </tr>
+          <tr>
+            <td><code>StreamWriter</code></td>
+            <td>Запись текста в поток</td>
+            <td><code>writer.WriteLine("Hello")</code></td>
+          </tr>
+          <tr>
+            <td><code>JsonSerializer</code></td>
+            <td>Сериализация/десериализация объектов в JSON</td>
+            <td><code>JsonSerializer.Serialize(obj)</code></td>
+          </tr>
+          <tr>
+            <td><code>XmlSerializer</code></td>
+            <td>Сериализация в XML</td>
+            <td><code>new XmlSerializer(typeof(Person))</code></td>
+          </tr>
+          <tr>
+            <td><code>BinaryFormatter</code></td>
+            <td>Бинарная сериализация (устаревшая)</td>
+            <td><code>formatter.Serialize(stream, obj)</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <p><b>Важно:</b> Для современных приложений рекомендуется использовать <b>JSON</b> или <b>XML</b> сериализацию, а бинарную применять только в специфических случаях.</p>
+    </div>
+
+    <h2>Практическое задание</h2>
+    <ol>
+      <li>Создайте класс <code>Book</code> с полями <code>Title</code> и <code>Author</code>.</li>
+      <li>Сериализуйте объект книги в JSON и сохраните в файл <code>book.json</code>.</li>
+      <li>Прочитайте файл и восстановите объект.</li>
+      <li>Выведите информацию о книге на экран.</li>
+    </ol>
+
+    <div class="tip">
+      <p><b>Совет:</b> JSON-сериализация — самый удобный способ обмена данными между приложениями и сервисами.</p>
+    </div>
+
+    <h2>Вывод</h2>
+    <p>
+      ✔ Данные можно хранить в памяти, файлах и базах данных.  
+      ✔ Потоки — основной инструмент работы с файлами и вводом-выводом.  
+      ✔ Сериализация позволяет сохранять и восстанавливать объекты.  
+      ✔ JSON — современный стандарт для обмена данными.  
+      ✔ Таблица поможет быстро вспомнить нужный класс или метод.
+    </p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Потоки ввода-вывода</title>
+
+  <!-- Стили -->
+  <link rel="stylesheet" href="stylesForLesson.css">
+
+  <!-- Prism.js -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/components/prism-csharp.min.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Потоки ввода-вывода</h1>
+    <p>Разберем Stream, StreamReader, StreamWriter и FileStream.</p>
+  </header>
+
+  <div class="container">
+    <h2>Цель</h2>
+    <p>
+      Изучить понятие потоков ввода-вывода в .NET и научиться работать с основными классами для чтения и записи данных.
+    </p>
+
+    <h2>Что такое поток?</h2>
+    <p>
+      <b>Поток (Stream)</b> — это абстракция последовательности байтов, через которую можно 
+      выполнять операции ввода (чтение) и вывода (запись).
+    </p>
+    <p>Основные возможности:</p>
+    <ul>
+      <li>Чтение данных из источника (файл, память, сеть).</li>
+      <li>Запись данных в источник.</li>
+      <li>Перемещение указателя (позиции) внутри потока.</li>
+    </ul>
+
+    <h2>Класс Stream</h2>
+    <p>
+      <code>Stream</code> — это базовый абстрактный класс для всех потоков.  
+      Он определяет общие методы:
+    </p>
+    <ul>
+      <li><code>Read()</code> — чтение массива байтов.</li>
+      <li><code>Write()</code> — запись массива байтов.</li>
+      <li><code>Seek()</code> — перемещение курсора внутри потока.</li>
+      <li><code>Close()</code> / <code>Dispose()</code> — закрытие потока.</li>
+    </ul>
+
+    <h2>FileStream</h2>
+    <p>
+      Класс <code>FileStream</code> — реализация потока для работы с файлами на диске.
+      Позволяет читать и записывать данные в виде байтов.
+    </p>
+    <div class="code-container">
+      <div class="code-header">Пример использования FileStream</div>
+      <pre><code class="language-csharp">
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        string path = "data.bin";
+
+        // Запись в файл
+        using (FileStream fs = new FileStream(path, FileMode.Create))
+        {
+            byte[] data = { 72, 101, 108, 108, 111 }; // "Hello"
+            fs.Write(data, 0, data.Length);
+            Console.WriteLine("Файл записан!");
+        }
+
+        // Чтение из файла
+        using (FileStream fs = new FileStream(path, FileMode.Open))
+        {
+            byte[] buffer = new byte[fs.Length];
+            fs.Read(buffer, 0, buffer.Length);
+
+            string text = System.Text.Encoding.UTF8.GetString(buffer);
+            Console.WriteLine("Содержимое файла: " + text);
+        }
+    }
+}
+      </code></pre>
+    </div>
+
+    <h2>StreamWriter</h2>
+    <p>
+      Класс <code>StreamWriter</code> упрощает запись текстовых данных в поток (например, файл).
+    </p>
+    <div class="code-container">
+      <div class="code-header">Пример использования StreamWriter</div>
+      <pre><code class="language-csharp">
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        using (StreamWriter writer = new StreamWriter("text.txt"))
+        {
+            writer.WriteLine("Привет, мир!");
+            writer.WriteLine("Вторая строка.");
+        }
+
+        Console.WriteLine("Файл записан!");
+    }
+}
+      </code></pre>
+    </div>
+
+    <h2>StreamReader</h2>
+    <p>
+      Класс <code>StreamReader</code> предназначен для чтения текстовых данных из потока.
+    </p>
+    <div class="code-container">
+      <div class="code-header">Пример использования StreamReader</div>
+      <pre><code class="language-csharp">
+using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        using (StreamReader reader = new StreamReader("text.txt"))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                Console.WriteLine(line);
+            }
+        }
+    }
+}
+      </code></pre>
+    </div>
+
+    <h2>Сравнительная таблица</h2>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Класс</th>
+            <th>Назначение</th>
+            <th>Пример</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Stream</code></td>
+            <td>Абстрактный поток байтов</td>
+            <td>Нельзя использовать напрямую</td>
+          </tr>
+          <tr>
+            <td><code>FileStream</code></td>
+            <td>Работа с файлами на уровне байтов</td>
+            <td><code>new FileStream("file.bin", FileMode.Open)</code></td>
+          </tr>
+          <tr>
+            <td><code>StreamWriter</code></td>
+            <td>Запись текста в поток</td>
+            <td><code>new StreamWriter("file.txt")</code></td>
+          </tr>
+          <tr>
+            <td><code>StreamReader</code></td>
+            <td>Чтение текста из потока</td>
+            <td><code>new StreamReader("file.txt")</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Практическое задание</h2>
+    <ol>
+      <li>Создайте файл и запишите в него несколько строк с помощью <code>StreamWriter</code>.</li>
+      <li>Прочитайте содержимое файла через <code>StreamReader</code>.</li>
+      <li>С помощью <code>FileStream</code> запишите в бинарный файл массив байтов.</li>
+      <li>Прочитайте бинарный файл и выведите содержимое в виде строки.</li>
+    </ol>
+
+    <div class="tip">
+      <p><b>Совет:</b> Используйте <code>using</code> для автоматического закрытия потоков и освобождения ресурсов.</p>
+    </div>
+
+    <h2>Вывод</h2>
+    <p>
+      ✔ <code>Stream</code> — базовый класс для всех потоков. <br>
+      ✔ <code>FileStream</code> — работа с файлами на уровне байтов. <br>
+      ✔ <code>StreamWriter</code> — запись текста в поток. <br>
+      ✔ <code>StreamReader</code> — чтение текста из потока. <br>
+      ✔ Потоки позволяют гибко управлять вводом и выводом данных.
+    </p>
+  </div>
+</body>
+</html>
